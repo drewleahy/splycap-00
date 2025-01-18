@@ -4,13 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Admin = () => {
   const { toast } = useToast();
-  const [editing, setEditing] = useState<string | null>(null);
-  const [formData, setFormData] = useState<{ title?: string; description?: string }>({});
+  const [editingSection, setEditingSection] = useState<string | null>(null);
+  const [formData, setFormData] = useState({ title: "", description: "" });
 
   const { data: contentSections, isLoading, refetch } = useQuery({
     queryKey: ["content-sections"],
@@ -26,10 +26,10 @@ const Admin = () => {
   });
 
   const handleEdit = (section: any) => {
-    setEditing(section.id);
+    setEditingSection(section.id);
     setFormData({
-      title: section.title,
-      description: section.description,
+      title: section.title || "",
+      description: section.description || "",
     });
   };
 
@@ -42,7 +42,7 @@ const Admin = () => {
           description: formData.description,
           updated_at: new Date().toISOString(),
         })
-        .eq("id", editing);
+        .eq("id", editingSection);
 
       if (error) throw error;
 
@@ -51,8 +51,7 @@ const Admin = () => {
         description: "Content updated successfully",
       });
 
-      setEditing(null);
-      setFormData({});
+      setEditingSection(null);
       refetch();
     } catch (error) {
       toast({
@@ -76,48 +75,52 @@ const Admin = () => {
       <h1 className="text-3xl font-bold mb-8">Content Management</h1>
       <div className="space-y-8">
         {contentSections?.map((section) => (
-          <div key={section.id} className="bg-white p-6 rounded-lg shadow">
+          <div key={section.id} className="p-6 bg-white rounded-lg shadow">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm text-gray-500 mb-2">Section ID: {section.section_id}</p>
-                {editing === section.id ? (
-                  <div className="space-y-4">
-                    <Input
-                      value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      placeholder="Title"
-                      className="mb-2"
-                    />
-                    <Textarea
-                      value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Description"
-                      rows={4}
-                    />
-                  </div>
-                ) : (
+                <h2 className="text-xl font-semibold mb-2">Section: {section.section_id}</h2>
+                {editingSection !== section.id ? (
                   <>
-                    <h3 className="text-xl font-semibold mb-2">{section.title}</h3>
-                    <p className="text-gray-600">{section.description}</p>
+                    <h3 className="font-medium">Title:</h3>
+                    <p className="mb-2">{section.title}</p>
+                    <h3 className="font-medium">Description:</h3>
+                    <p className="whitespace-pre-wrap">{section.description}</p>
                   </>
+                ) : (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Title</label>
+                      <Input
+                        value={formData.title}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Description</label>
+                      <Textarea
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        className="w-full"
+                        rows={4}
+                      />
+                    </div>
+                  </div>
                 )}
               </div>
               <div>
-                {editing === section.id ? (
+                {editingSection !== section.id ? (
+                  <Button onClick={() => handleEdit(section)}>Edit</Button>
+                ) : (
                   <div className="space-x-2">
                     <Button onClick={handleSave}>Save</Button>
-                    <Button variant="outline" onClick={() => setEditing(null)}>
+                    <Button variant="outline" onClick={() => setEditingSection(null)}>
                       Cancel
                     </Button>
                   </div>
-                ) : (
-                  <Button onClick={() => handleEdit(section)}>Edit</Button>
                 )}
               </div>
             </div>
-            <p className="text-sm text-gray-400">
-              Last updated: {new Date(section.updated_at).toLocaleDateString()}
-            </p>
           </div>
         ))}
       </div>
