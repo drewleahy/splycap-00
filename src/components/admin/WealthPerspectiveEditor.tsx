@@ -22,7 +22,7 @@ export const WealthPerspectiveEditor = () => {
         .from("content_sections")
         .select("*")
         .eq("section_id", "wealth-perspective")
-        .single();
+        .maybeSingle();
       
       if (error) throw error;
       return data;
@@ -41,12 +41,12 @@ export const WealthPerspectiveEditor = () => {
     try {
       const { error } = await supabase
         .from("content_sections")
-        .update({
+        .upsert({
+          section_id: "wealth-perspective",
           title: formData.title,
           description: formData.description,
           updated_at: new Date().toISOString(),
-        })
-        .eq("section_id", "wealth-perspective");
+        });
 
       if (error) throw error;
 
@@ -100,8 +100,8 @@ export const WealthPerspectiveEditor = () => {
       ) : (
         <div>
           <h3 className="font-medium mb-2">Current Content:</h3>
-          <p className="mb-4">{content?.title}</p>
-          <p className="mb-4 whitespace-pre-wrap">{content?.description}</p>
+          <p className="mb-4">{content?.title || "No title set"}</p>
+          <p className="mb-4 whitespace-pre-wrap">{content?.description || "No description set"}</p>
           <Button onClick={handleEdit}>Edit</Button>
         </div>
       )}

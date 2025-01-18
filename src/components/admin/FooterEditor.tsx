@@ -20,7 +20,7 @@ export const FooterEditor = () => {
         .from("content_sections")
         .select("*")
         .eq("section_id", "footer")
-        .single();
+        .maybeSingle();
       
       if (error) throw error;
       return data;
@@ -38,11 +38,11 @@ export const FooterEditor = () => {
     try {
       const { error } = await supabase
         .from("content_sections")
-        .update({
+        .upsert({
+          section_id: "footer",
           description: formData.description,
           updated_at: new Date().toISOString(),
-        })
-        .eq("section_id", "footer");
+        });
 
       if (error) throw error;
 
@@ -88,7 +88,7 @@ export const FooterEditor = () => {
         </div>
       ) : (
         <div>
-          <p className="mb-4 whitespace-pre-wrap">{content?.description}</p>
+          <p className="mb-4 whitespace-pre-wrap">{content?.description || "No description set"}</p>
           <Button onClick={handleEdit}>Edit</Button>
         </div>
       )}
