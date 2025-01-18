@@ -36,6 +36,36 @@ export type Database = {
         }
         Relationships: []
       }
+      cta_sections: {
+        Row: {
+          button_text: string
+          created_at: string
+          description: string
+          id: string
+          section_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          button_text: string
+          created_at?: string
+          description: string
+          id?: string
+          section_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          button_text?: string
+          created_at?: string
+          description?: string
+          id?: string
+          section_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       investment_focus_items: {
         Row: {
           created_at: string
@@ -59,6 +89,57 @@ export type Database = {
           icon?: string
           id?: string
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      partners: {
+        Row: {
+          created_at: string
+          id: string
+          location: string
+          name: string
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location: string
+          name: string
+          role: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location?: string
+          name?: string
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      past_investments: {
+        Row: {
+          created_at: string
+          id: string
+          logo_url: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          logo_url: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          logo_url?: string
+          name?: string
           updated_at?: string
         }
         Relationships: []
