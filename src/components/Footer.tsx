@@ -2,7 +2,7 @@ import { MapPin } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <footer className="bg-sply-dark text-white py-12 px-4">
+    <footer className="bg-gray-100 text-gray-800 py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
@@ -11,7 +11,7 @@ export const Footer = () => {
               alt="SPLYCAPITAL"
               className="h-8 mb-4"
             />
-            <p className="text-gray-400">
+            <p className="text-gray-600">
               Finding "best in class" deals that investors wouldn't normally have access to
             </p>
           </div>
@@ -19,7 +19,7 @@ export const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Our Locations</h4>
             <div className="space-y-2">
               {["Dallas, TX", "Portland, OR", "Ann Arbor, MI"].map((location) => (
-                <div key={location} className="flex items-center text-gray-400">
+                <div key={location} className="flex items-center text-gray-600">
                   <MapPin className="w-4 h-4 mr-2" />
                   <span>{location}</span>
                 </div>
@@ -28,14 +28,14 @@ export const Footer = () => {
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact</h4>
-            <p className="text-gray-400">
+            <p className="text-gray-600">
               For general inquiries:
               <br />
               info@splycapital.com
             </p>
           </div>
         </div>
-        <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
+        <div className="border-t border-gray-200 pt-8 text-center text-gray-600">
           <p>&copy; {new Date().getFullYear()} SPLYCAPITAL. All rights reserved.</p>
         </div>
       </div>
