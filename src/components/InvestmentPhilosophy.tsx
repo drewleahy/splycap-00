@@ -1,6 +1,31 @@
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 export const InvestmentPhilosophy = () => {
+  const { data: philosophyContent, isLoading } = useQuery({
+    queryKey: ["philosophy-content"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("content_sections")
+        .select("*")
+        .eq("section_id", "investment-philosophy")
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <section className="py-20 px-4 bg-white">
       <div className="max-w-6xl mx-auto space-y-16">
@@ -10,9 +35,9 @@ export const InvestmentPhilosophy = () => {
           transition={{ duration: 0.5 }}
           className="text-center max-w-4xl mx-auto"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">Investing in Visionaries With Long-Term Impact</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">{philosophyContent?.title}</h2>
           <p className="text-lg text-gray-600">
-            SPLYCAP focuses on backing visionary founders across diverse industry sectors with significant scale and impact.
+            {philosophyContent?.description}
           </p>
         </motion.div>
 

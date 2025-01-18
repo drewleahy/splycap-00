@@ -1,6 +1,31 @@
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 export const Hero = () => {
+  const { data: heroContent, isLoading } = useQuery({
+    queryKey: ["hero-content"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("content_sections")
+        .select("*")
+        .eq("section_id", "hero")
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[70vh]">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <section className="min-h-[70vh] flex items-center justify-center bg-white text-gray-900 px-4">
       <div className="max-w-4xl mx-auto text-center">
@@ -18,7 +43,7 @@ export const Hero = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-4xl md:text-6xl font-bold mb-6"
         >
-          Access to Elite Investment Opportunities
+          {heroContent?.title}
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -26,7 +51,7 @@ export const Hero = () => {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="text-xl md:text-2xl text-gray-600 mb-8"
         >
-          Finding "best in class" deals that investors wouldn't normally have access to
+          {heroContent?.description}
         </motion.p>
       </div>
     </section>
