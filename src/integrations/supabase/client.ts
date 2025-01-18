@@ -9,7 +9,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: true,
     detectSessionInUrl: true,
     persistSession: true,
-    // Update these URLs to match your deployment
-    redirectTo: window.location.origin,
-  },
+    storage: window.localStorage
+  }
 });
