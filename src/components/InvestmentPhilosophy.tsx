@@ -11,7 +11,7 @@ export const InvestmentPhilosophy = () => {
         .from("content_sections")
         .select("*")
         .eq("section_id", "investment-philosophy")
-        .single();
+        .maybeSingle();
       
       if (error) throw error;
       return data;
@@ -26,6 +26,16 @@ export const InvestmentPhilosophy = () => {
     );
   }
 
+  if (!philosophyContent) {
+    return (
+      <div className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto text-center text-gray-600">
+          No content available
+        </div>
+      </div>
+    );
+  }
+
   return (
     <section className="py-20 px-4 bg-white">
       <div className="max-w-6xl mx-auto space-y-16">
@@ -35,9 +45,9 @@ export const InvestmentPhilosophy = () => {
           transition={{ duration: 0.5 }}
           className="text-center max-w-4xl mx-auto"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">{philosophyContent?.title}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">{philosophyContent.title}</h2>
           <p className="text-lg text-gray-600">
-            {philosophyContent?.description}
+            {philosophyContent.description}
           </p>
         </motion.div>
 
