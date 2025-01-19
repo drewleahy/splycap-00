@@ -67,7 +67,11 @@ export const PastInvestmentsEditor = () => {
     try {
       const { error } = await supabase
         .from("past_investments")
-        .insert([values]);
+        .insert({
+          name: values.name,
+          logo_url: values.logo_url,
+          website_url: values.website_url || null,
+        });
       
       if (error) throw error;
       
@@ -92,7 +96,11 @@ export const PastInvestmentsEditor = () => {
     try {
       const { error } = await supabase
         .from("past_investments")
-        .update(values)
+        .update({
+          name: values.name,
+          logo_url: values.logo_url,
+          website_url: values.website_url || null,
+        })
         .eq("id", id);
       
       if (error) throw error;
