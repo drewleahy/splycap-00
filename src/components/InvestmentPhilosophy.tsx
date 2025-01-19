@@ -55,7 +55,7 @@ export const InvestmentPhilosophy = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="max-w-4xl mx-auto space-y-8"
+          className="max-w-4xl mx-auto space-y-8 text-center"
         >
           <h3 className="text-2xl md:text-3xl font-bold text-gray-900">A Long-Term Alpha Perspective</h3>
           <div className="space-y-6 text-gray-600">
