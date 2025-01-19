@@ -23,7 +23,7 @@ export const InvestmentPhilosophy = () => {
         <div className="max-w-4xl mx-auto text-center mb-12">
           <h2 className="text-4xl font-bold mb-6">{content?.title || "Our Investment Philosophy"}</h2>
           <p className="text-xl text-gray-600">
-            {content?.description || "We find "best in class" deals investors don't have access to"}
+            {content?.description || 'We find "best in class" deals investors don\'t have access to'}
           </p>
         </div>
         
