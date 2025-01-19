@@ -6,50 +6,40 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Pencil, Trash2, Plus, X, Check, ExternalLink } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { FormDescription } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+  name: z.string().min(1, "Company name is required"),
+  logo_url: z.string()
+    .min(1, "Logo URL is required")
+    .url("Must be a valid URL")
+    .regex(/^https?:\/\/.+/i, "Must start with http:// or https://"),
+  website_url: z.string()
+    .url("Must be a valid URL")
+    .regex(/^https?:\/\/.+/i, "Must start with http:// or https://")
+    .optional()
+    .or(z.literal(''))
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export const PastInvestmentsEditor = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newInvestment, setNewInvestment] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    logo_url: "",
-    website_url: "",
-  });
-  const [errors, setErrors] = useState({
-    name: "",
-    logo_url: "",
-    website_url: "",
-  });
-
-  const validateUrls = () => {
-    const newErrors = {
+  
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
       name: "",
       logo_url: "",
       website_url: "",
-    };
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Company name is required";
-    }
-
-    const urlPattern = /^https?:\/\/.+/i;
-    
-    if (!formData.logo_url.trim()) {
-      newErrors.logo_url = "Logo URL is required";
-    } else if (!urlPattern.test(formData.logo_url)) {
-      newErrors.logo_url = "Logo URL must start with http:// or https://";
-    }
-
-    if (formData.website_url.trim() && !urlPattern.test(formData.website_url)) {
-      newErrors.website_url = "Website URL must start with http:// or https://";
-    }
-
-    setErrors(newErrors);
-    return !Object.values(newErrors).some(error => error !== "");
-  };
+    },
+  });
 
   const { data: investments, isLoading } = useQuery({
     queryKey: ["past-investments"],
@@ -66,33 +56,24 @@ export const PastInvestmentsEditor = () => {
 
   const handleEdit = (investment: any) => {
     setEditingId(investment.id);
-    setFormData({
+    form.reset({
       name: investment.name,
       logo_url: investment.logo_url,
       website_url: investment.website_url || "",
     });
-    setErrors({ name: "", logo_url: "", website_url: "" });
   };
 
-  const handleAdd = async () => {
-    if (!validateUrls()) {
-      toast({
-        title: "Validation Error",
-        description: "Please check the form for errors",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const handleAdd = async (values: FormValues) => {
     try {
-      const { error } = await supabase.from("past_investments").insert([formData]);
+      const { error } = await supabase
+        .from("past_investments")
+        .insert([values]);
       
       if (error) throw error;
       
       await queryClient.invalidateQueries({ queryKey: ["past-investments"] });
       setNewInvestment(false);
-      setFormData({ name: "", logo_url: "", website_url: "" });
-      setErrors({ name: "", logo_url: "", website_url: "" });
+      form.reset();
       
       toast({
         title: "Success",
@@ -107,27 +88,18 @@ export const PastInvestmentsEditor = () => {
     }
   };
 
-  const handleUpdate = async (id: string) => {
-    if (!validateUrls()) {
-      toast({
-        title: "Validation Error",
-        description: "Please check the form for errors",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const handleUpdate = async (id: string, values: FormValues) => {
     try {
       const { error } = await supabase
         .from("past_investments")
-        .update(formData)
+        .update(values)
         .eq("id", id);
       
       if (error) throw error;
       
       await queryClient.invalidateQueries({ queryKey: ["past-investments"] });
       setEditingId(null);
-      setErrors({ name: "", logo_url: "", website_url: "" });
+      form.reset();
       
       toast({
         title: "Success",
@@ -177,8 +149,7 @@ export const PastInvestmentsEditor = () => {
         <Button
           onClick={() => {
             setNewInvestment(true);
-            setFormData({ name: "", logo_url: "", website_url: "" });
-            setErrors({ name: "", logo_url: "", website_url: "" });
+            form.reset();
           }}
           className="flex items-center gap-2"
         >
@@ -189,66 +160,74 @@ export const PastInvestmentsEditor = () => {
       <div className="space-y-4">
         {newInvestment && (
           <div className="border p-4 rounded-lg space-y-4">
-            <div>
-              <Input
-                placeholder="Company Name"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-              />
-              {errors.name && (
-                <p className="text-sm text-red-500 mt-1">{errors.name}</p>
-              )}
-            </div>
-            
-            <div>
-              <Input
-                placeholder="Logo URL"
-                value={formData.logo_url}
-                onChange={(e) =>
-                  setFormData({ ...formData, logo_url: e.target.value })
-                }
-              />
-              <FormDescription>
-                Enter a valid image URL starting with http:// or https://
-              </FormDescription>
-              {errors.logo_url && (
-                <p className="text-sm text-red-500 mt-1">{errors.logo_url}</p>
-              )}
-            </div>
-            
-            <div>
-              <Input
-                placeholder="Website URL (optional)"
-                value={formData.website_url}
-                onChange={(e) =>
-                  setFormData({ ...formData, website_url: e.target.value })
-                }
-              />
-              <FormDescription>
-                If provided, must start with http:// or https://
-              </FormDescription>
-              {errors.website_url && (
-                <p className="text-sm text-red-500 mt-1">{errors.website_url}</p>
-              )}
-            </div>
-            
-            <div className="flex gap-2">
-              <Button onClick={handleAdd} className="flex items-center gap-2">
-                <Check className="w-4 h-4" /> Save
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setNewInvestment(false);
-                  setErrors({ name: "", logo_url: "", website_url: "" });
-                }}
-                className="flex items-center gap-2"
-              >
-                <X className="w-4 h-4" /> Cancel
-              </Button>
-            </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleAdd)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Company Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Company Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="logo_url"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Logo URL</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Logo URL" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        Enter a valid image URL starting with http:// or https://
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="website_url"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Website URL (optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Website URL" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        If provided, must start with http:// or https://
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex items-center gap-2">
+                    <Check className="w-4 h-4" /> Save
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setNewInvestment(false);
+                      form.reset();
+                    }}
+                    className="flex items-center gap-2"
+                  >
+                    <X className="w-4 h-4" /> Cancel
+                  </Button>
+                </div>
+              </form>
+            </Form>
           </div>
         )}
 
@@ -258,71 +237,77 @@ export const PastInvestmentsEditor = () => {
             className="border p-4 rounded-lg space-y-4"
           >
             {editingId === investment.id ? (
-              <>
-                <div>
-                  <Input
-                    placeholder="Company Name"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
+              <Form {...form}>
+                <form 
+                  onSubmit={form.handleSubmit((values) => handleUpdate(investment.id, values))} 
+                  className="space-y-4"
+                >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Company Name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  {errors.name && (
-                    <p className="text-sm text-red-500 mt-1">{errors.name}</p>
-                  )}
-                </div>
-                
-                <div>
-                  <Input
-                    placeholder="Logo URL"
-                    value={formData.logo_url}
-                    onChange={(e) =>
-                      setFormData({ ...formData, logo_url: e.target.value })
-                    }
+                  
+                  <FormField
+                    control={form.control}
+                    name="logo_url"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Logo URL</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Logo URL" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          Enter a valid image URL starting with http:// or https://
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <FormDescription>
-                    Enter a valid image URL starting with http:// or https://
-                  </FormDescription>
-                  {errors.logo_url && (
-                    <p className="text-sm text-red-500 mt-1">{errors.logo_url}</p>
-                  )}
-                </div>
-                
-                <div>
-                  <Input
-                    placeholder="Website URL (optional)"
-                    value={formData.website_url}
-                    onChange={(e) =>
-                      setFormData({ ...formData, website_url: e.target.value })
-                    }
+                  
+                  <FormField
+                    control={form.control}
+                    name="website_url"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Website URL (optional)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Website URL" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          If provided, must start with http:// or https://
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <FormDescription>
-                    If provided, must start with http:// or https://
-                  </FormDescription>
-                  {errors.website_url && (
-                    <p className="text-sm text-red-500 mt-1">{errors.website_url}</p>
-                  )}
-                </div>
-                
-                <div className="flex gap-2">
-                  <Button
-                    onClick={() => handleUpdate(investment.id)}
-                    className="flex items-center gap-2"
-                  >
-                    <Check className="w-4 h-4" /> Save
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setEditingId(null);
-                      setErrors({ name: "", logo_url: "", website_url: "" });
-                    }}
-                    className="flex items-center gap-2"
-                  >
-                    <X className="w-4 h-4" /> Cancel
-                  </Button>
-                </div>
-              </>
+                  
+                  <div className="flex gap-2">
+                    <Button type="submit" className="flex items-center gap-2">
+                      <Check className="w-4 h-4" /> Save
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setEditingId(null);
+                        form.reset();
+                      }}
+                      className="flex items-center gap-2"
+                    >
+                      <X className="w-4 h-4" /> Cancel
+                    </Button>
+                  </div>
+                </form>
+              </Form>
             ) : (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
