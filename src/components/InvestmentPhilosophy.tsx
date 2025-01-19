@@ -57,16 +57,16 @@ export const InvestmentPhilosophy = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="max-w-4xl mx-auto space-y-8"
         >
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900">A Long-Term Wealth Generation Perspective</h3>
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-900">A Long-Term Alpha Perspective</h3>
           <div className="space-y-6 text-gray-600">
             <p>
-              We are business builders who seek to maximize long-term value and create defensible industry leaders. Our vehicles enables us to hold investments for the long term, and our investor base of business owners, family offices, and foundations serves as a patient source of capital.
+              We are business builders seeking to maximize long-term value while forging defensible industry leaders. Our philosophy underscores the importance of backing innovation while fostering growth in ventures who are poised to make a substantial difference.
+            </p>
+            <p className="font-bold">
+              Our vehicles enable us to hold investments for the long term, while adding continuous value to their core businesses.
             </p>
             <p>
-              As a result, our portfolio companies operate without the pressure to accept trade-offs associated with short-term investment horizons and instead seek to optimize outcomes for all stakeholders over the long run.
-            </p>
-            <p>
-              Our philosophy underscores the importance of backing innovation while fostering growth in ventures who are poised to make a substantial difference.
+              Our investor base of business owners, family offices, and foundations serve as a patient source of capital. As a result, our portfolio companies operate without the pressure to accept trade-offs associated with short-term investment horizons, optimizing outcomes for all stakeholders in the long run.
             </p>
           </div>
         </motion.div>
