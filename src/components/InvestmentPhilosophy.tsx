@@ -80,8 +80,8 @@ export const InvestmentPhilosophy = () => {
               className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1"
             >
               <img
-                src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=500"
-                alt="Investment Strategy"
+                src="https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a"
+                alt="NYC Skyline"
                 className="w-full h-40 object-cover rounded-lg mb-6"
               />
               <p className="text-gray-900 font-bold leading-relaxed">
