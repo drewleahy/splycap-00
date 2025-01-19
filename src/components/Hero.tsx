@@ -41,7 +41,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-4xl md:text-6xl font-bold mb-6"
+          className="text-3xl md:text-4xl font-bold mb-6"
         >
           {heroContent?.title}
         </motion.h1>
@@ -49,7 +49,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="text-xl md:text-2xl text-gray-600 mb-8"
+          className="text-lg md:text-xl text-gray-600 mb-8"
         >
           {heroContent?.description}
         </motion.p>
