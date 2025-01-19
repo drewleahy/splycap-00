@@ -48,28 +48,6 @@ export const InvestmentPhilosophy = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
             A Long-Term Alpha Perspective
           </h2>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="grid grid-cols-3 gap-6 mb-12"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=500"
-              alt="Growth Chart"
-              className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=500"
-              alt="Business Meeting"
-              className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1551259072-89f4d127b92d?auto=format&fit=crop&w=500"
-              alt="Investment Analysis"
-              className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-            />
-          </motion.div>
         </motion.div>
 
         <motion.div
@@ -86,8 +64,8 @@ export const InvestmentPhilosophy = () => {
               className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1"
             >
               <img
-                src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=500"
-                alt="Business Growth"
+                src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952"
+                alt="NYC Skyline"
                 className="w-full h-40 object-cover rounded-lg mb-6"
               />
               <p className="text-gray-700 leading-relaxed">
