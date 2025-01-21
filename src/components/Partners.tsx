@@ -8,7 +8,7 @@ const partners = [
     location: "Dallas, TX",
     linkedin: "https://www.linkedin.com/in/tyler-williams-476283101/",
     bio: "Tyler Williams is a seasoned investment professional with extensive experience in private equity and alternative investments. As a General Partner at SPLY Capital, he focuses on identifying and evaluating unique investment opportunities in the private markets. His expertise spans across deal sourcing, due diligence, and portfolio management, with a particular emphasis on off-market transactions. Tyler has built a strong network of industry relationships that enables him to access exclusive investment opportunities for SPLY Capital's investors.",
-    image: "/lovable-uploads/ba715009-75e7-4123-9190-33037b0b5102.png"
+    image: "/lovable-uploads/4d28451c-7efa-4856-983e-004c1c3a5142.png"
   },
   {
     name: "Omar Marquez",
@@ -16,7 +16,7 @@ const partners = [
     location: "Portland, OR",
     linkedin: "https://www.linkedin.com/in/omarquezportland/",
     bio: "Omar Marquez brings a wealth of experience in investment management and business development to SPLY Capital. As a General Partner, he specializes in identifying high-potential investment opportunities and building strategic partnerships. Omar's background includes extensive work in private markets, where he has demonstrated a strong track record of successful investments and portfolio management. His approach combines rigorous analysis with innovative thinking to uncover unique investment opportunities.",
-    image: "/lovable-uploads/4d28451c-7efa-4856-983e-004c1c3a5142.png"
+    image: "/lovable-uploads/d4ba0cd2-04c8-44f5-9b52-bd4cca8dbacd.png"
   },
   {
     name: "Drew Leahy",
@@ -24,7 +24,7 @@ const partners = [
     location: "Ann Arbor, MI",
     linkedin: "https://www.linkedin.com/in/drewleahy/",
     bio: "Drew Leahy is a General Partner at SPLY Capital with significant experience in investment strategy and portfolio management. Previously, he served as a founding partner at Hawke Ventures ($25M AUM) and as a general partner for a New Zealand venture fund ($50M AUM). Drew has developed a comprehensive understanding of private market dynamics and maintains strong relationships within the investment community. His analytical approach and deep market knowledge contribute to SPLY Capital's ability to source and evaluate exceptional investment opportunities.",
-    image: "/lovable-uploads/d4ba0cd2-04c8-44f5-9b52-bd4cca8dbacd.png"
+    image: "/lovable-uploads/ba715009-75e7-4123-9190-33037b0b5102.png"
   },
 ];
 
