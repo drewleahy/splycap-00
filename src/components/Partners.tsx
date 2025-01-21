@@ -46,7 +46,7 @@ export const Partners = () => {
                 <img 
                   src={partner.image} 
                   alt={partner.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover grayscale"
                 />
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-900">{partner.name}</h3>
