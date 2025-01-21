@@ -21,7 +21,7 @@ const partners = [
     role: "General Partner",
     location: "Ann Arbor, MI",
     linkedin: "https://www.linkedin.com/in/drewleahy/",
-    bio: "Drew Leahy is a General Partner at SPLY Capital with significant experience in investment strategy and portfolio management. His expertise lies in identifying and executing alternative investment opportunities across various sectors. Drew has developed a comprehensive understanding of private market dynamics and maintains strong relationships within the investment community. His analytical approach and deep market knowledge contribute to SPLY Capital's ability to source and evaluate exceptional investment opportunities.",
+    bio: "Drew Leahy is a General Partner at SPLY Capital with significant experience in investment strategy and portfolio management. Previously, he served as a founding partner at Hawke Ventures ($25M AUM) and as a general partner for a New Zealand venture fund ($50M AUM). His expertise lies in identifying and executing alternative investment opportunities across various sectors. Drew has developed a comprehensive understanding of private market dynamics and maintains strong relationships within the investment community. His analytical approach and deep market knowledge contribute to SPLY Capital's ability to source and evaluate exceptional investment opportunities.",
   },
 ];
 
