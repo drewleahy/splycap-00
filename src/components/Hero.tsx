@@ -47,7 +47,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="h-24 md:h-32 mx-auto mb-8"
+          className="h-16 md:h-24 mx-auto mb-8"
         />
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
