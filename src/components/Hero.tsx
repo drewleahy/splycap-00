@@ -33,7 +33,7 @@ export const Hero = () => {
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: "url('/lovable-uploads/6da6a794-cbf3-484f-b5f1-730c9724d531.png')",
-          backgroundSize: '100%',
+          backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
