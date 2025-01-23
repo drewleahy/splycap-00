@@ -83,13 +83,13 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-gray-100 rounded-lg"
+            className="p-8 bg-gray-100 rounded-lg h-full flex flex-col"
           >
             <h3 className="text-2xl font-bold mb-4 text-gray-900">Become an LP</h3>
             <p className="mb-6 text-gray-600">
               Interested in seeing our dealflow? We'd love to hear from you.
             </p>
-            <div id="hubspot-form-container"></div>
+            <div id="hubspot-form-container" className="flex-grow"></div>
           </motion.div>
         </div>
       </div>
