@@ -42,7 +42,7 @@ export const Hero = () => {
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
         <motion.img
-          src="/lovable-uploads/72f9c791-ffdb-4dcc-b146-ce52cecdf3a7.png"
+          src="/lovable-uploads/f7a927cd-a039-40ff-82ba-7da595d28922.png"
           alt="SPLYCAP"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
