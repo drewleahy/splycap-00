@@ -44,8 +44,10 @@ export const PastInvestments = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {investments?.map((investment, index) => {
-            // Get just the path portion of the URL, removing any domain
-            const logoUrl = new URL(investment.logo_url, window.location.origin).pathname;
+            // Handle both relative and absolute URLs
+            const logoUrl = investment.logo_url.startsWith('http') 
+              ? `/lovable-uploads/${investment.logo_url.split('/').pop()}`
+              : investment.logo_url;
             
             return (
               <motion.div
