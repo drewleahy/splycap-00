@@ -53,7 +53,7 @@ export const PastInvestmentForm = ({
       }
 
       const { publicUrl } = await response.json();
-      setValue("logo_url", publicUrl);
+      setValue("logo_url", `/lovable-uploads/${file.name}`);
       toast({
         title: "Success",
         description: "Logo uploaded successfully",

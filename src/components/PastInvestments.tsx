@@ -34,26 +34,10 @@ export const PastInvestments = () => {
     try {
       console.log('Processing URL:', url);
       
-      // If it's a Supabase storage URL, get the public URL
-      if (url.includes('storage.googleapis.com')) {
-        const { data } = supabase.storage.from('uploads').getPublicUrl(url);
-        console.log('Supabase public URL:', data.publicUrl);
-        return data.publicUrl;
-      }
-      
       // If it's already a relative path starting with /lovable-uploads, use it as is
       if (url.startsWith('/lovable-uploads/')) {
         console.log('Using relative path:', url);
         return url;
-      }
-      
-      // If it's a full URL, try to get the filename
-      if (url.startsWith('http')) {
-        const filename = url.split('/').pop();
-        if (filename) {
-          console.log('Extracted filename from URL:', filename);
-          return `/lovable-uploads/${filename}`;
-        }
       }
       
       // If it's just a filename, assume it's in lovable-uploads
