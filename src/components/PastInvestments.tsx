@@ -32,13 +32,18 @@ export const PastInvestments = () => {
 
   const getImageUrl = (url: string) => {
     try {
-      // If it's a Supabase storage URL, use it as is
+      console.log('Processing URL:', url);
+      
+      // If it's a Supabase storage URL, get the public URL
       if (url.includes('storage.googleapis.com')) {
-        return url;
+        const { data } = supabase.storage.from('uploads').getPublicUrl(url);
+        console.log('Supabase public URL:', data.publicUrl);
+        return data.publicUrl;
       }
       
       // If it's already a relative path starting with /lovable-uploads, use it as is
       if (url.startsWith('/lovable-uploads/')) {
+        console.log('Using relative path:', url);
         return url;
       }
       
@@ -46,16 +51,19 @@ export const PastInvestments = () => {
       if (url.startsWith('http')) {
         const filename = url.split('/').pop();
         if (filename) {
+          console.log('Extracted filename from URL:', filename);
           return `/lovable-uploads/${filename}`;
         }
       }
       
       // If it's just a filename, assume it's in lovable-uploads
       if (!url.includes('/')) {
+        console.log('Using filename directly:', url);
         return `/lovable-uploads/${url}`;
       }
       
       // Default case: return the URL as is
+      console.log('Using URL as is:', url);
       return url;
     } catch (error) {
       console.error('Error processing image URL:', url, error);
@@ -102,12 +110,14 @@ export const PastInvestments = () => {
                     alt={`${investment.name} logo`}
                     className="max-w-full max-h-full object-contain"
                     onError={(e) => {
+                      const target = e.currentTarget;
                       console.error(`Error loading image for ${investment.name}:`, {
                         url: logoUrl,
                         originalUrl: investment.logo_url,
                         error: e
                       });
-                      e.currentTarget.src = "/placeholder.svg";
+                      target.onerror = null; // Prevent infinite loop
+                      target.src = "/placeholder.svg";
                       toast({
                         title: "Image failed to load",
                         description: `Could not load logo for ${investment.name}. Please check the image URL in the database.`,
