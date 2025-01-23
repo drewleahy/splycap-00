@@ -57,15 +57,19 @@ export const Hero = () => {
         >
           {heroContent?.title}
         </motion.h1>
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed"
-          style={{ fontFamily: 'Georgia, serif' }}
+          className="bg-gray-800/50 backdrop-blur-sm py-3 px-6 rounded-lg inline-block"
         >
-          {heroContent?.description}
-        </motion.p>
+          <p
+            className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto leading-relaxed"
+            style={{ fontFamily: 'Georgia, serif' }}
+          >
+            {heroContent?.description}
+          </p>
+        </motion.div>
       </div>
     </section>
   );
