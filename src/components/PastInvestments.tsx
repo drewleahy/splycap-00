@@ -30,23 +30,22 @@ export const PastInvestments = () => {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Our Past Investments</h2>
-          <p className="text-xl font-semibold text-red-500 mt-4">UNDER CONSTRUCTION</p>
         </motion.div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {investments?.map((investment, index) => (
             <motion.div
               key={investment.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white p-6 rounded-lg shadow-sm flex items-center justify-center"
+              className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               <a
                 href={investment.website_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full aspect-[3/2] relative flex items-center justify-center hover:opacity-80 transition-opacity"
+                className="block w-full h-32 relative flex items-center justify-center hover:opacity-80 transition-opacity"
               >
                 <img
                   src={investment.logo_url}
