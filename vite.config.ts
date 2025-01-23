@@ -9,6 +9,11 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  build: {
+    // Ensure we're using standard Node.js build process
+    target: 'esnext',
+    outDir: 'dist',
+  },
   plugins: [
     react(),
     mode === 'development' &&
