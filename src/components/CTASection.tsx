@@ -1,21 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 
-export const CTASection = () => {
-  const [email, setEmail] = useState("");
-  const { toast } = useToast();
+declare global {
+  interface Window {
+    hbspt: any;
+  }
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Thank you for your interest!",
-      description: "We'll be in touch soon.",
-    });
-    setEmail("");
-  };
+export const CTASection = () => {
+  useEffect(() => {
+    // Load HubSpot script
+    const script = document.createElement('script');
+    script.src = "//js.hsforms.net/forms/embed/v2.js";
+    script.charset = "utf-8";
+    script.type = "text/javascript";
+    script.async = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      if (window.hbspt) {
+        window.hbspt.forms.create({
+          portalId: "45246649",
+          formId: "aa7c9602-fe5e-4224-82ae-aa19cb35a1a7",
+          target: "#hubspot-form-container",
+          css: `
+            .hs-form {
+              font-family: inherit;
+            }
+            .hs-form input {
+              width: 100%;
+              height: 40px;
+              padding: 8px 12px;
+              border: 1px solid #e2e8f0;
+              border-radius: 6px;
+              background-color: white;
+              margin-bottom: 16px;
+            }
+            .hs-form .hs-button {
+              background-color: #1a1f2c;
+              color: white;
+              font-weight: 500;
+              cursor: pointer;
+              transition: background-color 0.2s;
+            }
+            .hs-form .hs-button:hover {
+              background-color: #2d3748;
+            }
+          `
+        });
+      }
+    };
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <section className="py-20 px-4 bg-white text-gray-800">
@@ -49,19 +89,7 @@ export const CTASection = () => {
             <p className="mb-6 text-gray-600">
               Interested in seeing our dealflow? We'd love to hear from you.
             </p>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
-                required
-              />
-              <Button type="submit" className="w-full bg-gray-800 hover:bg-gray-700 text-white">
-                Get Started
-              </Button>
-            </form>
+            <div id="hubspot-form-container"></div>
           </motion.div>
         </div>
       </div>
