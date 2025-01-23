@@ -28,7 +28,6 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center">
-      {/* Background Image */}
       <div 
         className="absolute inset-0 z-0"
         style={{
@@ -37,10 +36,8 @@ export const Hero = () => {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
-      </div>
+      />
+      <div className="absolute inset-0 bg-black bg-opacity-30" />
 
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
