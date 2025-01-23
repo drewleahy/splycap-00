@@ -53,6 +53,10 @@ export const OurAllocations = () => {
             </div>
           ))}
         </div>
+        
+        <div className="text-center mt-12">
+          <p className="text-xl text-gray-600 italic">And many more...</p>
+        </div>
       </div>
     </section>
   );
