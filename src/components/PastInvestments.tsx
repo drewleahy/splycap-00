@@ -30,6 +30,34 @@ export const PastInvestments = () => {
     return null;
   }
 
+  const getImageUrl = (url: string) => {
+    try {
+      // If it's already a relative path starting with /lovable-uploads, use it as is
+      if (url.startsWith('/lovable-uploads/')) {
+        return url;
+      }
+      
+      // If it's a full URL, try to get the filename
+      if (url.startsWith('http')) {
+        const filename = url.split('/').pop();
+        if (filename) {
+          return `/lovable-uploads/${filename}`;
+        }
+      }
+      
+      // If it's just a filename, assume it's in lovable-uploads
+      if (!url.includes('/')) {
+        return `/lovable-uploads/${url}`;
+      }
+      
+      // Default case: return the URL as is
+      return url;
+    } catch (error) {
+      console.error('Error processing image URL:', url, error);
+      return url;
+    }
+  };
+
   return (
     <section className="py-20 px-4 bg-gray-50">
       <div className="max-w-6xl mx-auto">
@@ -44,10 +72,11 @@ export const PastInvestments = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {investments?.map((investment, index) => {
-            // Handle both relative and absolute URLs
-            const logoUrl = investment.logo_url.startsWith('http') 
-              ? `/lovable-uploads/${investment.logo_url.split('/').pop()}`
-              : investment.logo_url;
+            const logoUrl = getImageUrl(investment.logo_url);
+            console.log(`Processing image for ${investment.name}:`, {
+              original: investment.logo_url,
+              processed: logoUrl
+            });
             
             return (
               <motion.div
@@ -68,11 +97,15 @@ export const PastInvestments = () => {
                     alt={`${investment.name} logo`}
                     className="max-w-full max-h-full object-contain"
                     onError={(e) => {
-                      console.error(`Error loading image for ${investment.name}:`, e);
+                      console.error(`Error loading image for ${investment.name}:`, {
+                        url: logoUrl,
+                        originalUrl: investment.logo_url,
+                        error: e
+                      });
                       e.currentTarget.src = "/placeholder.svg";
                       toast({
                         title: "Image failed to load",
-                        description: `Could not load logo for ${investment.name}`,
+                        description: `Could not load logo for ${investment.name}. Please check the image URL in the database.`,
                         variant: "destructive",
                       });
                     }}
