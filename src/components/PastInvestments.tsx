@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export const PastInvestments = () => {
+  const { toast } = useToast();
   const { data: investments, isLoading } = useQuery({
     queryKey: ["past-investments"],
     queryFn: async () => {
@@ -11,8 +13,15 @@ export const PastInvestments = () => {
         .select("*")
         .order("name");
       
-      if (error) throw error;
-      console.log("Fetched investments:", data);
+      if (error) {
+        toast({
+          title: "Error loading investments",
+          description: error.message,
+          variant: "destructive",
+        });
+        throw error;
+      }
+      
       return data;
     },
   });
@@ -35,8 +44,8 @@ export const PastInvestments = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {investments?.map((investment, index) => {
-            // Remove any domain prefix from the URL if it exists
-            const logoUrl = investment.logo_url.replace(/^https?:\/\/[^\/]+/, '');
+            // Get just the path portion of the URL, removing any domain
+            const logoUrl = new URL(investment.logo_url, window.location.origin).pathname;
             
             return (
               <motion.div
@@ -59,6 +68,11 @@ export const PastInvestments = () => {
                     onError={(e) => {
                       console.error(`Error loading image for ${investment.name}:`, e);
                       e.currentTarget.src = "/placeholder.svg";
+                      toast({
+                        title: "Image failed to load",
+                        description: `Could not load logo for ${investment.name}`,
+                        variant: "destructive",
+                      });
                     }}
                   />
                 </a>
