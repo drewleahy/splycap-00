@@ -35,13 +35,9 @@ export const PastInvestments = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {investments?.map((investment, index) => {
-            // Ensure the logo_url is a relative path
-            const logoUrl = investment.logo_url.startsWith('http') 
-              ? investment.logo_url 
-              : investment.logo_url.startsWith('/') 
-                ? investment.logo_url 
-                : `/${investment.logo_url}`;
-
+            // Remove any domain prefix from the URL if it exists
+            const logoUrl = investment.logo_url.replace(/^https?:\/\/[^\/]+/, '');
+            
             return (
               <motion.div
                 key={investment.id}
