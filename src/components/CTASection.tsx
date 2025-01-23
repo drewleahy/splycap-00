@@ -65,9 +65,9 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-sply-dark rounded-lg text-white flex flex-col justify-center"
+            className="p-8 bg-sply-dark rounded-lg flex flex-col justify-center"
           >
-            <h3 className="text-2xl font-bold mb-4">Submit A Deal</h3>
+            <h3 className="text-2xl font-bold mb-4 text-white">Submit A Deal</h3>
             <p className="mb-6 text-gray-300">
               Founders, have a deal you want us to look at? Submit your pitch deck and round information, and let us get back to you. We appreciate your submission!
             </p>
@@ -83,13 +83,13 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-gray-100 rounded-lg h-full flex flex-col"
+            className="p-8 bg-gray-100 rounded-lg"
           >
             <h3 className="text-2xl font-bold mb-4 text-gray-900">Become an LP</h3>
             <p className="mb-6 text-gray-600">
               Interested in seeing our dealflow? We'd love to hear from you.
             </p>
-            <div id="hubspot-form-container" className="flex-grow"></div>
+            <div id="hubspot-form-container"></div>
           </motion.div>
         </div>
       </div>
