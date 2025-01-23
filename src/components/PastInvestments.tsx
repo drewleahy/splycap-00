@@ -12,7 +12,7 @@ export const PastInvestments = () => {
         .order("name");
       
       if (error) throw error;
-      console.log("Fetched investments:", data); // Debug log
+      console.log("Fetched investments:", data);
       return data;
     },
   });
@@ -35,7 +35,13 @@ export const PastInvestments = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {investments?.map((investment, index) => {
-            console.log("Rendering investment:", investment); // Debug log
+            // Ensure the logo_url is a relative path
+            const logoUrl = investment.logo_url.startsWith('http') 
+              ? investment.logo_url 
+              : investment.logo_url.startsWith('/') 
+                ? investment.logo_url 
+                : `/${investment.logo_url}`;
+
             return (
               <motion.div
                 key={investment.id}
@@ -51,12 +57,12 @@ export const PastInvestments = () => {
                   className="block w-full h-32 relative flex items-center justify-center hover:opacity-80 transition-opacity"
                 >
                   <img
-                    src={investment.logo_url}
+                    src={logoUrl}
                     alt={`${investment.name} logo`}
                     className="max-w-full max-h-full object-contain"
                     onError={(e) => {
                       console.error(`Error loading image for ${investment.name}:`, e);
-                      e.currentTarget.src = "/placeholder.svg"; // Fallback image
+                      e.currentTarget.src = "/placeholder.svg";
                     }}
                   />
                 </a>
