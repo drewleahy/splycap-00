@@ -29,7 +29,7 @@ export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center">
       <div 
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 grayscale"
         style={{
           backgroundImage: "url('/lovable-uploads/447bd166-d9ab-4a14-b16c-17cb098b3b8d.png')",
           backgroundSize: 'cover',
