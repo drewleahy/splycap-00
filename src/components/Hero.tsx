@@ -33,7 +33,7 @@ export const Hero = () => {
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: "url('/lovable-uploads/6da6a794-cbf3-484f-b5f1-730c9724d531.png')",
-          backgroundSize: 'cover',
+          backgroundSize: '100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
@@ -44,14 +44,15 @@ export const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
-        <motion.img
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          src="/lovable-uploads/f7a927cd-a039-40ff-82ba-7da595d28922.png"
-          alt="SPLYCAPITAL"
-          className="h-16 md:h-24 mx-auto mb-8 filter brightness-0 invert"
-        />
+          className="text-4xl md:text-6xl font-bold mb-8 text-white text-shadow-lg"
+          style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+        >
+          SPLYCAP
+        </motion.h1>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
