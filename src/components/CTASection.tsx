@@ -65,14 +65,14 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-sply-dark rounded-lg flex flex-col justify-center"
+            className="p-12 bg-sply-dark rounded-lg flex flex-col justify-center min-h-[400px]"
           >
-            <h3 className="text-2xl font-bold mb-4 text-white">Submit A Deal</h3>
-            <p className="mb-6 text-gray-300">
+            <h3 className="text-2xl font-bold mb-6 text-white">Submit A Deal</h3>
+            <p className="mb-8 text-gray-300 text-lg">
               Founders, have a deal you want us to look at? Submit your pitch deck and round information, and let us get back to you. We appreciate your submission!
             </p>
             <Button
-              className="w-full bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800"
+              className="w-full bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 py-6 text-lg"
               onClick={() => window.location.href = "#contact"}
             >
               Submit Your Pitch
@@ -83,13 +83,13 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-gray-100 rounded-lg"
+            className="p-12 bg-gray-100 rounded-lg min-h-[400px]"
           >
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Become an LP</h3>
-            <p className="mb-6 text-gray-600">
+            <h3 className="text-2xl font-bold mb-6 text-gray-900">Become an LP</h3>
+            <p className="mb-8 text-gray-600 text-lg">
               Interested in seeing our dealflow? We'd love to hear from you.
             </p>
-            <div id="hubspot-form-container"></div>
+            <div id="hubspot-form-container" className="h-full"></div>
           </motion.div>
         </div>
       </div>
