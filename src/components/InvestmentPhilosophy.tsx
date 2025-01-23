@@ -23,7 +23,7 @@ export const InvestmentPhilosophy = () => {
           <h2 className="text-4xl font-bold mb-4 text-sply-dark">{content?.title || "Our Investment Philosophy"}</h2>
           <div className="bg-[#F6F6F7] py-8 px-10 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300">
             <p className="text-lg text-gray-700 font-medium leading-relaxed">
-              {content?.description || 'We are business builders who seek to maximize long-term value and create defensible industry leaders. Our vehicles enables us to hold investments for the long term, and our investor base of business owners, family offices, and foundations serves as a patient source of capital.'}
+              {content?.description || "We are business builders who seek long-term value while backing titan's of industry. Our vehicles enable us to hold investments for the long term, with our investor base of <span className='underline'>business owners</span>, <span className='underline'>family offices</span>, and <span className='underline'>foundations</span> serves as a patient source of capital."}
             </p>
           </div>
         </div>
