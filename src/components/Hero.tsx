@@ -41,15 +41,14 @@ export const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
-        <motion.h1
+        <motion.img
+          src="/lovable-uploads/72f9c791-ffdb-4dcc-b146-ce52cecdf3a7.png"
+          alt="SPLYCAP"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-4xl md:text-6xl font-bold mb-8 text-white text-shadow-lg"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
-        >
-          SPLYCAP
-        </motion.h1>
+          className="h-24 md:h-32 mx-auto mb-8"
+        />
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
