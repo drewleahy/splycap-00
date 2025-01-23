@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AssetAllocationChart } from "./AssetAllocationChart";
 
 export const InvestmentPhilosophy = () => {
   const { data: content } = useQuery({
@@ -26,8 +25,6 @@ export const InvestmentPhilosophy = () => {
             {content?.description || 'We find "best in class" deals investors don\'t have access to'}
           </p>
         </div>
-        
-        <AssetAllocationChart />
       </div>
     </section>
   );
