@@ -32,7 +32,7 @@ export const CTASection = () => {
               Founders, have a deal you want us to look at? Submit your pitch deck and round information, and let us get back to you. We appreciate your submission!
             </p>
             <Button
-              className="w-full bg-sply-purple hover:bg-sply-purple/90 text-white"
+              className="w-full bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800"
               onClick={() => window.location.href = "#contact"}
             >
               Submit Your Pitch
