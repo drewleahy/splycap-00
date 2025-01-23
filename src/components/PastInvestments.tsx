@@ -12,6 +12,7 @@ export const PastInvestments = () => {
         .order("name");
       
       if (error) throw error;
+      console.log("Fetched investments:", data); // Debug log
       return data;
     },
   });
@@ -33,28 +34,35 @@ export const PastInvestments = () => {
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {investments?.map((investment, index) => (
-            <motion.div
-              key={investment.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
-            >
-              <a
-                href={investment.website_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full h-32 relative flex items-center justify-center hover:opacity-80 transition-opacity"
+          {investments?.map((investment, index) => {
+            console.log("Rendering investment:", investment); // Debug log
+            return (
+              <motion.div
+                key={investment.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
               >
-                <img
-                  src={investment.logo_url}
-                  alt={`${investment.name} logo`}
-                  className="max-w-full max-h-full object-contain"
-                />
-              </a>
-            </motion.div>
-          ))}
+                <a
+                  href={investment.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full h-32 relative flex items-center justify-center hover:opacity-80 transition-opacity"
+                >
+                  <img
+                    src={investment.logo_url}
+                    alt={`${investment.name} logo`}
+                    className="max-w-full max-h-full object-contain"
+                    onError={(e) => {
+                      console.error(`Error loading image for ${investment.name}:`, e);
+                      e.currentTarget.src = "/placeholder.svg"; // Fallback image
+                    }}
+                  />
+                </a>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
