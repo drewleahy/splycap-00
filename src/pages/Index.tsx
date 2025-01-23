@@ -5,6 +5,7 @@ import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
 import { InvestmentPhilosophy } from "@/components/InvestmentPhilosophy";
 import { OurAllocations } from "@/components/OurAllocations";
+import { PodcastSection } from "@/components/PodcastSection";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
@@ -19,6 +20,7 @@ const Index = () => {
           <InvestmentFocus />
           <Partners />
           <OurAllocations />
+          <PodcastSection />
         </>
       ) : (
         <>
@@ -26,6 +28,7 @@ const Index = () => {
           <InvestmentPhilosophy />
           <Partners />
           <OurAllocations />
+          <PodcastSection />
         </>
       )}
       <CTASection />
