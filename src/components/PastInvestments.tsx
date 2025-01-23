@@ -32,6 +32,11 @@ export const PastInvestments = () => {
 
   const getImageUrl = (url: string) => {
     try {
+      // If it's a Supabase storage URL, use it as is
+      if (url.includes('storage.googleapis.com')) {
+        return url;
+      }
+      
       // If it's already a relative path starting with /lovable-uploads, use it as is
       if (url.startsWith('/lovable-uploads/')) {
         return url;

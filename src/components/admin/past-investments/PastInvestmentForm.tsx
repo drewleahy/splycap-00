@@ -1,35 +1,30 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
-const formSchema = z.object({
-  name: z.string().min(1, "Company name is required"),
-  logo_url: z.string()
-    .min(1, "Logo URL is required")
-    .url("Must be a valid URL")
-    .regex(/^https?:\/\/.+/i, "Must start with http:// or https://"),
-  website_url: z.string()
-    .url("Must be a valid URL")
-    .regex(/^https?:\/\/.+/i, "Must start with http:// or https://")
-    .optional()
-    .or(z.literal(''))
-});
-
-export type InvestmentFormValues = z.infer<typeof formSchema>;
+export interface InvestmentFormValues {
+  name: string;
+  logo_url: string;
+  website_url?: string;
+}
 
 interface PastInvestmentFormProps {
   defaultValues?: InvestmentFormValues;
-  onSubmit: (values: InvestmentFormValues) => Promise<void>;
+  onSubmit: (values: InvestmentFormValues) => void;
   onCancel: () => void;
 }
 
-export const PastInvestmentForm = ({ defaultValues, onSubmit, onCancel }: PastInvestmentFormProps) => {
-  const form = useForm<InvestmentFormValues>({
-    resolver: zodResolver(formSchema),
+export const PastInvestmentForm = ({
+  defaultValues,
+  onSubmit,
+  onCancel,
+}: PastInvestmentFormProps) => {
+  const { toast } = useToast();
+  const [isUploading, setIsUploading] = useState(false);
+  const { register, handleSubmit, setValue, watch } = useForm<InvestmentFormValues>({
     defaultValues: defaultValues || {
       name: "",
       logo_url: "",
@@ -37,71 +32,88 @@ export const PastInvestmentForm = ({ defaultValues, onSubmit, onCancel }: PastIn
     },
   });
 
+  const currentLogoUrl = watch("logo_url");
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("/functions/v1/upload-investment-logo", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const { publicUrl } = await response.json();
+      setValue("logo_url", publicUrl);
+      toast({
+        title: "Success",
+        description: "Logo uploaded successfully",
+      });
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upload logo. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Company Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <Label htmlFor="name">Company Name</Label>
+        <Input id="name" {...register("name", { required: true })} />
+      </div>
+
+      <div>
+        <Label htmlFor="logo">Logo</Label>
+        <div className="flex gap-4 items-center">
+          <Input
+            id="logo"
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            disabled={isUploading}
+          />
+          {currentLogoUrl && (
+            <img
+              src={currentLogoUrl}
+              alt="Logo preview"
+              className="w-12 h-12 object-contain"
+            />
           )}
-        />
-        
-        <FormField
-          control={form.control}
-          name="logo_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Logo URL</FormLabel>
-              <FormControl>
-                <Input placeholder="Logo URL" {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter a valid image URL starting with http:// or https://
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <FormField
-          control={form.control}
-          name="website_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Website URL (optional)</FormLabel>
-              <FormControl>
-                <Input placeholder="Website URL" {...field} />
-              </FormControl>
-              <FormDescription>
-                If provided, must start with http:// or https://
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <div className="flex gap-2">
-          <Button type="submit" className="flex items-center gap-2">
-            <Check className="w-4 h-4" /> Save
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            className="flex items-center gap-2"
-          >
-            <X className="w-4 h-4" /> Cancel
-          </Button>
         </div>
-      </form>
-    </Form>
+        <Input
+          type="hidden"
+          {...register("logo_url", { required: true })}
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="website">Website URL (optional)</Label>
+        <Input id="website" {...register("website_url")} />
+      </div>
+
+      <div className="flex gap-4 justify-end">
+        <Button type="button" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isUploading}>
+          {isUploading ? "Uploading..." : defaultValues ? "Update" : "Add"}
+        </Button>
+      </div>
+    </form>
   );
 };
