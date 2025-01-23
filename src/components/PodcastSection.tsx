@@ -73,12 +73,12 @@ export const PodcastSection = () => {
           }}
         />
         <div className="absolute inset-0 bg-black bg-opacity-30" />
-        <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="relative z-10 h-full flex items-center justify-center px-4">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl md:text-5xl font-bold text-white text-shadow-lg hover:scale-105 transition-transform duration-300"
+            className="text-4xl md:text-5xl font-bold text-white text-shadow-lg hover:scale-105 transition-transform duration-300 text-center"
           >
             Are you ready to work with us?
           </motion.h2>
