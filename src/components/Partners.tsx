@@ -24,7 +24,7 @@ const partners = [
     location: "Ann Arbor, MI",
     linkedin: "https://www.linkedin.com/in/drewleahy/",
     bio: "Drew Leahy is a General Partner at SPLY Capital with significant experience in investment strategy and portfolio management. Previously, he served as a founding partner at Hawke Ventures ($25M AUM) and as a general partner for a New Zealand venture fund ($50M AUM). Drew has developed a comprehensive understanding of private market dynamics and maintains strong relationships within the investment community. His analytical approach and deep market knowledge contribute to SPLY Capital's ability to source and evaluate exceptional investment opportunities.",
-    image: "/lovable-uploads/ba715009-75e7-4123-9190-33037b0b5102.png"
+    image: "/lovable-uploads/452e0ed4-d482-48a7-b740-0c0d3d1defc7.png"
   },
 ];
 
