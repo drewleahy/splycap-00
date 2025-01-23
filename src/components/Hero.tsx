@@ -31,7 +31,7 @@ export const Hero = () => {
       <div 
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: "url('/lovable-uploads/260ba02d-aa20-485c-9893-c37ccebd406e.png')",
+          backgroundImage: "url('/lovable-uploads/447bd166-d9ab-4a14-b16c-17cb098b3b8d.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
