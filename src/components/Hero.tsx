@@ -27,21 +27,36 @@ export const Hero = () => {
   }
 
   return (
-    <section className="min-h-[70vh] flex items-center justify-center bg-white text-gray-900 px-4">
-      <div className="max-w-4xl mx-auto text-center">
+    <section className="relative min-h-screen flex items-center justify-center">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url('/lovable-uploads/6da6a794-cbf3-484f-b5f1-730c9724d531.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
         <motion.img
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           src="/lovable-uploads/f7a927cd-a039-40ff-82ba-7da595d28922.png"
           alt="SPLYCAPITAL"
-          className="h-24 mx-auto mb-8"
+          className="h-16 md:h-24 mx-auto mb-8 filter brightness-0 invert"
         />
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-3xl md:text-4xl font-bold mb-6"
+          className="text-3xl md:text-5xl font-bold mb-6 text-white text-shadow-lg"
         >
           {heroContent?.title}
         </motion.h1>
@@ -49,7 +64,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="text-lg md:text-xl text-gray-600 mb-8"
+          className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed"
         >
           {heroContent?.description}
         </motion.p>
