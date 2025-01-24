@@ -58,6 +58,8 @@ export const CTASection = () => {
               color: #EF4444;
               margin-top: 0.25rem;
               font-size: 0.875rem;
+              display: block;
+              font-weight: 500;
             }
             .hs-submit {
               margin-top: 1.5rem;
@@ -65,20 +67,58 @@ export const CTASection = () => {
             .hs-button {
               background-color: #1A1F2C !important;
               color: white !important;
-              font-weight: 500 !important;
-              padding: 0.75rem 1.5rem !important;
+              font-weight: 600 !important;
+              padding: 1rem 2rem !important;
               border-radius: 0.5rem !important;
               border: none !important;
               cursor: pointer !important;
               width: 100% !important;
               font-size: 1rem !important;
-              transition: background-color 0.2s !important;
+              transition: all 0.2s ease-in-out !important;
+              box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+              text-transform: uppercase !important;
+              letter-spacing: 0.025em !important;
             }
             .hs-button:hover {
               background-color: #2D3748 !important;
+              transform: translateY(-1px) !important;
+              box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+            }
+            .hs-button:active {
+              transform: translateY(0) !important;
+              box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
             }
             .hs-form-required {
               color: #EF4444;
+            }
+            .inputs-list {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+            }
+            .hs-fieldtype-checkbox .hs-form-checkbox-display {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            }
+            .no-list {
+              list-style: none;
+              padding: 0;
+              margin: 4px 0;
+            }
+            label.hs-error-msg {
+              color: #EF4444;
+              font-size: 0.875rem;
+              margin-top: 0.25rem;
+              display: block;
+            }
+            .submitted-message {
+              color: #059669;
+              font-size: 1rem;
+              padding: 1rem;
+              border-radius: 0.5rem;
+              background-color: #ECFDF5;
+              margin-top: 1rem;
             }
           `
         });
