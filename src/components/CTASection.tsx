@@ -23,7 +23,7 @@ export const CTASection = () => {
           portalId: "45246649",
           formId: "aa7c9602-fe5e-4224-82ae-aa19cb35a1a7",
           target: "#hubspot-form-container",
-          submitButtonClass: "bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 px-6 py-2 text-sm rounded-md mt-6",
+          submitButtonClass: "bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 px-6 py-2 text-sm rounded-md mt-6 font-bold",
           cssClass: "hubspot-form-spacing flex flex-col items-center"
         });
       }
