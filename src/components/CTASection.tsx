@@ -23,7 +23,7 @@ export const CTASection = () => {
           portalId: "45246649",
           formId: "aa7c9602-fe5e-4224-82ae-aa19cb35a1a7",
           target: "#hubspot-form-container",
-          submitButtonClass: "bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 px-6 py-2 text-sm rounded-md mt-6 font-bold",
+          submitButtonClass: "bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 px-6 py-2 text-sm rounded-md font-bold",
           cssClass: "hubspot-form-spacing flex flex-col items-center"
         });
       }
@@ -48,12 +48,14 @@ export const CTASection = () => {
             <p className="mb-6 text-gray-300 max-w-2xl text-center">
               Founders, have a deal you want us to look at? Submit your pitch deck and round information, and let us get back to you. We appreciate your submission!
             </p>
-            <Button
-              className="bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 px-6 py-2 text-sm"
-              onClick={() => window.location.href = "#contact"}
-            >
-              Submit Your Pitch
-            </Button>
+            <div className="mt-auto">
+              <Button
+                className="bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 px-6 py-2 text-sm"
+                onClick={() => window.location.href = "#contact"}
+              >
+                Submit Your Pitch
+              </Button>
+            </div>
           </motion.div>
 
           <motion.div
@@ -66,7 +68,7 @@ export const CTASection = () => {
             <p className="mb-6 text-gray-600 max-w-2xl text-center">
               Want access to our deal flow? Let's get started.
             </p>
-            <div id="hubspot-form-container" className="w-full max-w-md mx-auto"></div>
+            <div id="hubspot-form-container" className="w-full max-w-md mx-auto flex flex-col"></div>
           </motion.div>
         </div>
       </div>
