@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const words = [
-  "SPACE/DEFENSE/AEROSPACE",
+  "SPACE/DEFENSE",
   "ENERGY",
   "FOOD",
   "HEALTH",
