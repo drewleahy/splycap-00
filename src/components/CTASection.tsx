@@ -24,7 +24,7 @@ export const CTASection = () => {
           formId: "aa7c9602-fe5e-4224-82ae-aa19cb35a1a7",
           target: "#hubspot-form-container",
           submitButtonClass: "bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 px-6 py-2 text-sm rounded-md mt-6",
-          cssClass: "hubspot-form-spacing"
+          cssClass: "hubspot-form-spacing flex flex-col items-center"
         });
       }
     };
@@ -63,7 +63,7 @@ export const CTASection = () => {
             className="p-8 bg-[#F1F0FB] rounded-lg text-gray-800 flex flex-col items-center"
           >
             <h3 className="text-2xl font-bold mb-4">Become an LP</h3>
-            <div id="hubspot-form-container" className="w-full max-w-2xl"></div>
+            <div id="hubspot-form-container" className="w-full max-w-md mx-auto"></div>
           </motion.div>
         </div>
       </div>
