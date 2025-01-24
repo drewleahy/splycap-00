@@ -97,6 +97,11 @@
   .hubspot-form-spacing .hs-form-field {
     margin-bottom: 1.5rem !important;
   }
+
+  /* HubSpot form labels */
+  .hubspot-form-spacing .hs-form-field label {
+    font-weight: 600 !important;
+  }
 }
 
 @layer base {
