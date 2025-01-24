@@ -92,6 +92,11 @@
   .text-shadow-lg {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
+
+  /* HubSpot form spacing */
+  .hubspot-form-spacing .hs-form-field {
+    margin-bottom: 1.5rem !important;
+  }
 }
 
 @layer base {
