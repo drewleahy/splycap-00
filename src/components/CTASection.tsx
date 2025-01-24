@@ -68,7 +68,7 @@ export const CTASection = () => {
           >
             <h3 className="text-2xl font-bold mb-4">Become an LP</h3>
             <p className="mb-6 text-gray-600 max-w-2xl text-center">
-              Want access to our deal flow? Let's get started.
+              Sign up for access to our deal flow
             </p>
             <div id="hubspot-form-container" className="w-full max-w-md mx-auto flex flex-col"></div>
           </motion.div>
