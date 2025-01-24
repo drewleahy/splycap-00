@@ -10,7 +10,6 @@ declare global {
 
 export const CTASection = () => {
   useEffect(() => {
-    // Load HubSpot script
     const script = document.createElement('script');
     script.src = "//js.hsforms.net/forms/embed/v2.js";
     script.charset = "utf-8";
@@ -27,25 +26,59 @@ export const CTASection = () => {
           css: `
             .hs-form {
               font-family: inherit;
+              max-width: 100%;
+              padding: 1rem;
+            }
+            .hs-form-field {
+              margin-bottom: 1.5rem;
+            }
+            .hs-form-field label {
+              display: block;
+              margin-bottom: 0.5rem;
+              font-size: 1.125rem;
+              color: #1A1F2C;
+              font-weight: 500;
             }
             .hs-form input {
               width: 100%;
-              height: 40px;
-              padding: 8px 12px;
-              border: 1px solid #e2e8f0;
-              border-radius: 6px;
+              height: 48px;
+              padding: 0.75rem 1rem;
+              border: 1px solid #E2E8F0;
+              border-radius: 0.5rem;
               background-color: white;
-              margin-bottom: 16px;
+              font-size: 1rem;
+              transition: border-color 0.2s;
             }
-            .hs-form .hs-button {
-              background-color: #1a1f2c;
-              color: white;
-              font-weight: 500;
-              cursor: pointer;
-              transition: background-color 0.2s;
+            .hs-form input:focus {
+              outline: none;
+              border-color: #9b87f5;
+              box-shadow: 0 0 0 3px rgba(155, 135, 245, 0.1);
             }
-            .hs-form .hs-button:hover {
-              background-color: #2d3748;
+            .hs-error-msg {
+              color: #EF4444;
+              margin-top: 0.25rem;
+              font-size: 0.875rem;
+            }
+            .hs-submit {
+              margin-top: 1.5rem;
+            }
+            .hs-button {
+              background-color: #1A1F2C !important;
+              color: white !important;
+              font-weight: 500 !important;
+              padding: 0.75rem 1.5rem !important;
+              border-radius: 0.5rem !important;
+              border: none !important;
+              cursor: pointer !important;
+              width: 100% !important;
+              font-size: 1rem !important;
+              transition: background-color 0.2s !important;
+            }
+            .hs-button:hover {
+              background-color: #2D3748 !important;
+            }
+            .hs-form-required {
+              color: #EF4444;
             }
           `
         });
@@ -65,14 +98,14 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-sply-dark rounded-lg text-white flex flex-col justify-center"
+            className="p-12 bg-sply-dark rounded-lg text-white flex flex-col justify-center min-h-[500px]"
           >
-            <h3 className="text-2xl font-bold mb-4">Submit A Deal</h3>
-            <p className="mb-6 text-gray-300">
+            <h3 className="text-3xl font-bold mb-6">Submit A Deal</h3>
+            <p className="mb-8 text-gray-300 text-lg leading-relaxed">
               Founders, have a deal you want us to look at? Submit your pitch deck and round information, and let us get back to you. We appreciate your submission!
             </p>
             <Button
-              className="w-full bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800"
+              className="w-full bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 py-6 text-lg"
               onClick={() => window.location.href = "#contact"}
             >
               Submit Your Pitch
@@ -83,10 +116,10 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-gray-100 rounded-lg"
+            className="p-12 bg-[#F8F9FC] rounded-lg min-h-[500px]"
           >
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Become an LP</h3>
-            <p className="mb-6 text-gray-600">
+            <h3 className="text-3xl font-bold mb-6 text-gray-900">Become an LP</h3>
+            <p className="mb-8 text-gray-600 text-lg leading-relaxed">
               Interested in seeing our dealflow? We'd love to hear from you.
             </p>
             <div id="hubspot-form-container"></div>
