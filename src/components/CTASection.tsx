@@ -10,14 +10,14 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-sply-dark rounded-lg text-white"
+            className="p-8 bg-sply-dark rounded-lg text-white text-center"
           >
             <h3 className="text-2xl font-bold mb-4">Submit A Deal</h3>
             <p className="mb-6 text-gray-300">
               Founders, have a deal you want us to look at? Submit your pitch deck and round information, and let us get back to you. We appreciate your submission!
             </p>
             <Button
-              className="w-full bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800"
+              className="bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 px-6 py-2 text-sm"
               onClick={() => window.location.href = "#contact"}
             >
               Submit Your Pitch
