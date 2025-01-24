@@ -7,7 +7,7 @@ const partners = [
     role: "General Partner",
     location: "Dallas, TX",
     linkedin: "https://www.linkedin.com/in/tyler-williams-476283101/",
-    bio: "Tyler Williams is a serial entrepreneur turned seasoned investor, with a proven track record of building and scaling successful companies, culminating in multiple successful exits. This entrepreneurial foundation has honed his expertise in private equity and alternative investments.\n\nAs a General Partner at SPLYCAP, Tyler leverages his deep knowledge in deal sourcing, due diligence, and portfolio management to uncover high-potential investments. His extensive industry network provides access to exclusive opportunities, driving exceptional results for SPLY Capital's investors.",
+    bio: "Tyler Williams is a serial entrepreneur turned seasoned investor, with a proven track record of building and scaling successful companies, culminating in multiple successful exits. This entrepreneurial foundation has honed his expertise in private equity and alternative investments.\n\nAs a General Partner at SPLYCAP, Tyler leverages his deep knowledge in deal sourcing, due diligence, and portfolio management to uncover high-potential investments. His extensive industry network provides access to exclusive opportunities, driving exceptional results for SPLYCAP investors.",
     image: "/lovable-uploads/4d28451c-7efa-4856-983e-004c1c3a5142.png"
   },
   {
