@@ -22,7 +22,8 @@ export const CTASection = () => {
         window.hbspt.forms.create({
           portalId: "45246649",
           formId: "aa7c9602-fe5e-4224-82ae-aa19cb35a1a7",
-          target: "#hubspot-form-container"
+          target: "#hubspot-form-container",
+          submitButtonClass: "bg-[#D3E4FD] hover:bg-[#D3E4FD]/90 text-gray-800 px-6 py-2 text-sm rounded-md"
         });
       }
     };
@@ -40,10 +41,10 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-sply-dark rounded-lg text-white text-center"
+            className="p-8 bg-sply-dark rounded-lg text-white flex flex-col items-center"
           >
             <h3 className="text-2xl font-bold mb-4">Submit A Deal</h3>
-            <p className="mb-6 text-gray-300">
+            <p className="mb-6 text-gray-300 max-w-2xl text-center">
               Founders, have a deal you want us to look at? Submit your pitch deck and round information, and let us get back to you. We appreciate your submission!
             </p>
             <Button
@@ -58,10 +59,10 @@ export const CTASection = () => {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-8 bg-sply-dark rounded-lg text-white"
+            className="p-8 bg-sply-dark rounded-lg text-white flex flex-col items-center"
           >
-            <h3 className="text-2xl font-bold mb-4 text-center">Become an LP</h3>
-            <div id="hubspot-form-container"></div>
+            <h3 className="text-2xl font-bold mb-4">Become an LP</h3>
+            <div id="hubspot-form-container" className="w-full max-w-2xl"></div>
           </motion.div>
         </div>
       </div>
