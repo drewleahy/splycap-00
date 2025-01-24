@@ -96,11 +96,20 @@
   /* HubSpot form spacing */
   .hubspot-form-spacing .hs-form-field {
     margin-bottom: 0.5rem !important;
+    text-align: center !important;
   }
 
   /* HubSpot form labels */
   .hubspot-form-spacing .hs-form-field label {
     font-weight: 600 !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  /* HubSpot form fields container */
+  .hubspot-form-spacing .hs-form-field > .input {
+    display: flex !important;
+    justify-content: center !important;
   }
 }
 
