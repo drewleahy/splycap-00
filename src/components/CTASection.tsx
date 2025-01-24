@@ -37,7 +37,7 @@ export const CTASection = () => {
   return (
     <section className="py-20 px-4 bg-white text-gray-800">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
