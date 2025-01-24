@@ -111,6 +111,11 @@
     display: flex !important;
     justify-content: center !important;
   }
+
+  /* HubSpot form input fields */
+  .hubspot-form-spacing .hs-input {
+    border-radius: 0.5rem !important;
+  }
 }
 
 @layer base {
