@@ -7,7 +7,7 @@ const partners = [
     role: "General Partner",
     location: "Dallas, TX",
     linkedin: "https://www.linkedin.com/in/tyler-williams-476283101/",
-    bio: "Tyler Williams is a seasoned investment professional with extensive experience in private equity and alternative investments. As a General Partner at SPLY Capital, he focuses on identifying and evaluating unique investment opportunities in the private markets. His expertise spans across deal sourcing, due diligence, and portfolio management, with a particular emphasis on off-market transactions. Tyler has built a strong network of industry relationships that enables him to access exclusive investment opportunities for SPLY Capital's investors. Prior to SPLY Capital, Tyler was a Vice President at Gauge Capital, a middle market private equity firm with $2B+ in AUM.",
+    bio: "Tyler Williams is a serial entrepreneur turned seasoned investor, with a proven track record of building and scaling successful companies, culminating in multiple successful exits. This entrepreneurial foundation has honed his expertise in private equity and alternative investments.\n\nAs a General Partner at SPLYCAP, Tyler leverages his deep knowledge in deal sourcing, due diligence, and portfolio management to uncover high-potential investments. His extensive industry network provides access to exclusive opportunities, driving exceptional results for SPLY Capital's investors.",
     image: "/lovable-uploads/4d28451c-7efa-4856-983e-004c1c3a5142.png"
   },
   {
@@ -51,7 +51,7 @@ export const Partners = () => {
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-900">{partner.name}</h3>
               <p className="text-gray-600 mb-4">{partner.role}</p>
-              <p className="text-gray-700 mb-6 text-sm leading-relaxed flex-grow">{partner.bio}</p>
+              <p className="text-gray-700 mb-6 text-sm leading-relaxed flex-grow whitespace-pre-line">{partner.bio}</p>
               <p className="text-gray-800 mb-4">{partner.location}</p>
               <a
                 href={partner.linkedin}
