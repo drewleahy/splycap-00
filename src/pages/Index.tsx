@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { InvestmentPhilosophy } from "@/components/InvestmentPhilosophy";
 import { OurAllocations } from "@/components/OurAllocations";
 import { PodcastSection } from "@/components/PodcastSection";
+import { AnimatedWords } from "@/components/AnimatedWords";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
@@ -14,6 +15,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Hero />
+      <AnimatedWords />
       {isMobile ? (
         <>
           <InvestmentPhilosophy />
