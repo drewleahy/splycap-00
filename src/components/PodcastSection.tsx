@@ -1,20 +1,31 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 
 export const PodcastSection = () => {
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("Please tell us about your family office and include any relevant links!");
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Create the mailto link with pre-populated subject and body
+    const mailtoLink = `mailto:drew@splycapital.com?subject=${encodeURIComponent("I am interested in speaking on the podcast")}&body=${encodeURIComponent(message)}`;
+    
+    // Open the default email client
+    window.location.href = mailtoLink;
+    
     toast({
-      title: "Thanks for your interest!",
-      description: "We'll be in touch about the podcast soon.",
+      title: "Email client opened!",
+      description: "Your default email client has been opened with the pre-populated message.",
     });
+    
     setEmail("");
+    setMessage("Please tell us about your family office and include any relevant links!");
   };
 
   return (
@@ -42,8 +53,8 @@ export const PodcastSection = () => {
                 of family businesses and investors.
               </p>
               
-              <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-                <div className="flex gap-4">
+              <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
+                <div className="flex flex-col gap-4">
                   <Input
                     type="email"
                     placeholder="Enter your email"
@@ -52,8 +63,15 @@ export const PodcastSection = () => {
                     className="flex-1"
                     required
                   />
-                  <Button type="submit">
-                    Get on the Pod
+                  <Textarea
+                    placeholder="Your message"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="min-h-[100px]"
+                    required
+                  />
+                  <Button type="submit" className="w-full">
+                    Get on the Podcast
                   </Button>
                 </div>
               </form>
