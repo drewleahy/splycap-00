@@ -23,6 +23,34 @@ export const OurAllocations = () => {
     {
       src: "/lovable-uploads/d5fca2ae-c2c1-46df-814c-344b23552c49.png",
       alt: "Superfiliate Logo"
+    },
+    {
+      src: "/lovable-uploads/04fd2081-a49d-4fc9-ba7d-659e52a0a3fc.png",
+      alt: "Legacy EV Logo"
+    },
+    {
+      src: "/lovable-uploads/075f4cf1-45a4-4851-b90d-49b0f1d6ac0e.png",
+      alt: "Axel Automotive Logo"
+    },
+    {
+      src: "/lovable-uploads/ac5dd086-8744-449a-820b-8fb756702589.png",
+      alt: "Ondas Logo"
+    },
+    {
+      src: "/lovable-uploads/0cad8683-488e-4792-af7f-754928cabaf9.png",
+      alt: "Psionic Logo"
+    },
+    {
+      src: "/lovable-uploads/ebde123b-be23-4a30-852c-3f81783c1bca.png",
+      alt: "Parcel Logo"
+    },
+    {
+      src: "/lovable-uploads/efced77d-4224-4349-9764-eea14d72867d.png",
+      alt: "Qualtik Logo"
+    },
+    {
+      src: "/lovable-uploads/0adce2c0-3c4c-4939-9e79-e9ba43cdfce7.png",
+      alt: "Facteus Logo"
     }
   ];
 
@@ -39,7 +67,7 @@ export const OurAllocations = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 items-center justify-items-center">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 items-center justify-items-center">
           {logos.map((logo, index) => (
             <div 
               key={index} 
