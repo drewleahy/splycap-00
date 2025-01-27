@@ -4,28 +4,46 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 export const PodcastSection = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("Please tell us about your family office and include any relevant links!");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Create the mailto link with pre-populated subject and body
-    const mailtoLink = `mailto:drew@splycapital.com?subject=${encodeURIComponent("I am interested in speaking on the podcast")}&body=${encodeURIComponent(message)}`;
-    
-    // Open the default email client
-    window.location.href = mailtoLink;
-    
-    toast({
-      title: "Email client opened!",
-      description: "Your default email client has been opened with the pre-populated message.",
-    });
-    
-    setEmail("");
-    setMessage("Please tell us about your family office and include any relevant links!");
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('send-podcast-email', {
+        body: {
+          from: email,
+          message: message,
+          subject: "New Podcast Guest Request"
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Message sent successfully!",
+        description: "We'll get back to you soon.",
+      });
+
+      setEmail("");
+      setMessage("Please tell us about your family office and include any relevant links!");
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Error sending message",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -70,8 +88,12 @@ export const PodcastSection = () => {
                     className="min-h-[100px]"
                     required
                   />
-                  <Button type="submit" className="w-full">
-                    Get on the Podcast
+                  <Button 
+                    type="submit" 
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Sending..." : "Get on the Podcast"}
                   </Button>
                 </div>
               </form>
