@@ -2,6 +2,7 @@ import { WealthPerspectiveEditor } from "@/components/admin/WealthPerspectiveEdi
 import { PartnersEditor } from "@/components/admin/PartnersEditor";
 import { CTAEditor } from "@/components/admin/CTAEditor";
 import { FooterEditor } from "@/components/admin/FooterEditor";
+import { LogosEditor } from "@/components/admin/LogosEditor";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,6 +19,7 @@ const Admin = () => {
       queryClient.invalidateQueries({ queryKey: ["cta-sections"] }),
       queryClient.invalidateQueries({ queryKey: ["footer-content"] }),
       queryClient.invalidateQueries({ queryKey: ["philosophy-content"] }),
+      queryClient.invalidateQueries({ queryKey: ["logos"] }),
     ]);
     
     toast({
@@ -36,6 +38,7 @@ const Admin = () => {
         </Button>
       </div>
       <div className="space-y-8">
+        <LogosEditor />
         <WealthPerspectiveEditor />
         <PartnersEditor />
         <CTAEditor />
