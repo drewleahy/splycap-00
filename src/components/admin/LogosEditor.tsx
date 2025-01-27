@@ -23,7 +23,8 @@ export const LogosEditor = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("past_investments")
-        .select("*");
+        .select("*")
+        .order('updated_at', { ascending: false });
       
       if (error) throw error;
       return data as Investment[];
