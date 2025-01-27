@@ -3,11 +3,12 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const OurAllocations = () => {
   const { data: logos } = useQuery({
-    queryKey: ["past_investments"],
+    queryKey: ["logos"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("past_investments")
-        .select("*");
+        .from("logos")
+        .select("*")
+        .order("order");
       
       if (error) throw error;
       return data;
@@ -30,12 +31,12 @@ export const OurAllocations = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 items-center justify-items-center">
           {logos?.map((logo, index) => (
             <div 
-              key={logo.id} 
+              key={index} 
               className="w-full h-32 flex items-center justify-center p-4 bg-white rounded-lg transition-transform hover:scale-105"
             >
               <img
-                src={logo.logo_url}
-                alt={logo.name}
+                src={logo.src}
+                alt={logo.alt}
                 className="max-w-full max-h-full object-contain"
               />
             </div>
