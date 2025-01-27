@@ -24,7 +24,8 @@ export const LogosEditor = () => {
       const { data, error } = await supabase
         .from("past_investments")
         .select("*")
-        .order('updated_at', { ascending: false });
+        .order('updated_at', { ascending: false })
+        .limit(1000); // Set a high limit to ensure we get all records
       
       if (error) throw error;
       return data as Investment[];
