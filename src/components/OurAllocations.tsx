@@ -51,6 +51,14 @@ export const OurAllocations = () => {
     {
       src: "/lovable-uploads/0adce2c0-3c4c-4939-9e79-e9ba43cdfce7.png",
       alt: "Facteus Logo"
+    },
+    {
+      src: "/lovable-uploads/03c3d3ba-5807-47f4-8644-947b51237635.png",
+      alt: "Mogul AI Logo"
+    },
+    {
+      src: "/lovable-uploads/02799a0f-33b5-42ca-b080-9a2d657533a2.png",
+      alt: "Sydecar Logo"
     }
   ];
 
