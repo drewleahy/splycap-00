@@ -61,7 +61,7 @@ export const PodcastSection = () => {
               The #1 Investment Podcast for Families to Tell Entrepreneurial Stories
             </p>
             <div className="bg-red-500 text-white py-2 px-4 inline-block rounded-full mb-8">
-              TAPING NOW - COMING SOON!
+              IN STUDIO NOW - COMING SOON!
             </div>
             
             <div className="bg-white p-8 rounded-lg shadow-lg">
