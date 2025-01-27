@@ -2,15 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export const OurAllocations = () => {
-  const { data: logos } = useQuery({
-    queryKey: ["logos"],
+  const { data: investments } = useQuery({
+    queryKey: ["past-investments"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("logos")
+        .from("past_investments")
         .select("*")
-        .order("order");
+        .order("created_at", { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching past investments:", error);
+        throw error;
+      }
       return data;
     },
   });
@@ -29,14 +32,14 @@ export const OurAllocations = () => {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 items-center justify-items-center">
-          {logos?.map((logo, index) => (
+          {investments?.map((investment, index) => (
             <div 
-              key={index} 
+              key={investment.id} 
               className="w-full h-32 flex items-center justify-center p-4 bg-white rounded-lg transition-transform hover:scale-105"
             >
               <img
-                src={logo.src}
-                alt={logo.alt}
+                src={investment.logo_url}
+                alt={investment.name}
                 className="max-w-full max-h-full object-contain"
               />
             </div>
