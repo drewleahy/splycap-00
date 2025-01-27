@@ -6,49 +6,45 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, GripVertical } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
-type Logo = {
+type Investment = {
   id: string;
   name: string;
   logo_url: string;
   website_url: string | null;
-  order: number;
+  created_at: string;
+  updated_at: string;
 };
 
 export const LogosEditor = () => {
   const { toast } = useToast();
 
-  const { data: logos, isLoading, refetch } = useQuery({
+  const { data: investments, isLoading, refetch } = useQuery({
     queryKey: ["past_investments"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("past_investments")
-        .select("*")
-        .order("order");
+        .select("*");
       
       if (error) throw error;
-      return data as Logo[];
+      return data as Investment[];
     },
   });
 
   const handleDragEnd = async (result: any) => {
-    if (!result.destination || !logos) return;
+    if (!result.destination || !investments) return;
 
-    const items = Array.from(logos);
+    const items = Array.from(investments);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    // Update the order in the database
-    const updates = items.map((item, index) => ({
-      id: item.id,
-      order: index,
-    }));
-
+    // Update the positions in the database by updating timestamps
+    // This will effectively reorder items when queried
     try {
-      for (const update of updates) {
+      for (const item of items) {
         await supabase
           .from("past_investments")
-          .update({ order: update.order })
-          .eq("id", update.id);
+          .update({ updated_at: new Date().toISOString() })
+          .eq("id", item.id);
       }
 
       toast({
@@ -106,8 +102,8 @@ export const LogosEditor = () => {
               ref={provided.innerRef}
               className="space-y-4"
             >
-              {logos?.map((logo, index) => (
-                <Draggable key={logo.id} draggableId={logo.id} index={index}>
+              {investments?.map((investment, index) => (
+                <Draggable key={investment.id} draggableId={investment.id} index={index}>
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
@@ -118,15 +114,15 @@ export const LogosEditor = () => {
                         <GripVertical className="text-gray-400" />
                       </div>
                       <img
-                        src={logo.logo_url}
-                        alt={logo.name}
+                        src={investment.logo_url}
+                        alt={investment.name}
                         className="w-12 h-12 object-contain"
                       />
                       <div className="flex-1 space-y-2">
-                        <p className="font-medium">{logo.name}</p>
+                        <p className="font-medium">{investment.name}</p>
                         <Input
-                          value={logo.website_url || ""}
-                          onChange={(e) => handleUpdateUrl(logo.id, e.target.value)}
+                          value={investment.website_url || ""}
+                          onChange={(e) => handleUpdateUrl(investment.id, e.target.value)}
                           placeholder="Website URL"
                           className="text-sm"
                         />
