@@ -81,8 +81,9 @@ export const OurAllocations = () => {
         
         <div className="max-w-3xl mx-auto text-center mb-16">
           <p className="text-lg text-gray-600 leading-relaxed">
-            Over the past two decades, our partners have allocated to a host of top performing deals, 
-            with SPLYCAP and partners placing tens of millions of private capital
+            Over the past two decades, our partners have allocated to a host of top performing deals. 
+            Including personal investments, venture capital funds, SPVs, and other private investments, 
+            SPLYCAP has placed tens of millions in private capital
           </p>
         </div>
 
