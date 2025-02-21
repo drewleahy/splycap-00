@@ -1,11 +1,14 @@
+
 import { WealthPerspectiveEditor } from "@/components/admin/WealthPerspectiveEditor";
 import { PartnersEditor } from "@/components/admin/PartnersEditor";
 import { CTAEditor } from "@/components/admin/CTAEditor";
 import { FooterEditor } from "@/components/admin/FooterEditor";
+import { LPContentEditor } from "@/components/admin/LPContentEditor";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Admin = () => {
   const queryClient = useQueryClient();
@@ -18,6 +21,7 @@ const Admin = () => {
       queryClient.invalidateQueries({ queryKey: ["cta-sections"] }),
       queryClient.invalidateQueries({ queryKey: ["footer-content"] }),
       queryClient.invalidateQueries({ queryKey: ["philosophy-content"] }),
+      queryClient.invalidateQueries({ queryKey: ["lp-content"] }),
     ]);
     
     toast({
@@ -35,12 +39,26 @@ const Admin = () => {
           Refresh All
         </Button>
       </div>
-      <div className="space-y-8">
-        <WealthPerspectiveEditor />
-        <PartnersEditor />
-        <CTAEditor />
-        <FooterEditor />
-      </div>
+      
+      <Tabs defaultValue="website">
+        <TabsList className="mb-8">
+          <TabsTrigger value="website">Website Content</TabsTrigger>
+          <TabsTrigger value="lp">LP Data Room</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="website">
+          <div className="space-y-8">
+            <WealthPerspectiveEditor />
+            <PartnersEditor />
+            <CTAEditor />
+            <FooterEditor />
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="lp">
+          <LPContentEditor />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
