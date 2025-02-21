@@ -74,33 +74,38 @@ export const LPContentEditor = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">LP Data Room Content</CardTitle>
-        </CardHeader>
-        <CardContent className="p-6">
-          <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 mb-6 bg-muted/60 p-1">
+    <Card className="mb-8">
+      <CardHeader className="border-b">
+        <CardTitle>LP Data Room Content</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <Tabs value={activeSection} onValueChange={setActiveSection}>
+          <div className="mb-6">
+            <TabsList className="inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground w-full flex-wrap gap-1">
               {sections.map((section) => (
                 <TabsTrigger 
                   key={section.id} 
                   value={section.id}
-                  className="text-sm whitespace-nowrap data-[state=active]:bg-white"
+                  className="ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm h-8 rounded-md px-3 text-sm font-medium"
                 >
                   {section.title}
                 </TabsTrigger>
               ))}
             </TabsList>
+          </div>
+
+          <div className="mt-4">
             {sections.map((section) => (
               <TabsContent 
                 key={section.id} 
                 value={section.id}
-                className="border rounded-lg p-4 mt-2 bg-white"
+                className="mt-0 border-0"
               >
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900">{section.title}</h3>
-                  <div className="bg-white rounded-lg">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    {section.title}
+                  </h3>
+                  <div className="rounded-lg">
                     <Editor
                       initialContent={
                         content?.find(c => c.section_id === `lp-${section.id}`)?.description || ""
@@ -111,9 +116,9 @@ export const LPContentEditor = () => {
                 </div>
               </TabsContent>
             ))}
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
+          </div>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 };
