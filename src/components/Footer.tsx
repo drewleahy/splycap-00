@@ -1,4 +1,6 @@
+
 import { MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
@@ -27,12 +29,19 @@ export const Footer = () => {
             </div>
           </div>
           <div>
-            <h4 className="text-lg font-semibold mb-4">Contact</h4>
-            <p className="text-gray-600">
-              For general inquiries:
-              <br />
-              info@splycapital.com
-            </p>
+            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+            <div className="space-y-2">
+              <div>
+                <Link to="/LP-Splash" className="text-gray-600 hover:text-sply-purple transition-colors">
+                  LP Splash
+                </Link>
+              </div>
+              <p className="text-gray-600">
+                For general inquiries:
+                <br />
+                info@splycapital.com
+              </p>
+            </div>
           </div>
         </div>
         <div className="border-t border-gray-200 pt-8 text-center text-gray-600">
