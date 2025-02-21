@@ -8,6 +8,17 @@ import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import LPSplash from "./pages/LPSplash";
 import Deck from "./pages/lp/Deck";
+import Thesis from "./pages/lp/Thesis";
+import Schedule from "./pages/lp/Schedule";
+import Memos from "./pages/lp/Memos";
+import Criteria from "./pages/lp/Criteria";
+import Protocol from "./pages/lp/Protocol";
+import Screening from "./pages/lp/Screening";
+import Bio from "./pages/lp/Bio";
+import Workflow from "./pages/lp/Workflow";
+import IRA from "./pages/lp/IRA";
+import Mockup from "./pages/lp/Mockup";
+import Agreements from "./pages/lp/Agreements";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +33,17 @@ const App = () => (
           <Route path="/admin" element={<Admin />} />
           <Route path="/LP-Splash" element={<LPSplash />} />
           <Route path="/LP-Splash/Deck" element={<Deck />} />
+          <Route path="/LP-Splash/Thesis" element={<Thesis />} />
+          <Route path="/LP-Splash/Schedule" element={<Schedule />} />
+          <Route path="/LP-Splash/Memos" element={<Memos />} />
+          <Route path="/LP-Splash/Criteria" element={<Criteria />} />
+          <Route path="/LP-Splash/Protocol" element={<Protocol />} />
+          <Route path="/LP-Splash/Screening" element={<Screening />} />
+          <Route path="/LP-Splash/Bio" element={<Bio />} />
+          <Route path="/LP-Splash/Workflow" element={<Workflow />} />
+          <Route path="/LP-Splash/IRA" element={<IRA />} />
+          <Route path="/LP-Splash/Mockup" element={<Mockup />} />
+          <Route path="/LP-Splash/Agreements" element={<Agreements />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
