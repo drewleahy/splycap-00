@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import LPSplash from "./pages/LPSplash";
+import Deck from "./pages/lp/Deck";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/LP-Splash" element={<LPSplash />} />
+          <Route path="/LP-Splash/Deck" element={<Deck />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
