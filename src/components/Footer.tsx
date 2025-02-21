@@ -33,7 +33,7 @@ export const Footer = () => {
             <div className="space-y-2">
               <div>
                 <Link to="/LP-Splash" className="text-gray-600 hover:text-sply-purple transition-colors">
-                  LP Splash
+                  LP Data Room
                 </Link>
               </div>
               <p className="text-gray-600">
