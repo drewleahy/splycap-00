@@ -17,22 +17,23 @@ export const LPContentEditor = () => {
     queryKey: ["lp-content"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("lp_content")
+        .from("content_sections")
         .select("*")
-        .order("section");
+        .like("section_id", "lp-%");
       
       if (error) throw error;
       return data || [];
     },
   });
 
-  const handleSave = async (section: string, content: string) => {
+  const handleSave = async (sectionId: string, content: string) => {
     try {
       const { error } = await supabase
-        .from("lp_content")
+        .from("content_sections")
         .upsert({
-          section,
-          content,
+          section_id: `lp-${sectionId}`,
+          description: content,
+          title: sectionId.charAt(0).toUpperCase() + sectionId.slice(1),
           updated_at: new Date().toISOString(),
         });
 
@@ -89,7 +90,9 @@ export const LPContentEditor = () => {
                 <div className="mt-4 space-y-4">
                   <h3 className="text-lg font-medium">{section.title}</h3>
                   <Editor
-                    initialContent={content?.find(c => c.section === section.id)?.content || ""}
+                    initialContent={
+                      content?.find(c => c.section_id === `lp-${section.id}`)?.description || ""
+                    }
                     onSave={(content) => handleSave(section.id, content)}
                   />
                 </div>

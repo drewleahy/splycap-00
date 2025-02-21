@@ -11,13 +11,13 @@ const Deck = () => {
     queryKey: ["lp-content", "deck"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("lp_content")
-        .select("content")
-        .eq("section", "deck")
+        .from("content_sections")
+        .select("description")
+        .eq("section_id", "lp-deck")
         .maybeSingle();
       
       if (error) throw error;
-      return data?.content || "";
+      return data?.description || "";
     },
   });
 
