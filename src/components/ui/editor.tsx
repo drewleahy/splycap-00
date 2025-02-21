@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "./button";
 import {
   Bold,
@@ -8,7 +8,11 @@ import {
   List,
   ListOrdered,
   Save,
+  Image as ImageIcon,
+  File as FileIcon,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface EditorProps {
   initialContent: string;
@@ -16,7 +20,10 @@ interface EditorProps {
 }
 
 export const Editor = ({ initialContent, onSave }: EditorProps) => {
+  const { toast } = useToast();
   const [content, setContent] = useState(initialContent);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const handleFormat = (command: string, value?: string) => {
     document.execCommand(command, false, value);
@@ -26,6 +33,69 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
     const url = prompt("Enter URL:");
     if (url) {
       handleFormat("createLink", url);
+    }
+  };
+
+  const handleFileUpload = async (file: File, type: 'image' | 'file') => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `content-uploads/${fileName}`;
+
+      const { error: uploadError, data } = await supabase.storage
+        .from('public')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('public')
+        .getPublicUrl(filePath);
+
+      if (type === 'image') {
+        document.execCommand('insertImage', false, publicUrl);
+      } else {
+        const fileLink = `<a href="${publicUrl}" target="_blank" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+            <polyline points="13 2 13 9 20 9"></polyline>
+          </svg>
+          ${file.name}</a>`;
+        document.execCommand('insertHTML', false, fileLink);
+      }
+
+      toast({
+        title: "Success",
+        description: `${type === 'image' ? 'Image' : 'File'} uploaded successfully`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: `Failed to upload ${type}`,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Error",
+          description: "Please select an image file",
+          variant: "destructive",
+        });
+        return;
+      }
+      handleFileUpload(file, 'image');
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileUpload(file, 'file');
     }
   };
 
@@ -77,7 +147,40 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
         >
           <LinkIcon className="h-4 w-4" />
         </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => imageInputRef.current?.click()}
+          type="button"
+          className="hover:bg-gray-100"
+        >
+          <ImageIcon className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => fileInputRef.current?.click()}
+          type="button"
+          className="hover:bg-gray-100"
+        >
+          <FileIcon className="h-4 w-4" />
+        </Button>
       </div>
+      
+      <input
+        type="file"
+        ref={imageInputRef}
+        onChange={handleImageSelect}
+        accept="image/*"
+        className="hidden"
+      />
+      
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileSelect}
+        className="hidden"
+      />
       
       <div
         className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
