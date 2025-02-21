@@ -31,7 +31,7 @@ const Admin = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container mx-auto py-8 px-4 space-y-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Content Management</h1>
         <Button onClick={handleRefreshAll} className="flex items-center gap-2">
@@ -40,13 +40,13 @@ const Admin = () => {
         </Button>
       </div>
       
-      <Tabs defaultValue="website">
+      <Tabs defaultValue="website" className="space-y-6">
         <TabsList className="mb-8">
           <TabsTrigger value="website">Website Content</TabsTrigger>
           <TabsTrigger value="lp">LP Data Room</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="website">
+        <TabsContent value="website" className="space-y-8">
           <div className="space-y-8">
             <WealthPerspectiveEditor />
             <PartnersEditor />
@@ -55,7 +55,7 @@ const Admin = () => {
           </div>
         </TabsContent>
         
-        <TabsContent value="lp">
+        <TabsContent value="lp" className="mt-6">
           <LPContentEditor />
         </TabsContent>
       </Tabs>
