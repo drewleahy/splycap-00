@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
@@ -76,25 +76,38 @@ export const LPContentEditor = () => {
   return (
     <div className="space-y-6">
       <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">LP Data Room Content</CardTitle>
+        </CardHeader>
         <CardContent className="p-6">
-          <Tabs value={activeSection} onValueChange={setActiveSection}>
-            <TabsList className="grid grid-cols-3 lg:grid-cols-4 gap-2">
+          <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 mb-6 bg-muted/60 p-1">
               {sections.map((section) => (
-                <TabsTrigger key={section.id} value={section.id}>
+                <TabsTrigger 
+                  key={section.id} 
+                  value={section.id}
+                  className="text-sm whitespace-nowrap data-[state=active]:bg-white"
+                >
                   {section.title}
                 </TabsTrigger>
               ))}
             </TabsList>
             {sections.map((section) => (
-              <TabsContent key={section.id} value={section.id}>
-                <div className="mt-4 space-y-4">
-                  <h3 className="text-lg font-medium">{section.title}</h3>
-                  <Editor
-                    initialContent={
-                      content?.find(c => c.section_id === `lp-${section.id}`)?.description || ""
-                    }
-                    onSave={(content) => handleSave(section.id, content)}
-                  />
+              <TabsContent 
+                key={section.id} 
+                value={section.id}
+                className="border rounded-lg p-4 mt-2 bg-white"
+              >
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-900">{section.title}</h3>
+                  <div className="bg-white rounded-lg">
+                    <Editor
+                      initialContent={
+                        content?.find(c => c.section_id === `lp-${section.id}`)?.description || ""
+                      }
+                      onSave={(content) => handleSave(section.id, content)}
+                    />
+                  </div>
                 </div>
               </TabsContent>
             ))}
