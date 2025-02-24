@@ -103,12 +103,6 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
     }
   };
 
-  const handleInput = () => {
-    if (editorRef.current) {
-      setContent(editorRef.current.innerHTML);
-    }
-  };
-
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2 p-2 border rounded-md bg-gray-50">
@@ -194,11 +188,13 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       
       <div
         ref={editorRef}
-        className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         contentEditable
-        dangerouslySetInnerHTML={{ __html: content }}
-        onInput={handleInput}
-      />
+        suppressContentEditableWarning
+        onInput={(e) => setContent(e.currentTarget.innerHTML)}
+        className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        {initialContent}
+      </div>
       
       <Button 
         className="w-full bg-blue-600 hover:bg-blue-700"
