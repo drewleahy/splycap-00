@@ -24,9 +24,13 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
   const [content, setContent] = useState(initialContent);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
 
   const handleFormat = (command: string, value?: string) => {
     document.execCommand(command, false, value);
+    if (editorRef.current) {
+      setContent(editorRef.current.innerHTML);
+    }
   };
 
   const handleLink = () => {
@@ -53,7 +57,7 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
         .getPublicUrl(filePath);
 
       if (type === 'image') {
-        document.execCommand('insertImage', false, publicUrl);
+        handleFormat('insertImage', publicUrl);
       } else {
         const fileLink = `<a href="${publicUrl}" target="_blank" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -61,7 +65,7 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
             <polyline points="13 2 13 9 20 9"></polyline>
           </svg>
           ${file.name}</a>`;
-        document.execCommand('insertHTML', false, fileLink);
+        handleFormat('insertHTML', fileLink);
       }
 
       toast({
@@ -96,6 +100,12 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
     const file = e.target.files?.[0];
     if (file) {
       handleFileUpload(file, 'file');
+    }
+  };
+
+  const handleInput = () => {
+    if (editorRef.current) {
+      setContent(editorRef.current.innerHTML);
     }
   };
 
@@ -183,10 +193,11 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       />
       
       <div
+        ref={editorRef}
         className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         contentEditable
         dangerouslySetInnerHTML={{ __html: content }}
-        onInput={(e) => setContent(e.currentTarget.innerHTML)}
+        onInput={handleInput}
       />
       
       <Button 
