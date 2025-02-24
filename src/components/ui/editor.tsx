@@ -34,8 +34,20 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
   };
 
   const handleLink = () => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      toast({
+        title: "Error",
+        description: "Please select some text first",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const url = prompt("Enter URL:");
     if (url) {
+      // Focus the editor before applying the command
+      editorRef.current?.focus();
       handleFormat("createLink", url);
     }
   };
@@ -192,9 +204,8 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
         suppressContentEditableWarning
         onInput={(e) => setContent(e.currentTarget.innerHTML)}
         className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      >
-        {initialContent}
-      </div>
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
       
       <Button 
         className="w-full bg-blue-600 hover:bg-blue-700"
