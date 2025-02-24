@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "./button";
 import {
   Bold,
@@ -26,6 +26,12 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.innerHTML = initialContent;
+    }
+  }, [initialContent]);
+
   const handleFormat = (command: string, value?: string) => {
     document.execCommand(command, false, value);
     if (editorRef.current) {
@@ -46,7 +52,6 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
 
     const url = prompt("Enter URL:");
     if (url) {
-      // Focus the editor before applying the command
       editorRef.current?.focus();
       handleFormat("createLink", url);
     }
@@ -113,6 +118,11 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
     if (file) {
       handleFileUpload(file, 'file');
     }
+  };
+
+  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+    const newContent = e.currentTarget.innerHTML;
+    setContent(newContent);
   };
 
   return (
@@ -202,9 +212,8 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
-        onInput={(e) => setContent(e.currentTarget.innerHTML)}
+        onInput={handleInput}
         className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        dangerouslySetInnerHTML={{ __html: content }}
       />
       
       <Button 
