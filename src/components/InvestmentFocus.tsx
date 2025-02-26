@@ -46,8 +46,8 @@ export const InvestmentFocus = () => {
     );
   }
 
-  // Fallback test data if no data is returned from the database
-  const testInvestments = investments?.length ? investments : [
+  // Define the test investments that will be used when there's no data from DB
+  const testInvestments = [
     {
       id: 1,
       title: "Private Capital Opportunities",
@@ -71,6 +71,9 @@ export const InvestmentFocus = () => {
     }
   ];
 
+  // Use the data from the database if available, otherwise use test data
+  const displayInvestments = investments?.length ? investments : testInvestments;
+
   return (
     <section className="py-20 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
@@ -78,7 +81,7 @@ export const InvestmentFocus = () => {
           {focusContent?.title || "Our Investment Focus"}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testInvestments.map((investment, index) => {
+          {displayInvestments.map((investment, index) => {
             const Icon = iconMap[investment.icon];
             return (
               <motion.div
