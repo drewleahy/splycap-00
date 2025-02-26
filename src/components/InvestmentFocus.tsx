@@ -64,8 +64,8 @@ export const InvestmentFocus = () => {
     },
     {
       id: 3,
-      title: "Public Markets",
-      description: "We maintain a diversified portfolio of public securities with a focus on long-term value creation and dividend growth.",
+      title: "Evergreen Trade Finance Vehicle",
+      description: "Producing cash on cash returns by backing Fortune 1000 companies and their USA suppliers",
       icon: "LineChart",
       created_at: new Date().toISOString()
     }
@@ -86,6 +86,13 @@ export const InvestmentFocus = () => {
       return {
         ...item,
         description: "Backing $50-100m+ exited founders on their next golden opportunity"
+      };
+    }
+    if (item.title === "Public Markets" || item.title === "Evergreen Trade Finance Vehicle") {
+      return {
+        ...item,
+        title: "Evergreen Trade Finance Vehicle",
+        description: "Producing cash on cash returns by backing Fortune 1000 companies and their USA suppliers"
       };
     }
     return item;
