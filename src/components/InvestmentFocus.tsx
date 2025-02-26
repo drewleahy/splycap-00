@@ -57,8 +57,8 @@ export const InvestmentFocus = () => {
     },
     {
       id: 2,
-      title: "Real Estate",
-      description: "Our real estate portfolio includes commercial properties in high-growth urban markets with stable cash flows and appreciation potential.",
+      title: "Off Market VC Deals",
+      description: "Exclusive access to Tier 1 lead later stage deals via SPV",
       icon: "Building2",
       created_at: new Date().toISOString()
     },
