@@ -1,3 +1,4 @@
+
 import { Briefcase, Building2, LineChart, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
@@ -45,14 +46,39 @@ export const InvestmentFocus = () => {
     );
   }
 
+  // Fallback test data if no data is returned from the database
+  const testInvestments = investments?.length ? investments : [
+    {
+      id: 1,
+      title: "Private Equity",
+      description: "We focus on growth-stage companies with proven business models and strong market positions, typically investing $10-50M per deal.",
+      icon: "Briefcase",
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 2,
+      title: "Real Estate",
+      description: "Our real estate portfolio includes commercial properties in high-growth urban markets with stable cash flows and appreciation potential.",
+      icon: "Building2",
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 3,
+      title: "Public Markets",
+      description: "We maintain a diversified portfolio of public securities with a focus on long-term value creation and dividend growth.",
+      icon: "LineChart",
+      created_at: new Date().toISOString()
+    }
+  ];
+
   return (
     <section className="py-20 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">
-          {focusContent?.title}
+          {focusContent?.title || "Our Investment Focus"}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {investments?.map((investment, index) => {
+          {testInvestments.map((investment, index) => {
             const Icon = iconMap[investment.icon];
             return (
               <motion.div
