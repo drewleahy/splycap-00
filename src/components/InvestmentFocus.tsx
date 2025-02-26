@@ -74,12 +74,18 @@ export const InvestmentFocus = () => {
   // Use the data from the database if available, otherwise use test data
   const displayInvestments = investments?.length ? investments : testInvestments;
 
-  // Force the specific text for the Off Market VC Deals item
+  // Force the specific text for the Off Market VC Deals item and Private Capital Opportunities
   const finalInvestments = displayInvestments.map(item => {
     if (item.title === "Off Market VC Deals") {
       return {
         ...item,
         description: "Exclusive access to Tier 1 lead later stage deals via SPV"
+      };
+    }
+    if (item.title === "Private Capital Opportunities") {
+      return {
+        ...item,
+        description: "Backing $50-100m+ exited founders on their next golden opportunity"
       };
     }
     return item;
