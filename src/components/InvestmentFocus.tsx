@@ -50,8 +50,8 @@ export const InvestmentFocus = () => {
   const testInvestments = investments?.length ? investments : [
     {
       id: 1,
-      title: "Private Equity",
-      description: "We focus on growth-stage companies with proven business models and strong market positions, typically investing $10-50M per deal.",
+      title: "Private Capital Opportunities",
+      description: "Backing $50-100m+ exited founders on their next golden opportunity",
       icon: "Briefcase",
       created_at: new Date().toISOString()
     },
