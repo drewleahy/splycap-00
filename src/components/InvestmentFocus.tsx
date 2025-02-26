@@ -74,6 +74,17 @@ export const InvestmentFocus = () => {
   // Use the data from the database if available, otherwise use test data
   const displayInvestments = investments?.length ? investments : testInvestments;
 
+  // Force the specific text for the Off Market VC Deals item
+  const finalInvestments = displayInvestments.map(item => {
+    if (item.title === "Off Market VC Deals") {
+      return {
+        ...item,
+        description: "Exclusive access to Tier 1 lead later stage deals via SPV"
+      };
+    }
+    return item;
+  });
+
   return (
     <section className="py-20 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
@@ -81,7 +92,7 @@ export const InvestmentFocus = () => {
           {focusContent?.title || "Our Investment Focus"}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {displayInvestments.map((investment, index) => {
+          {finalInvestments.map((investment, index) => {
             const Icon = iconMap[investment.icon];
             return (
               <motion.div
