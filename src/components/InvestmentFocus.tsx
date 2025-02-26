@@ -58,7 +58,7 @@ export const InvestmentFocus = () => {
     {
       id: 2,
       title: "Off Market VC Deals",
-      description: "Exclusive access to Tier 1 lead later stage deals via SPV",
+      description: "Exclusive access to Tier 1 lead investors in later stage deals via SPV",
       icon: "Building2",
       created_at: new Date().toISOString()
     },
@@ -79,7 +79,7 @@ export const InvestmentFocus = () => {
     if (item.title === "Off Market VC Deals") {
       return {
         ...item,
-        description: "Exclusive access to Tier 1 lead later stage deals via SPV"
+        description: "Exclusive access to Tier 1 lead investors in later stage deals via SPV"
       };
     }
     if (item.title === "Private Capital Opportunities") {
