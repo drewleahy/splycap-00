@@ -25,6 +25,7 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -59,19 +60,52 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
 
   const handleFileUpload = async (file: File, type: 'image' | 'file') => {
     try {
+      setIsUploading(true);
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const filePath = `content-uploads/${fileName}`;
+      const filePath = `lovable-uploads/${fileName}`;
 
-      const { error: uploadError, data } = await supabase.storage
+      // First try to upload to the 'public' bucket
+      let uploadResult = await supabase.storage
         .from('public')
         .upload(filePath, file);
+      
+      // If the public bucket doesn't exist, try uploading to the default bucket
+      if (uploadResult.error && uploadResult.error.message.includes('bucket not found')) {
+        uploadResult = await supabase.storage
+          .from('content-uploads')
+          .upload(filePath, file);
+          
+        // If that also fails, try 'lovable-uploads' bucket
+        if (uploadResult.error && uploadResult.error.message.includes('bucket not found')) {
+          filePath = fileName; // Simplify path for default bucket
+          uploadResult = await supabase.storage
+            .from('lovable-uploads')
+            .upload(filePath, file);
+        }
+      }
+      
+      if (uploadResult.error) throw uploadResult.error;
 
-      if (uploadError) throw uploadError;
+      // Get the correct public URL based on which bucket succeeded
+      let publicUrl = '';
+      
+      if (uploadResult.data) {
+        const bucketName = uploadResult.data.path.includes('/') 
+          ? uploadResult.data.path.split('/')[0] 
+          : 'lovable-uploads';
+          
+        const { data } = supabase.storage
+          .from(bucketName)
+          .getPublicUrl(uploadResult.data.path);
+          
+        publicUrl = data.publicUrl;
+      }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('public')
-        .getPublicUrl(filePath);
+      // Fallback to using a local path if we still don't have a URL
+      if (!publicUrl) {
+        publicUrl = `/lovable-uploads/${fileName}`;
+      }
 
       if (type === 'image') {
         handleFormat('insertImage', publicUrl);
@@ -90,11 +124,14 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
         description: `${type === 'image' ? 'Image' : 'File'} uploaded successfully`,
       });
     } catch (error) {
+      console.error('Upload error:', error);
       toast({
         title: "Error",
-        description: `Failed to upload ${type}`,
+        description: `Failed to upload ${type}. Please check your permissions or try again later.`,
         variant: "destructive",
       });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -179,6 +216,7 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
           onClick={() => imageInputRef.current?.click()}
           type="button"
           className="hover:bg-gray-100"
+          disabled={isUploading}
         >
           <ImageIcon className="h-4 w-4" />
         </Button>
@@ -188,6 +226,7 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
           onClick={() => fileInputRef.current?.click()}
           type="button"
           className="hover:bg-gray-100"
+          disabled={isUploading}
         >
           <FileIcon className="h-4 w-4" />
         </Button>
@@ -219,9 +258,10 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       <Button 
         className="w-full bg-blue-600 hover:bg-blue-700"
         onClick={() => onSave(content)}
+        disabled={isUploading}
       >
         <Save className="w-4 h-4 mr-2" />
-        Save Changes
+        {isUploading ? "Uploading..." : "Save Changes"}
       </Button>
     </div>
   );
