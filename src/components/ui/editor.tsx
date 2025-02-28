@@ -63,25 +63,30 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       setIsUploading(true);
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const filePath = `lovable-uploads/${fileName}`;
+      
+      // We'll use different paths as we try different buckets
+      let currentPath = `lovable-uploads/${fileName}`;
+      let bucketName = 'public';
 
       // First try to upload to the 'public' bucket
       let uploadResult = await supabase.storage
-        .from('public')
-        .upload(filePath, file);
+        .from(bucketName)
+        .upload(currentPath, file);
       
-      // If the public bucket doesn't exist, try uploading to the default bucket
+      // If the public bucket doesn't exist, try uploading to the content-uploads bucket
       if (uploadResult.error && uploadResult.error.message.includes('bucket not found')) {
+        bucketName = 'content-uploads';
         uploadResult = await supabase.storage
-          .from('content-uploads')
-          .upload(filePath, file);
+          .from(bucketName)
+          .upload(currentPath, file);
           
-        // If that also fails, try 'lovable-uploads' bucket
+        // If that also fails, try 'lovable-uploads' bucket with simplified path
         if (uploadResult.error && uploadResult.error.message.includes('bucket not found')) {
-          filePath = fileName; // Simplify path for default bucket
+          bucketName = 'lovable-uploads';
+          currentPath = fileName; // Simplified path for default bucket
           uploadResult = await supabase.storage
-            .from('lovable-uploads')
-            .upload(filePath, file);
+            .from(bucketName)
+            .upload(currentPath, file);
         }
       }
       
@@ -91,12 +96,12 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       let publicUrl = '';
       
       if (uploadResult.data) {
-        const bucketName = uploadResult.data.path.includes('/') 
+        const successBucket = uploadResult.data.path.includes('/') 
           ? uploadResult.data.path.split('/')[0] 
-          : 'lovable-uploads';
+          : bucketName;
           
         const { data } = supabase.storage
-          .from(bucketName)
+          .from(successBucket)
           .getPublicUrl(uploadResult.data.path);
           
         publicUrl = data.publicUrl;
