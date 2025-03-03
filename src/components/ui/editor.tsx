@@ -10,6 +10,7 @@ import {
   Save,
   Image as ImageIcon,
   File as FileIcon,
+  Code as CodeIcon,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -55,6 +56,33 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
     if (url) {
       editorRef.current?.focus();
       handleFormat("createLink", url);
+    }
+  };
+
+  const handleCodeBlock = () => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      toast({
+        title: "Error",
+        description: "Please select some text first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const selectedText = selection.toString();
+    const language = prompt("Enter code language (e.g., javascript, typescript, sql, html, css):", "javascript");
+    
+    if (language) {
+      // Create a pre element with a code element inside it
+      const codeHtml = `<pre class="bg-gray-100 p-3 rounded-md overflow-x-auto my-2"><code class="language-${language}">${selectedText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
+      
+      // Insert the HTML
+      document.execCommand('insertHTML', false, codeHtml);
+      
+      if (editorRef.current) {
+        setContent(editorRef.current.innerHTML);
+      }
     }
   };
 
@@ -214,6 +242,15 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
           className="hover:bg-gray-100"
         >
           <LinkIcon className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={handleCodeBlock}
+          type="button"
+          className="hover:bg-gray-100"
+        >
+          <CodeIcon className="h-4 w-4" />
         </Button>
         <Button
           variant="outline"
