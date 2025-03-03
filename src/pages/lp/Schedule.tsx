@@ -14,13 +14,24 @@ const Schedule = () => {
   
   const { data: content, isLoading, error, refetch } = useQuery({
     queryKey: ["lp-content", "schedule"],
-    queryFn: () => fetchLPContent("schedule"),
-    staleTime: 5000, // Consider data fresh for just 5 seconds to ensure freshness
-    retry: 2,
+    queryFn: async () => {
+      try {
+        console.log("Fetching schedule content...");
+        const result = await fetchLPContent("schedule");
+        console.log("Fetched content:", result);
+        return result;
+      } catch (error) {
+        console.error("Error fetching schedule content:", error);
+        throw error;
+      }
+    },
+    staleTime: 0, // Set to 0 to always fetch fresh data
+    retry: 1,
   });
 
   useEffect(() => {
     // Initial load - force refresh from server
+    console.log("Initial load - invalidating queries");
     queryClient.invalidateQueries({ queryKey: ["lp-content", "schedule"] });
   }, [queryClient]);
 
@@ -31,12 +42,17 @@ const Schedule = () => {
     });
     
     // Clear the cache completely for this query
+    console.log("Resetting schedule queries");
     await queryClient.resetQueries({ queryKey: ["lp-content", "schedule"] });
     
     // Fetch fresh data
+    console.log("Refetching schedule content");
     const result = await refetch();
     
+    console.log("Refetch result:", result);
+    
     if (result.error) {
+      console.error("Error after refetch:", result.error);
       toast({
         title: "Error refreshing content",
         description: "Please try again or contact support.",
@@ -76,7 +92,9 @@ const Schedule = () => {
               <div className="text-red-600 py-4">
                 <p>Error loading content. Please try refreshing.</p>
                 <pre className="text-xs mt-2 bg-gray-100 p-2 rounded overflow-auto">
-                  {error.toString()}
+                  {error instanceof Error 
+                    ? `${error.name}: ${error.message}` 
+                    : JSON.stringify(error, null, 2)}
                 </pre>
                 <Button onClick={() => refetch()} variant="destructive" size="sm" className="mt-2">
                   Try Again

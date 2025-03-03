@@ -20,15 +20,22 @@ export const LPContentEditor = () => {
       const { data, error } = await supabase
         .from("content_sections")
         .select("*")
-        .like("section_id", "lp-%");
+        .like("section_id", "lp-%")
+        .order('updated_at', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching content sections:", error);
+        throw error;
+      }
+      
+      console.log("Fetched content sections:", data);
       return data || [];
     },
   });
 
   const handleSave = async (sectionId: string, content: string) => {
     try {
+      console.log(`Saving content for ${sectionId}...`);
       await saveLPContent(sectionId, content);
 
       toast({
@@ -37,6 +44,7 @@ export const LPContentEditor = () => {
       });
 
       // Invalidate ALL queries
+      console.log("Invalidating all queries...");
       await queryClient.invalidateQueries();
       
       // Specifically invalidate any related LP content queries
@@ -47,11 +55,13 @@ export const LPContentEditor = () => {
       
       // Force refetch current content
       await refetch();
+      
+      console.log("Content saved and cache invalidated successfully");
     } catch (error) {
       console.error("Error saving content:", error);
       toast({
         title: "Error",
-        description: "Failed to update content",
+        description: "Failed to update content: " + (error instanceof Error ? error.message : "Unknown error"),
         variant: "destructive",
       });
     }
@@ -75,6 +85,17 @@ export const LPContentEditor = () => {
     { id: "mockup", title: "LP Portal Mockup" },
     { id: "agreements", title: "LP Agreements" },
   ];
+
+  // Get the most recent content for each section
+  const getLatestContent = (sectionId: string) => {
+    if (!content) return "";
+    
+    const sectionContent = content
+      .filter(c => c.section_id === `lp-${sectionId}`)
+      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+    
+    return sectionContent.length > 0 ? sectionContent[0].description : "";
+  };
 
   return (
     <Card className="mb-8">
@@ -110,9 +131,7 @@ export const LPContentEditor = () => {
                   </h3>
                   <div className="rounded-lg">
                     <Editor
-                      initialContent={
-                        content?.find(c => c.section_id === `lp-${section.id}`)?.description || ""
-                      }
+                      initialContent={getLatestContent(section.id)}
                       onSave={(content) => handleSave(section.id, content)}
                     />
                   </div>
