@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "./button";
 import {
@@ -74,10 +73,8 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
     const language = prompt("Enter code language (e.g., javascript, typescript, sql, html, css):", "javascript");
     
     if (language) {
-      // Create a pre element with a code element inside it
       const codeHtml = `<pre class="bg-gray-100 p-3 rounded-md overflow-x-auto my-2"><code class="language-${language}">${selectedText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
       
-      // Insert the HTML
       document.execCommand('insertHTML', false, codeHtml);
       
       if (editorRef.current) {
@@ -92,53 +89,33 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
       
-      // We'll use different paths as we try different buckets
-      let currentPath = `lovable-uploads/${fileName}`;
-      let bucketName = 'public';
-
-      // First try to upload to the 'public' bucket
-      let uploadResult = await supabase.storage
+      console.log(`Starting upload for ${type}:`, {
+        fileName,
+        fileType: file.type,
+        fileSize: file.size,
+        bucket: 'lovable-uploads'
+      });
+      
+      const bucketName = 'lovable-uploads';
+      const currentPath = fileName; // Simplified path
+      
+      const uploadResult = await supabase.storage
         .from(bucketName)
         .upload(currentPath, file);
       
-      // If the public bucket doesn't exist, try uploading to the content-uploads bucket
-      if (uploadResult.error && uploadResult.error.message.includes('bucket not found')) {
-        bucketName = 'content-uploads';
-        uploadResult = await supabase.storage
-          .from(bucketName)
-          .upload(currentPath, file);
-          
-        // If that also fails, try 'lovable-uploads' bucket with simplified path
-        if (uploadResult.error && uploadResult.error.message.includes('bucket not found')) {
-          bucketName = 'lovable-uploads';
-          currentPath = fileName; // Simplified path for default bucket
-          uploadResult = await supabase.storage
-            .from(bucketName)
-            .upload(currentPath, file);
-        }
+      if (uploadResult.error) {
+        console.error('Upload error:', uploadResult.error);
+        throw uploadResult.error;
       }
       
-      if (uploadResult.error) throw uploadResult.error;
-
-      // Get the correct public URL based on which bucket succeeded
-      let publicUrl = '';
+      console.log('Upload successful:', uploadResult.data);
       
-      if (uploadResult.data) {
-        const successBucket = uploadResult.data.path.includes('/') 
-          ? uploadResult.data.path.split('/')[0] 
-          : bucketName;
-          
-        const { data } = supabase.storage
-          .from(successBucket)
-          .getPublicUrl(uploadResult.data.path);
-          
-        publicUrl = data.publicUrl;
-      }
-
-      // Fallback to using a local path if we still don't have a URL
-      if (!publicUrl) {
-        publicUrl = `/lovable-uploads/${fileName}`;
-      }
+      const { data } = supabase.storage
+        .from(bucketName)
+        .getPublicUrl(uploadResult.data.path);
+      
+      const publicUrl = data.publicUrl;
+      console.log('Public URL:', publicUrl);
 
       if (type === 'image') {
         handleFormat('insertImage', publicUrl);
