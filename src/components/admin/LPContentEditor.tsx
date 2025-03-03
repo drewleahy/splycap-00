@@ -15,8 +15,9 @@ export const LPContentEditor = () => {
   const queryClient = useQueryClient();
 
   const { data: content, isLoading, refetch } = useQuery({
-    queryKey: ["lp-content"],
+    queryKey: ["lp-content-admin"],
     queryFn: async () => {
+      console.log("LPContentEditor: Fetching all LP sections...");
       const { data, error } = await supabase
         .from("content_sections")
         .select("*")
@@ -24,18 +25,19 @@ export const LPContentEditor = () => {
         .order('updated_at', { ascending: false });
       
       if (error) {
-        console.error("Error fetching content sections:", error);
+        console.error("LPContentEditor: Error fetching content sections:", error);
         throw error;
       }
       
-      console.log("Fetched content sections:", data);
+      console.log("LPContentEditor: Fetched content sections:", data?.length || 0);
       return data || [];
     },
+    staleTime: 0, // Always fetch fresh data
   });
 
   const handleSave = async (sectionId: string, content: string) => {
     try {
-      console.log(`Saving content for ${sectionId}...`);
+      console.log(`LPContentEditor: Saving content for ${sectionId}...`);
       await saveLPContent(sectionId, content);
 
       toast({
@@ -44,21 +46,22 @@ export const LPContentEditor = () => {
       });
 
       // Invalidate ALL queries
-      console.log("Invalidating all queries...");
+      console.log("LPContentEditor: Invalidating all queries...");
       await queryClient.invalidateQueries();
       
       // Specifically invalidate any related LP content queries
       await queryClient.invalidateQueries({ queryKey: ["lp-content"] });
       await queryClient.invalidateQueries({ queryKey: ["lp-content", sectionId] });
+      await queryClient.invalidateQueries({ queryKey: ["lp-content-admin"] });
       
-      console.log(`Invalidated queries for section: ${sectionId}`);
+      console.log(`LPContentEditor: Invalidated queries for section: ${sectionId}`);
       
       // Force refetch current content
       await refetch();
       
-      console.log("Content saved and cache invalidated successfully");
+      console.log("LPContentEditor: Content saved and cache invalidated successfully");
     } catch (error) {
-      console.error("Error saving content:", error);
+      console.error("LPContentEditor: Error saving content:", error);
       toast({
         title: "Error",
         description: "Failed to update content: " + (error instanceof Error ? error.message : "Unknown error"),
@@ -68,7 +71,11 @@ export const LPContentEditor = () => {
   };
 
   if (isLoading) {
-    return <Loader2 className="w-8 h-8 animate-spin" />;
+    return (
+      <div className="flex justify-center py-12">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
   }
 
   const sections = [
@@ -94,7 +101,8 @@ export const LPContentEditor = () => {
       .filter(c => c.section_id === `lp-${sectionId}`)
       .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
     
-    return sectionContent.length > 0 ? sectionContent[0].description : "";
+    console.log(`LPContentEditor: Latest content for ${sectionId}:`, sectionContent.length > 0 ? "Found" : "None");
+    return sectionContent.length > 0 ? sectionContent[0].description || "" : "";
   };
 
   return (

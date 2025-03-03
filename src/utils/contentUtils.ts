@@ -5,21 +5,7 @@ export const fetchLPContent = async (sectionId: string) => {
   console.log(`Fetching LP content for section: ${sectionId}`);
   
   try {
-    // First, get all entries for this section to check what we have
-    const allEntriesResult = await supabase
-      .from("content_sections")
-      .select("id, section_id, description, updated_at")
-      .eq("section_id", `lp-${sectionId}`)
-      .order('updated_at', { ascending: false });
-    
-    if (allEntriesResult.error) {
-      console.error(`Error checking all entries for ${sectionId}:`, allEntriesResult.error);
-      throw allEntriesResult.error;
-    }
-    
-    console.log(`Found ${allEntriesResult.data.length} entries for ${sectionId}:`, allEntriesResult.data);
-    
-    // Get the most recent entry
+    // Get the most recent entry for this section
     const { data, error } = await supabase
       .from("content_sections")
       .select("description")
@@ -33,11 +19,15 @@ export const fetchLPContent = async (sectionId: string) => {
       throw error;
     }
     
-    console.log(`Content retrieved for ${sectionId}:`, data?.description ? "Yes" : "No");
+    console.log(`Content retrieved for ${sectionId}:`, data?.description ? "Content found" : "No content");
     return data?.description || "";
   } catch (err) {
     console.error(`Exception fetching content for ${sectionId}:`, err);
-    throw err;
+    // Return the error in a structured way that will be easier to debug
+    const errorMessage = err instanceof Error 
+      ? err.message 
+      : JSON.stringify(err);
+    throw new Error(`Failed to fetch content: ${errorMessage}`);
   }
 };
 
@@ -45,7 +35,7 @@ export const saveLPContent = async (sectionId: string, content: string) => {
   console.log(`Saving LP content for section: ${sectionId}`, content ? "Content present" : "No content");
   
   try {
-    // Create a new entry instead of using upsert since there's an issue with the conflict resolution
+    // Insert a new record instead of using upsert
     const { data, error } = await supabase
       .from("content_sections")
       .insert({
@@ -63,7 +53,7 @@ export const saveLPContent = async (sectionId: string, content: string) => {
     console.log(`Content saved successfully for ${sectionId}`);
     return true;
   } catch (error) {
-    console.error(`Error saving content for ${sectionId}:`, error);
+    console.error(`Exception saving content for ${sectionId}:`, error);
     throw error;
   }
 };

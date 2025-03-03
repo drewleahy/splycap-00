@@ -16,22 +16,22 @@ const Schedule = () => {
     queryKey: ["lp-content", "schedule"],
     queryFn: async () => {
       try {
-        console.log("Fetching schedule content...");
+        console.log("Schedule page: Fetching schedule content...");
         const result = await fetchLPContent("schedule");
-        console.log("Fetched content:", result);
+        console.log("Schedule page: Content fetched successfully:", result ? "Content exists" : "No content");
         return result;
       } catch (error) {
-        console.error("Error fetching schedule content:", error);
+        console.error("Schedule page: Error fetching schedule content:", error);
         throw error;
       }
     },
-    staleTime: 0, // Set to 0 to always fetch fresh data
+    staleTime: 0, // Always fetch fresh data
     retry: 1,
   });
 
   useEffect(() => {
     // Initial load - force refresh from server
-    console.log("Initial load - invalidating queries");
+    console.log("Schedule page: Initial load - invalidating queries");
     queryClient.invalidateQueries({ queryKey: ["lp-content", "schedule"] });
   }, [queryClient]);
 
@@ -41,18 +41,18 @@ const Schedule = () => {
       description: "Fetching the latest content from server...",
     });
     
-    // Clear the cache completely for this query
-    console.log("Resetting schedule queries");
+    // Reset query cache completely
+    console.log("Schedule page: Resetting schedule queries");
     await queryClient.resetQueries({ queryKey: ["lp-content", "schedule"] });
     
     // Fetch fresh data
-    console.log("Refetching schedule content");
+    console.log("Schedule page: Refetching schedule content");
     const result = await refetch();
     
-    console.log("Refetch result:", result);
+    console.log("Schedule page: Refetch result:", result.isSuccess ? "Success" : "Failed");
     
     if (result.error) {
-      console.error("Error after refetch:", result.error);
+      console.error("Schedule page: Error after refetch:", result.error);
       toast({
         title: "Error refreshing content",
         description: "Please try again or contact support.",
@@ -64,6 +64,17 @@ const Schedule = () => {
         description: "The latest content has been loaded.",
       });
     }
+  };
+
+  // Format error message properly
+  const formatError = (err: unknown) => {
+    if (err instanceof Error) {
+      return err.message;
+    }
+    if (typeof err === 'object' && err !== null) {
+      return JSON.stringify(err, null, 2);
+    }
+    return String(err);
   };
 
   return (
@@ -90,13 +101,11 @@ const Schedule = () => {
               </div>
             ) : error ? (
               <div className="text-red-600 py-4">
-                <p>Error loading content. Please try refreshing.</p>
-                <pre className="text-xs mt-2 bg-gray-100 p-2 rounded overflow-auto">
-                  {error instanceof Error 
-                    ? `${error.name}: ${error.message}` 
-                    : JSON.stringify(error, null, 2)}
-                </pre>
-                <Button onClick={() => refetch()} variant="destructive" size="sm" className="mt-2">
+                <p className="font-semibold">Error loading content:</p>
+                <div className="mt-2 bg-gray-100 p-3 rounded overflow-auto max-h-48 text-sm">
+                  {formatError(error)}
+                </div>
+                <Button onClick={() => refetch()} variant="destructive" size="sm" className="mt-4">
                   Try Again
                 </Button>
               </div>
