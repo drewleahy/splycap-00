@@ -36,14 +36,17 @@ export const LPContentEditor = () => {
         description: "Content updated successfully",
       });
 
-      // Invalidate all LP content queries
+      // Invalidate ALL queries
+      await queryClient.invalidateQueries();
+      
+      // Specifically invalidate any related LP content queries
       await queryClient.invalidateQueries({ queryKey: ["lp-content"] });
       await queryClient.invalidateQueries({ queryKey: ["lp-content", sectionId] });
       
+      console.log(`Invalidated queries for section: ${sectionId}`);
+      
       // Force refetch current content
       await refetch();
-      
-      console.log(`Invalidated queries for section: ${sectionId}`);
     } catch (error) {
       console.error("Error saving content:", error);
       toast({
