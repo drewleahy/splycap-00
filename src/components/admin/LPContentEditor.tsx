@@ -1,17 +1,17 @@
-
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { Editor } from "@/components/ui/editor";
+import { supabase } from "@/integrations/supabase/client";
+import { fetchLPContent, saveLPContent } from "@/utils/contentUtils";
 
 export const LPContentEditor = () => {
   const { toast } = useToast();
   const [activeSection, setActiveSection] = useState("deck");
+  const queryClient = useQueryClient();
 
   const { data: content, isLoading, refetch } = useQuery({
     queryKey: ["lp-content"],
@@ -28,24 +28,23 @@ export const LPContentEditor = () => {
 
   const handleSave = async (sectionId: string, content: string) => {
     try {
-      const { error } = await supabase
-        .from("content_sections")
-        .upsert({
-          section_id: `lp-${sectionId}`,
-          description: content,
-          title: sectionId.charAt(0).toUpperCase() + sectionId.slice(1),
-          updated_at: new Date().toISOString(),
-        });
-
-      if (error) throw error;
+      await saveLPContent(sectionId, content);
 
       toast({
         title: "Success",
         description: "Content updated successfully",
       });
 
-      refetch();
+      // Invalidate all LP content queries
+      await queryClient.invalidateQueries({ queryKey: ["lp-content"] });
+      await queryClient.invalidateQueries({ queryKey: ["lp-content", sectionId] });
+      
+      // Force refetch current content
+      await refetch();
+      
+      console.log(`Invalidated queries for section: ${sectionId}`);
     } catch (error) {
+      console.error("Error saving content:", error);
       toast({
         title: "Error",
         description: "Failed to update content",

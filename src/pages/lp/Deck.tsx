@@ -2,24 +2,22 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import { fetchLPContent } from "@/utils/contentUtils";
 
 const Deck = () => {
-  const { data: content, isLoading } = useQuery({
+  const queryClient = useQueryClient();
+  
+  const { data: content, isLoading, error } = useQuery({
     queryKey: ["lp-content", "deck"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("content_sections")
-        .select("description")
-        .eq("section_id", "lp-deck")
-        .maybeSingle();
-      
-      if (error) throw error;
-      return data?.description || "";
-    },
+    queryFn: () => fetchLPContent("deck"),
+    staleTime: 30000, // Consider data fresh for 30 seconds
   });
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ["lp-content", "deck"] });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-12">
@@ -30,12 +28,21 @@ const Deck = () => {
               ← Back to Data Room
             </Button>
           </Link>
-          <h1 className="text-3xl font-semibold text-sply-dark mb-6">SPLY Capital Deck</h1>
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-semibold text-sply-dark mb-6">SPLY Capital Deck</h1>
+            <Button variant="outline" onClick={handleRefresh} size="sm">
+              Refresh Content
+            </Button>
+          </div>
         </div>
         <Card>
           <CardContent className="p-6">
             {isLoading ? (
-              <Loader2 className="w-8 h-8 animate-spin" />
+              <div className="flex justify-center py-8">
+                <Loader2 className="w-8 h-8 animate-spin" />
+              </div>
+            ) : error ? (
+              <p className="text-red-600">Error loading content. Please try refreshing.</p>
             ) : content ? (
               <div dangerouslySetInnerHTML={{ __html: content }} />
             ) : (
