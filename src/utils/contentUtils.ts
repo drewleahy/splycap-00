@@ -30,6 +30,8 @@ export const saveLPContent = async (sectionId: string, content: string) => {
         description: content,
         title: sectionId.charAt(0).toUpperCase() + sectionId.slice(1),
         updated_at: new Date().toISOString(),
+      }, {
+        onConflict: 'section_id'
       });
 
     if (error) throw error;
