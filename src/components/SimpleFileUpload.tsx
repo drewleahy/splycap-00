@@ -1,4 +1,3 @@
-
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Upload, AlertCircle, Check, FileText } from "lucide-react";
@@ -23,7 +22,7 @@ export const SimpleFileUpload = ({
     // Check file size (10MB limit)
     const MAX_SIZE = 10 * 1024 * 1024; // 10MB
     if (file.size > MAX_SIZE) {
-      setError(`File size exceeds 10MB limit`);
+      setError(`File size exceeds 10MB limit (${(file.size / (1024 * 1024)).toFixed(2)}MB)`);
       return false;
     }
 
@@ -42,14 +41,12 @@ export const SimpleFileUpload = ({
 
   const uploadFile = async (file: File) => {
     console.log(`Starting PHP upload for file: ${file.name} (${file.size} bytes)`);
+    console.log(`File type: ${file.type}`);
     
     const formData = new FormData();
     formData.append("file", file);
     
     try {
-      // Show what's in the FormData
-      console.log("FormData created with file:", file.name);
-      
       // Log the URL we're sending to
       const url = "/api/upload-file.php";
       console.log("Sending POST request to:", url);
@@ -66,7 +63,16 @@ export const SimpleFileUpload = ({
       });
       
       if (!response.ok) {
-        const errorText = await response.text();
+        let errorText;
+        try {
+          // Try to parse as JSON first
+          const errorData = await response.json();
+          errorText = errorData.error || `Upload failed with status: ${response.status}`;
+        } catch (e) {
+          // If not JSON, get as text
+          errorText = await response.text();
+        }
+        
         console.error("Upload failed:", {
           status: response.status,
           statusText: response.statusText,

@@ -47,7 +47,7 @@ try {
 
     // Get the file from the request
     $file = $_FILES['file'];
-    logError("File received: " . $file['name'] . " (size: " . $file['size'] . " bytes, tmp_name: " . $file['tmp_name'] . ")");
+    logError("File received: " . $file['name'] . " (size: " . $file['size'] . " bytes, type: " . $file['type'] . ", tmp_name: " . $file['tmp_name'] . ")");
 
     // Check for upload errors
     if ($file['error'] !== UPLOAD_ERR_OK) {
@@ -81,8 +81,14 @@ try {
         exit;
     }
 
+    // Additional validation for PDF files
+    $file_extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if ($file_extension === 'pdf' && $file['type'] !== 'application/pdf') {
+        logError("File extension is PDF but mime type is: " . $file['type']);
+        // Continue anyway, but log the discrepancy
+    }
+
     // Generate a random filename to avoid conflicts
-    $file_extension = pathinfo($file['name'], PATHINFO_EXTENSION);
     $random_filename = uniqid() . '.' . $file_extension;
 
     // Create upload directory if it doesn't exist

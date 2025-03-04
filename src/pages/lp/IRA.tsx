@@ -94,6 +94,7 @@ const IRA = () => {
             <h2 className="text-xl font-semibold mb-4">Upload IRA Documents</h2>
             <p className="text-gray-600 mb-4">
               Upload your IRA application forms, transfer documents, or other relevant files here.
+              We accept PDF files and other document formats.
             </p>
             
             <SimpleFileUpload 
