@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "./button";
 import {
@@ -103,33 +104,42 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       const filePath = fileName;
       
       // Check if the bucket exists and create it if it doesn't
-      const { data: bucketExists } = await supabase.storage
-        .getBucket(bucketName);
-        
-      if (!bucketExists) {
-        console.log(`Creating bucket ${bucketName}...`);
-        const { error: bucketError } = await supabase.storage
-          .createBucket(bucketName, {
-            public: true,
-            fileSizeLimit: 52428800 // 50MB
-          });
+      try {
+        const { data: bucketExists } = await supabase.storage
+          .getBucket(bucketName);
           
-        if (bucketError) {
-          console.error('Bucket creation error:', bucketError);
-          throw new Error(`Failed to create storage bucket: ${bucketError.message}`);
+        if (!bucketExists) {
+          console.log(`Creating bucket ${bucketName}...`);
+          const { error: bucketError } = await supabase.storage
+            .createBucket(bucketName, {
+              public: true,
+              fileSizeLimit: 52428800 // 50MB
+            });
+            
+          if (bucketError) {
+            console.error('Bucket creation error:', bucketError);
+            throw new Error(`Failed to create storage bucket: ${bucketError.message}`);
+          }
         }
+      } catch (bucketError) {
+        console.log("Bucket might already exist, continuing with upload");
       }
       
-      // Set the correct bucket policy if it's not already public
+      // Set the bucket to public
+      try {
+        await supabase.storage.updateBucket(bucketName, {
+          public: true
+        });
+        console.log("Bucket set to public");
+      } catch (updateError) {
+        console.log("Could not update bucket settings, continuing anyway:", updateError);
+      }
+      
+      // Get the public URL (to ensure bucket is properly set up)
       await supabase.storage
         .from(bucketName)
         .getPublicUrl(filePath);
         
-      // Try to update bucket to public anyway to ensure it's public
-      await supabase.storage.updateBucket(bucketName, {
-        public: true
-      });
-      
       // Upload the file
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from(bucketName)
