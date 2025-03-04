@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "./button";
 import {
@@ -122,16 +121,14 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       }
       
       // Set the correct bucket policy if it's not already public
-      const { error: policyError } = await supabase.storage
+      await supabase.storage
         .from(bucketName)
         .getPublicUrl(filePath);
         
-      if (policyError) {
-        console.log('Setting bucket to public...');
-        await supabase.storage.updateBucket(bucketName, {
-          public: true
-        });
-      }
+      // Try to update bucket to public anyway to ensure it's public
+      await supabase.storage.updateBucket(bucketName, {
+        public: true
+      });
       
       // Upload the file
       const { data: uploadData, error: uploadError } = await supabase.storage
