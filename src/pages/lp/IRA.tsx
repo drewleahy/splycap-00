@@ -42,7 +42,13 @@ const IRA = () => {
   };
 
   const handleFileUploadSuccess = (fileUrl: string, fileName: string) => {
+    console.log("File upload success:", fileUrl, fileName);
     setUploadedFiles(prev => [...prev, { url: fileUrl, name: fileName }]);
+    
+    toast({
+      title: "Document Added",
+      description: `${fileName} has been successfully uploaded.`,
+    });
   };
 
   return (

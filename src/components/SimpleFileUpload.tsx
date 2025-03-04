@@ -27,7 +27,7 @@ export const SimpleFileUpload = ({
       return false;
     }
 
-    // Check file type if allowedFileTypes is provided
+    // Check file type
     if (allowedFileTypes.length > 0) {
       const fileExtension = "." + file.name.split('.').pop()?.toLowerCase();
       if (!allowedFileTypes.includes(fileExtension) && 
@@ -40,25 +40,40 @@ export const SimpleFileUpload = ({
     return true;
   };
 
-  const uploadToLocalServer = async (file: File): Promise<string> => {
+  const uploadFile = async (file: File) => {
+    console.log(`Starting upload for file: ${file.name} (${file.size} bytes)`);
+    
     const formData = new FormData();
     formData.append("file", file);
     
-    const response = await fetch("/api/upload-file.php", {
-      method: "POST",
-      body: formData,
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Upload failed with status: ${response.status}`);
+    try {
+      // Simple direct PHP upload
+      const response = await fetch("/api/upload-file.php", {
+        method: "POST",
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        console.error(`Upload failed with status: ${response.status}`);
+        throw new Error(`Upload failed with status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log("Upload response:", data);
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      if (!data.publicUrl) {
+        throw new Error("No file URL returned");
+      }
+      
+      return data.publicUrl;
+    } catch (error) {
+      console.error("Upload error:", error);
+      throw error;
     }
-    
-    const data = await response.json();
-    if (!data.publicUrl) {
-      throw new Error("No file URL returned");
-    }
-    
-    return data.publicUrl;
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,8 +85,6 @@ export const SimpleFileUpload = ({
     setUploadedFile(null);
 
     try {
-      console.log(`Starting upload for file: ${file.name} (${file.size} bytes)`);
-      
       // Validate file before uploading
       if (!validateFile(file)) {
         setIsUploading(false);
@@ -83,10 +96,8 @@ export const SimpleFileUpload = ({
         description: `Uploading ${file.name}...`,
       });
 
-      // Try to upload the file
-      const fileUrl = await uploadToLocalServer(file);
-      
-      console.log("Upload successful, URL:", fileUrl);
+      // Upload the file
+      const fileUrl = await uploadFile(file);
       
       setUploadedFile({
         url: fileUrl,
@@ -117,10 +128,6 @@ export const SimpleFileUpload = ({
         fileInputRef.current.value = "";
       }
     }
-  };
-
-  const handleButtonClick = () => {
-    fileInputRef.current?.click();
   };
 
   const resetUpload = () => {
@@ -154,14 +161,14 @@ export const SimpleFileUpload = ({
               
               <Button 
                 type="button"
-                onClick={handleButtonClick}
+                onClick={() => fileInputRef.current?.click()}
                 className="relative"
               >
                 Select File
                 <input
                   ref={fileInputRef}
                   type="file"
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  className="hidden"
                   onChange={handleFileChange}
                   disabled={isUploading}
                   accept={allowedFileTypes.join(',')}
@@ -189,7 +196,7 @@ export const SimpleFileUpload = ({
                 rel="noopener noreferrer"
                 className="text-sm text-blue-600 hover:text-blue-800 underline block truncate"
               >
-                {uploadedFile.url}
+                View Document
               </a>
             </div>
           </div>

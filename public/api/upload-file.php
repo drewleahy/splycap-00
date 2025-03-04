@@ -6,6 +6,7 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
+header('Content-Type: application/json');
 
 // Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -22,14 +23,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Function to log errors for debugging
 function logError($message) {
-    $logFile = 'upload_errors.log';
+    $logFile = '../upload_errors.log';
     $timestamp = date('Y-m-d H:i:s');
     file_put_contents($logFile, "[$timestamp] $message\n", FILE_APPEND);
 }
 
 try {
+    // Debug log incoming request
+    logError("Received upload request");
+    
     // Check if a file was uploaded
     if (empty($_FILES['file'])) {
+        logError("No file in request");
         http_response_code(400);
         echo json_encode(['error' => 'No file uploaded']);
         exit;
@@ -37,6 +42,7 @@ try {
 
     // Get the file from the request
     $file = $_FILES['file'];
+    logError("File received: " . $file['name'] . " (size: " . $file['size'] . " bytes)");
 
     // Check for upload errors
     if ($file['error'] !== UPLOAD_ERR_OK) {
@@ -77,6 +83,7 @@ try {
     // Create upload directory if it doesn't exist
     $upload_dir = '../lovable-uploads/';
     if (!file_exists($upload_dir)) {
+        logError("Creating upload directory: $upload_dir");
         if (!mkdir($upload_dir, 0755, true)) {
             logError("Failed to create upload directory");
             http_response_code(500);
@@ -86,6 +93,7 @@ try {
     }
 
     $local_path = $upload_dir . $random_filename;
+    logError("Attempting to move file to: $local_path");
 
     // Try to upload the file
     if (!move_uploaded_file($file['tmp_name'], $local_path)) {
@@ -95,20 +103,26 @@ try {
         exit;
     }
 
+    logError("File successfully uploaded to $local_path");
+
     // Return the public URL
     $host = $_SERVER['HTTP_HOST'];
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
     $public_url = $protocol . '://' . $host . '/lovable-uploads/' . $random_filename;
     
-    // Success response
-    echo json_encode([
+    $response = [
         'message' => 'File uploaded successfully',
         'filename' => $random_filename,
         'originalName' => $file['name'],
         'publicUrl' => $public_url,
         'size' => $file['size'],
         'type' => $file['type']
-    ]);
+    ];
+    
+    logError("Sending success response: " . json_encode($response));
+    
+    // Success response
+    echo json_encode($response);
     
 } catch (Exception $e) {
     logError("Exception: " . $e->getMessage());
