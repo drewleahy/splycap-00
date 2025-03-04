@@ -5,18 +5,32 @@ import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { fetchLPContent } from "@/utils/contentUtils";
+import { useToast } from "@/hooks/use-toast";
 
 const IRA = () => {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   
   const { data: content, isLoading, isError, refetch } = useQuery({
     queryKey: ["lp-content", "ira"],
     queryFn: () => fetchLPContent("ira"),
     staleTime: 0, // Always fetch fresh data
-    retry: 1,
+    retry: 2,
+    onError: (error) => {
+      console.error("Error loading IRA content:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load content. Please try refreshing.",
+        variant: "destructive",
+      });
+    }
   });
 
   const handleRefresh = () => {
+    toast({
+      title: "Refreshing",
+      description: "Fetching the latest content...",
+    });
     queryClient.invalidateQueries({ queryKey: ["lp-content", "ira"] });
     refetch();
   };
@@ -44,7 +58,12 @@ const IRA = () => {
                 <Loader2 className="w-8 h-8 animate-spin" />
               </div>
             ) : isError ? (
-              <p className="text-red-600">Error loading content. Please try refreshing.</p>
+              <div className="text-center py-8">
+                <p className="text-red-600 mb-4">Error loading content.</p>
+                <Button onClick={handleRefresh}>
+                  Try Again
+                </Button>
+              </div>
             ) : content ? (
               <div dangerouslySetInnerHTML={{ __html: content }} className="prose max-w-none" />
             ) : (

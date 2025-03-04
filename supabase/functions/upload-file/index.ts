@@ -8,15 +8,18 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
+    console.log("Upload file function called")
     const formData = await req.formData()
     const file = formData.get('file')
 
     if (!file) {
+      console.error("No file uploaded")
       return new Response(
         JSON.stringify({ error: 'No file uploaded' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
@@ -33,6 +36,8 @@ serve(async (req) => {
     const fileExt = sanitizedFileName.split('.').pop()
     const filePath = `${crypto.randomUUID()}.${fileExt}`
 
+    console.log(`Uploading file: ${filePath}, type: ${file.type}`)
+
     // Upload the file as admin to bypass RLS policies
     const { data, error: uploadError } = await supabase.storage
       .from('lovable-uploads')
@@ -42,6 +47,7 @@ serve(async (req) => {
       })
 
     if (uploadError) {
+      console.error("Upload error:", uploadError)
       return new Response(
         JSON.stringify({ error: 'Failed to upload file', details: uploadError }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
@@ -53,6 +59,8 @@ serve(async (req) => {
       .from('lovable-uploads')
       .getPublicUrl(filePath)
 
+    console.log(`File uploaded successfully. Public URL: ${publicUrl}`)
+
     return new Response(
       JSON.stringify({ 
         message: 'File uploaded successfully', 
@@ -62,6 +70,7 @@ serve(async (req) => {
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     )
   } catch (error) {
+    console.error("Unexpected error:", error)
     return new Response(
       JSON.stringify({ error: 'An unexpected error occurred', details: error.message }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }

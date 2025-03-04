@@ -20,75 +20,14 @@ export const useFileUpload = (
     }
   };
 
-  // New approach for file uploads using direct fetch with retry
-  const uploadFile = async (file: File, type: 'image' | 'file', maxRetries = 3): Promise<string> => {
-    let retries = 0;
-    
-    while (retries <= maxRetries) {
-      try {
-        // Sanitize the filename to ensure it only contains safe characters
-        const sanitizedFileName = file.name.replace(/[^\x00-\x7F]/g, '');
-        const fileExt = sanitizedFileName.split('.').pop();
-        const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-        
-        // Instead of creating the bucket programmatically, we'll use the existing bucket
-        const bucketName = 'lovable-uploads';
-        
-        // Generate a signed URL for upload
-        const { data: signedUrlData, error: signedUrlError } = await supabase.storage
-          .from(bucketName)
-          .createSignedUploadUrl(fileName);
-        
-        if (signedUrlError) {
-          console.error('Signed URL error:', signedUrlError);
-          throw new Error(`Failed to generate upload URL: ${signedUrlError.message}`);
-        }
-        
-        // Use the signed URL to upload the file directly
-        const { signedUrl, path } = signedUrlData;
-        
-        // Upload the file using fetch directly
-        const uploadResponse = await fetch(signedUrl, {
-          method: 'PUT',
-          body: file,
-          headers: {
-            'Content-Type': file.type,
-          },
-        });
-        
-        if (!uploadResponse.ok) {
-          throw new Error(`Upload failed with status: ${uploadResponse.status}`);
-        }
-        
-        // Get the public URL
-        const { data: publicUrlData } = supabase.storage
-          .from(bucketName)
-          .getPublicUrl(path);
-        
-        return publicUrlData.publicUrl;
-      } catch (error) {
-        console.error(`Upload attempt ${retries + 1} failed:`, error);
-        retries++;
-        
-        if (retries <= maxRetries) {
-          // Wait before retrying (exponential backoff)
-          await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retries)));
-          console.log(`Retrying upload, attempt ${retries + 1}...`);
-        } else {
-          throw error; // Rethrow the error if all retries failed
-        }
-      }
-    }
-    
-    throw new Error('Upload failed after maximum retry attempts');
-  };
-
-  // Alternative method: use edge function for uploads if direct upload continues to fail
+  // Primary upload method using the Edge Function
   const uploadViaEdgeFunction = async (file: File): Promise<string> => {
+    console.log("Uploading via Edge Function");
     try {
       const formData = new FormData();
       formData.append('file', file);
       
+      // Use the edge function directly
       const response = await fetch('/api/upload-file', {
         method: 'POST',
         body: formData,
@@ -100,6 +39,7 @@ export const useFileUpload = (
       }
       
       const data = await response.json();
+      console.log("Edge function upload successful:", data.publicUrl);
       return data.publicUrl;
     } catch (error) {
       console.error('Edge function upload error:', error);
@@ -107,43 +47,92 @@ export const useFileUpload = (
     }
   };
 
+  // Fallback method using direct Supabase storage upload
+  const uploadViaSupabaseStorage = async (file: File): Promise<string> => {
+    console.log("Uploading via Supabase Storage");
+    const sanitizedFileName = file.name.replace(/[^\x00-\x7F]/g, '');
+    const fileExt = sanitizedFileName.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const bucketName = 'lovable-uploads';
+    
+    // Try a simple approach - direct upload without signed URLs
+    const { data, error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: true
+      });
+    
+    if (uploadError) throw uploadError;
+    
+    const { data: urlData } = supabase.storage
+      .from(bucketName)
+      .getPublicUrl(data?.path || fileName);
+    
+    console.log("Supabase storage upload successful:", urlData.publicUrl);
+    return urlData.publicUrl;
+  };
+
+  // Last resort: use the public edge function
+  const uploadViaPublicEdgeFunction = async (file: File): Promise<string> => {
+    console.log("Uploading via Public Edge Function");
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      // Use the full edge function URL directly without authentication
+      const url = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
+      
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Response not OK:", response.status, errorText);
+        throw new Error(`Upload failed with status ${response.status}: ${errorText}`);
+      }
+      
+      const data = await response.json();
+      console.log("Public edge function upload successful:", data.publicUrl);
+      return data.publicUrl;
+    } catch (error) {
+      console.error('Public edge function upload error:', error);
+      throw error;
+    }
+  };
+
   const handleFileUpload = async (file: File, type: 'image' | 'file') => {
     try {
       setIsUploading(true);
+      console.log(`Starting ${type} upload:`, file.name);
       
       let publicUrl;
-      try {
-        // Try the direct upload first
-        publicUrl = await uploadFile(file, type);
-      } catch (directUploadError) {
-        console.error('Direct upload failed, falling back to alternative method:', directUploadError);
-        
-        // Fallback to using a simple method - direct upload with fetch
+      let uploadMethods = [
+        { name: "Edge Function", fn: uploadViaEdgeFunction },
+        { name: "Supabase Storage", fn: uploadViaSupabaseStorage },
+        { name: "Public Edge Function", fn: uploadViaPublicEdgeFunction }
+      ];
+      
+      let lastError;
+      
+      // Try each upload method in sequence until one works
+      for (const method of uploadMethods) {
         try {
-          const sanitizedFileName = file.name.replace(/[^\x00-\x7F]/g, '');
-          const fileExt = sanitizedFileName.split('.').pop();
-          const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-          const bucketName = 'lovable-uploads';
-          
-          // Try a much simpler approach - direct upload without signed URLs
-          const { data, error: uploadError } = await supabase.storage
-            .from(bucketName)
-            .upload(fileName, file, {
-              cacheControl: '3600',
-              upsert: true
-            });
-          
-          if (uploadError) throw uploadError;
-          
-          const { data: urlData } = supabase.storage
-            .from(bucketName)
-            .getPublicUrl(data?.path || fileName);
-          
-          publicUrl = urlData.publicUrl;
-        } catch (simpleUploadError) {
-          console.error('Simple upload failed too:', simpleUploadError);
-          throw simpleUploadError;
+          console.log(`Trying upload method: ${method.name}`);
+          publicUrl = await method.fn(file);
+          console.log(`Upload succeeded with ${method.name}`);
+          break; // Exit the loop if upload is successful
+        } catch (error) {
+          console.error(`Upload failed with ${method.name}:`, error);
+          lastError = error;
+          // Continue to the next method
         }
+      }
+      
+      if (!publicUrl) {
+        throw new Error(`All upload methods failed. Last error: ${lastError?.message || 'Unknown error'}`);
       }
 
       if (type === 'image') {
@@ -165,7 +154,7 @@ export const useFileUpload = (
         description: `${type === 'image' ? 'Image' : 'File'} uploaded successfully`,
       });
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error('Final upload error:', error);
       
       // More descriptive error message
       const errorMessage = error instanceof Error 
