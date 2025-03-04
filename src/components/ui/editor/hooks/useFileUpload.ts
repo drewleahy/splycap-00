@@ -1,86 +1,22 @@
 
-import { useState, useRef, useEffect } from "react";
-import { Button } from "./button";
-import {
-  Bold,
-  Italic,
-  Link as LinkIcon,
-  List,
-  ListOrdered,
-  Save,
-  Image as ImageIcon,
-  File as FileIcon,
-  Code as CodeIcon,
-} from "lucide-react";
+import { useState, useRef, RefObject } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-interface EditorProps {
-  initialContent: string;
-  onSave: (content: string) => void;
-}
-
-export const Editor = ({ initialContent, onSave }: EditorProps) => {
+export const useFileUpload = (
+  setContent: React.Dispatch<React.SetStateAction<string>>,
+  editorRef: RefObject<HTMLDivElement>
+) => {
   const { toast } = useToast();
-  const [content, setContent] = useState(initialContent);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
-  const editorRef = useRef<HTMLDivElement>(null);
-  const [isUploading, setIsUploading] = useState(false);
 
-  useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.innerHTML = initialContent;
-    }
-  }, [initialContent]);
-
+  // Function to format text in the editor
   const handleFormat = (command: string, value?: string) => {
     document.execCommand(command, false, value);
     if (editorRef.current) {
       setContent(editorRef.current.innerHTML);
-    }
-  };
-
-  const handleLink = () => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) {
-      toast({
-        title: "Error",
-        description: "Please select some text first",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const url = prompt("Enter URL:");
-    if (url) {
-      editorRef.current?.focus();
-      handleFormat("createLink", url);
-    }
-  };
-
-  const handleCodeBlock = () => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) {
-      toast({
-        title: "Error",
-        description: "Please select some text first",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const selectedText = selection.toString();
-    const language = prompt("Enter code language (e.g., javascript, typescript, sql, html, css):", "javascript");
-    
-    if (language) {
-      const codeHtml = `<pre class="bg-gray-100 p-3 rounded-md overflow-x-auto my-2"><code class="language-${language}">${selectedText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
-      
-      document.execCommand('insertHTML', false, codeHtml);
-      
-      if (editorRef.current) {
-        setContent(editorRef.current.innerHTML);
-      }
     }
   };
 
@@ -268,121 +204,11 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
     }
   };
 
-  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-    const newContent = e.currentTarget.innerHTML;
-    setContent(newContent);
+  return {
+    isUploading,
+    fileInputRef,
+    imageInputRef,
+    handleImageSelect,
+    handleFileSelect
   };
-
-  return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap gap-2 p-2 border rounded-md bg-gray-50">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => handleFormat("bold")}
-          type="button"
-          className="hover:bg-gray-100"
-        >
-          <Bold className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => handleFormat("italic")}
-          type="button"
-          className="hover:bg-gray-100"
-        >
-          <Italic className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => handleFormat("insertUnorderedList")}
-          type="button"
-          className="hover:bg-gray-100"
-        >
-          <List className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => handleFormat("insertOrderedList")}
-          type="button"
-          className="hover:bg-gray-100"
-        >
-          <ListOrdered className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handleLink}
-          type="button"
-          className="hover:bg-gray-100"
-        >
-          <LinkIcon className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handleCodeBlock}
-          type="button"
-          className="hover:bg-gray-100"
-        >
-          <CodeIcon className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => imageInputRef.current?.click()}
-          type="button"
-          className="hover:bg-gray-100"
-          disabled={isUploading}
-        >
-          <ImageIcon className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => fileInputRef.current?.click()}
-          type="button"
-          className="hover:bg-gray-100"
-          disabled={isUploading}
-        >
-          <FileIcon className="h-4 w-4" />
-        </Button>
-      </div>
-      
-      <input
-        type="file"
-        ref={imageInputRef}
-        onChange={handleImageSelect}
-        accept="image/*"
-        className="hidden"
-      />
-      
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileSelect}
-        className="hidden"
-      />
-      
-      <div
-        ref={editorRef}
-        contentEditable
-        suppressContentEditableWarning
-        onInput={handleInput}
-        className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      />
-      
-      <Button 
-        className="w-full bg-blue-600 hover:bg-blue-700"
-        onClick={() => onSave(content)}
-        disabled={isUploading}
-      >
-        <Save className="w-4 h-4 mr-2" />
-        {isUploading ? "Uploading..." : "Save Changes"}
-      </Button>
-    </div>
-  );
 };
