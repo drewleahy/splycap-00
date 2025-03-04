@@ -2,31 +2,33 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Loader2, FileText } from "lucide-react";
 import { fetchLPContent } from "@/utils/contentUtils";
 import { useToast } from "@/hooks/use-toast";
-import { FileUpload } from "@/components/FileUpload";
+import { SimpleFileUpload } from "@/components/SimpleFileUpload";
 import { useState } from "react";
 
 const IRA = () => {
-  const queryClient = useQueryClient();
   const { toast } = useToast();
-  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
-  
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ url: string, name: string }>>([]);
+
+  // Updated to use the modern approach without the onError property
   const { data: content, isLoading, isError, refetch } = useQuery({
     queryKey: ["lp-content", "ira"],
     queryFn: () => fetchLPContent("ira"),
     staleTime: 0, // Always fetch fresh data
     retry: 2,
     meta: {
-      onError: (error: Error) => {
-        console.error("Error loading IRA content:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load content. Please try refreshing.",
-          variant: "destructive",
-        });
+      onSettled: (data, error) => {
+        if (error) {
+          console.error("Error loading IRA content:", error);
+          toast({
+            title: "Error",
+            description: "Failed to load content. Please try refreshing.",
+            variant: "destructive",
+          });
+        }
       }
     }
   });
@@ -36,16 +38,11 @@ const IRA = () => {
       title: "Refreshing",
       description: "Fetching the latest content...",
     });
-    queryClient.invalidateQueries({ queryKey: ["lp-content", "ira"] });
     refetch();
   };
 
-  const handleFileUploadSuccess = (fileUrl: string) => {
-    setUploadedFile(fileUrl);
-    toast({
-      title: "File Uploaded",
-      description: "The file has been successfully uploaded and is available for viewing.",
-    });
+  const handleFileUploadSuccess = (fileUrl: string, fileName: string) => {
+    setUploadedFiles(prev => [...prev, { url: fileUrl, name: fileName }]);
   };
 
   return (
@@ -93,33 +90,31 @@ const IRA = () => {
               Upload your IRA application forms, transfer documents, or other relevant files here.
             </p>
             
-            <FileUpload onSuccess={handleFileUploadSuccess} />
+            <SimpleFileUpload 
+              onSuccess={handleFileUploadSuccess} 
+              allowedFileTypes={['.pdf', '.doc', '.docx', '.xls', '.xlsx']}
+            />
             
-            {uploadedFile && (
-              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-md">
-                <h3 className="font-medium text-green-800 mb-2">File Successfully Uploaded</h3>
-                <div className="flex items-start gap-2">
-                  <FileText className="w-5 h-5 text-green-700 mt-0.5" />
-                  <div>
-                    <p className="text-green-700 mb-2">Your file is available at:</p>
-                    <a 
-                      href={uploadedFile} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 underline block truncate"
-                    >
-                      {uploadedFile}
-                    </a>
-                  </div>
-                </div>
-                <div className="mt-3 flex justify-end">
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    onClick={() => setUploadedFile(null)}
-                  >
-                    Upload Another File
-                  </Button>
+            {uploadedFiles.length > 0 && (
+              <div className="mt-6">
+                <h3 className="font-medium text-gray-800 mb-3">Your Uploaded Documents</h3>
+                <div className="space-y-3">
+                  {uploadedFiles.map((file, index) => (
+                    <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 border border-gray-200 rounded-md">
+                      <FileText className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
+                      <div className="overflow-hidden">
+                        <p className="text-sm font-medium text-gray-700 mb-1">{file.name}</p>
+                        <a 
+                          href={file.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-sm text-blue-600 hover:text-blue-800 underline block truncate"
+                        >
+                          View Document
+                        </a>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
