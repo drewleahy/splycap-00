@@ -47,14 +47,15 @@ export const SimpleFileUpload = ({
     formData.append("file", file);
     
     try {
-      // Simple direct PHP upload
+      console.log("Sending to PHP endpoint");
       const response = await fetch("/api/upload-file.php", {
         method: "POST",
         body: formData,
       });
       
+      console.log("Response status:", response.status);
+      
       if (!response.ok) {
-        console.error(`Upload failed with status: ${response.status}`);
         throw new Error(`Upload failed with status: ${response.status}`);
       }
       
@@ -63,10 +64,6 @@ export const SimpleFileUpload = ({
       
       if (data.error) {
         throw new Error(data.error);
-      }
-      
-      if (!data.publicUrl) {
-        throw new Error("No file URL returned");
       }
       
       return data.publicUrl;
@@ -85,6 +82,8 @@ export const SimpleFileUpload = ({
     setUploadedFile(null);
 
     try {
+      console.log("File selected:", file.name);
+      
       // Validate file before uploading
       if (!validateFile(file)) {
         setIsUploading(false);
@@ -96,8 +95,9 @@ export const SimpleFileUpload = ({
         description: `Uploading ${file.name}...`,
       });
 
-      // Upload the file
+      console.log("Starting upload process");
       const fileUrl = await uploadFile(file);
+      console.log("Upload completed, URL:", fileUrl);
       
       setUploadedFile({
         url: fileUrl,

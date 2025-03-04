@@ -1,6 +1,6 @@
 
 <?php
-// This file acts as a simple file upload handler with local storage
+// Simple PHP file upload handler with comprehensive error logging
 
 // Set headers to allow cross-origin requests
 header('Access-Control-Allow-Origin: *');
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// Only allow POST requests
+// Only allow POST requests for file uploads
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['error' => 'Method not allowed']);
@@ -28,10 +28,14 @@ function logError($message) {
     file_put_contents($logFile, "[$timestamp] $message\n", FILE_APPEND);
 }
 
+// Log request information
+logError("Request received: " . json_encode([
+    'method' => $_SERVER['REQUEST_METHOD'],
+    'content_type' => $_SERVER['CONTENT_TYPE'] ?? 'not set',
+    'files' => !empty($_FILES) ? 'present' : 'empty'
+]));
+
 try {
-    // Debug log incoming request
-    logError("Received upload request");
-    
     // Check if a file was uploaded
     if (empty($_FILES['file'])) {
         logError("No file in request");
