@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Function to log errors for debugging
 function logError($message) {
-    $logFile = '../upload_errors.log';
+    $logFile = '../php_upload_errors.log';
     $timestamp = date('Y-m-d H:i:s');
     file_put_contents($logFile, "[$timestamp] $message\n", FILE_APPEND);
 }
@@ -32,7 +32,8 @@ function logError($message) {
 logError("Request received: " . json_encode([
     'method' => $_SERVER['REQUEST_METHOD'],
     'content_type' => $_SERVER['CONTENT_TYPE'] ?? 'not set',
-    'files' => !empty($_FILES) ? 'present' : 'empty'
+    'files' => !empty($_FILES) ? count($_FILES) . ' files present' : 'empty',
+    'file_keys' => !empty($_FILES) ? implode(', ', array_keys($_FILES)) : 'none'
 ]));
 
 try {
@@ -46,7 +47,7 @@ try {
 
     // Get the file from the request
     $file = $_FILES['file'];
-    logError("File received: " . $file['name'] . " (size: " . $file['size'] . " bytes)");
+    logError("File received: " . $file['name'] . " (size: " . $file['size'] . " bytes, tmp_name: " . $file['tmp_name'] . ")");
 
     // Check for upload errors
     if ($file['error'] !== UPLOAD_ERR_OK) {
@@ -85,7 +86,7 @@ try {
     $random_filename = uniqid() . '.' . $file_extension;
 
     // Create upload directory if it doesn't exist
-    $upload_dir = '../lovable-uploads/';
+    $upload_dir = '../uploads/';
     if (!file_exists($upload_dir)) {
         logError("Creating upload directory: $upload_dir");
         if (!mkdir($upload_dir, 0755, true)) {
@@ -101,7 +102,11 @@ try {
 
     // Try to upload the file
     if (!move_uploaded_file($file['tmp_name'], $local_path)) {
-        logError("Failed to move uploaded file to $local_path");
+        logError("Failed to move uploaded file from {$file['tmp_name']} to $local_path - Check permissions");
+        // Additional debug info about the directory
+        logError("Upload directory permissions: " . substr(sprintf('%o', fileperms($upload_dir)), -4));
+        logError("PHP process user: " . (function_exists('posix_getpwuid') ? posix_getpwuid(posix_geteuid())['name'] : 'unknown'));
+        
         http_response_code(500);
         echo json_encode(['error' => 'Failed to move uploaded file']);
         exit;
@@ -112,7 +117,7 @@ try {
     // Return the public URL
     $host = $_SERVER['HTTP_HOST'];
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
-    $public_url = $protocol . '://' . $host . '/lovable-uploads/' . $random_filename;
+    $public_url = $protocol . '://' . $host . '/uploads/' . $random_filename;
     
     $response = [
         'message' => 'File uploaded successfully',
@@ -129,7 +134,7 @@ try {
     echo json_encode($response);
     
 } catch (Exception $e) {
-    logError("Exception: " . $e->getMessage());
+    logError("Exception: " . $e->getMessage() . "\nStack trace: " . $e->getTraceAsString());
     http_response_code(500);
     echo json_encode([
         'error' => 'An unexpected error occurred',

@@ -41,31 +41,62 @@ export const SimpleFileUpload = ({
   };
 
   const uploadFile = async (file: File) => {
-    console.log(`Starting upload for file: ${file.name} (${file.size} bytes)`);
+    console.log(`Starting PHP upload for file: ${file.name} (${file.size} bytes)`);
     
     const formData = new FormData();
     formData.append("file", file);
     
     try {
-      console.log("Sending to PHP endpoint");
-      const response = await fetch("/api/upload-file.php", {
+      // Show what's in the FormData
+      console.log("FormData created with file:", file.name);
+      
+      // Log the URL we're sending to
+      const url = "/api/upload-file.php";
+      console.log("Sending POST request to:", url);
+      
+      const response = await fetch(url, {
         method: "POST",
         body: formData,
       });
       
-      console.log("Response status:", response.status);
+      console.log("Response received", {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok
+      });
       
       if (!response.ok) {
-        throw new Error(`Upload failed with status: ${response.status}`);
+        const errorText = await response.text();
+        console.error("Upload failed:", {
+          status: response.status,
+          statusText: response.statusText,
+          responseText: errorText
+        });
+        throw new Error(`Upload failed with status: ${response.status}. ${errorText}`);
       }
       
-      const data = await response.json();
-      console.log("Upload response:", data);
+      let data;
+      try {
+        data = await response.json();
+        console.log("Parsed response data:", data);
+      } catch (e) {
+        console.error("Failed to parse response as JSON:", e);
+        const text = await response.text();
+        console.log("Raw response:", text);
+        throw new Error("Invalid server response");
+      }
       
       if (data.error) {
+        console.error("Server returned error:", data.error);
         throw new Error(data.error);
       }
       
+      if (!data.publicUrl) {
+        console.error("No publicUrl in response:", data);
+        throw new Error("No file URL returned from server");
+      }
+      
+      console.log("Upload successful, received URL:", data.publicUrl);
       return data.publicUrl;
     } catch (error) {
       console.error("Upload error:", error);
@@ -75,17 +106,21 @@ export const SimpleFileUpload = ({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
 
     setIsUploading(true);
     setError(null);
     setUploadedFile(null);
 
     try {
-      console.log("File selected:", file.name);
+      console.log("File selected:", file.name, file.type, file.size, "bytes");
       
       // Validate file before uploading
       if (!validateFile(file)) {
+        console.log("File validation failed");
         setIsUploading(false);
         return;
       }
@@ -95,9 +130,9 @@ export const SimpleFileUpload = ({
         description: `Uploading ${file.name}...`,
       });
 
-      console.log("Starting upload process");
+      console.log("Starting PHP upload process");
       const fileUrl = await uploadFile(file);
-      console.log("Upload completed, URL:", fileUrl);
+      console.log("Upload completed successfully, URL:", fileUrl);
       
       setUploadedFile({
         url: fileUrl,
@@ -113,7 +148,7 @@ export const SimpleFileUpload = ({
         onSuccess(fileUrl, file.name);
       }
     } catch (err) {
-      console.error("Upload failed:", err);
+      console.error("Upload process failed:", err);
       const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
       setError(`Failed to upload file: ${errorMessage}`);
       
