@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
+import { Loader2, FileText } from "lucide-react";
 import { fetchLPContent } from "@/utils/contentUtils";
 import { useToast } from "@/hooks/use-toast";
 import { FileUpload } from "@/components/FileUpload";
@@ -98,15 +98,29 @@ const IRA = () => {
             {uploadedFile && (
               <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-md">
                 <h3 className="font-medium text-green-800 mb-2">File Successfully Uploaded</h3>
-                <p className="text-green-700 mb-2">Your file is available at:</p>
-                <a 
-                  href={uploadedFile} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline block truncate"
-                >
-                  {uploadedFile}
-                </a>
+                <div className="flex items-start gap-2">
+                  <FileText className="w-5 h-5 text-green-700 mt-0.5" />
+                  <div>
+                    <p className="text-green-700 mb-2">Your file is available at:</p>
+                    <a 
+                      href={uploadedFile} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline block truncate"
+                    >
+                      {uploadedFile}
+                    </a>
+                  </div>
+                </div>
+                <div className="mt-3 flex justify-end">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    onClick={() => setUploadedFile(null)}
+                  >
+                    Upload Another File
+                  </Button>
+                </div>
               </div>
             )}
           </CardContent>
