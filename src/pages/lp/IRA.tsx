@@ -6,10 +6,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { fetchLPContent } from "@/utils/contentUtils";
 import { useToast } from "@/hooks/use-toast";
+import { FileUpload } from "@/components/FileUpload";
+import { useState } from "react";
 
 const IRA = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   
   const { data: content, isLoading, isError, refetch } = useQuery({
     queryKey: ["lp-content", "ira"],
@@ -37,6 +40,14 @@ const IRA = () => {
     refetch();
   };
 
+  const handleFileUploadSuccess = (fileUrl: string) => {
+    setUploadedFile(fileUrl);
+    toast({
+      title: "File Uploaded",
+      description: "The file has been successfully uploaded and is available for viewing.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-12">
       <div className="max-w-4xl mx-auto px-4">
@@ -53,7 +64,8 @@ const IRA = () => {
             </Button>
           </div>
         </div>
-        <Card>
+        
+        <Card className="mb-8">
           <CardContent className="p-6">
             {isLoading ? (
               <div className="flex justify-center py-8">
@@ -70,6 +82,32 @@ const IRA = () => {
               <div dangerouslySetInnerHTML={{ __html: content }} className="prose max-w-none" />
             ) : (
               <p className="text-gray-600">Content coming soon.</p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Upload IRA Documents</h2>
+            <p className="text-gray-600 mb-4">
+              Upload your IRA application forms, transfer documents, or other relevant files here.
+            </p>
+            
+            <FileUpload onSuccess={handleFileUploadSuccess} />
+            
+            {uploadedFile && (
+              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-md">
+                <h3 className="font-medium text-green-800 mb-2">File Successfully Uploaded</h3>
+                <p className="text-green-700 mb-2">Your file is available at:</p>
+                <a 
+                  href={uploadedFile} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline block truncate"
+                >
+                  {uploadedFile}
+                </a>
+              </div>
             )}
           </CardContent>
         </Card>
