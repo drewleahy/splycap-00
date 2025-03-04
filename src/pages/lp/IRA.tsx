@@ -16,13 +16,15 @@ const IRA = () => {
     queryFn: () => fetchLPContent("ira"),
     staleTime: 0, // Always fetch fresh data
     retry: 2,
-    onError: (error) => {
-      console.error("Error loading IRA content:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load content. Please try refreshing.",
-        variant: "destructive",
-      });
+    meta: {
+      onError: (error: Error) => {
+        console.error("Error loading IRA content:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load content. Please try refreshing.",
+          variant: "destructive",
+        });
+      }
     }
   });
 
