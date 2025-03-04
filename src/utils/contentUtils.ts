@@ -11,22 +11,26 @@ export const fetchLPContent = async (sectionId: string) => {
       .select("description")
       .eq("section_id", `lp-${sectionId}`)
       .order('updated_at', { ascending: false })
-      .limit(1)
-      .single();
+      .limit(1);
     
     if (error) {
       console.error(`Error fetching content for ${sectionId}:`, error);
-      throw error;
+      throw new Error(error.message || "Database error occurred");
     }
     
-    console.log(`Content retrieved for ${sectionId}:`, data?.description ? "Content found" : "No content");
-    return data?.description || "";
+    if (!data || data.length === 0) {
+      console.log(`No content found for ${sectionId}`);
+      return "";
+    }
+    
+    console.log(`Content retrieved for ${sectionId}:`, data[0]?.description ? "Content found" : "No content");
+    return data[0]?.description || "";
   } catch (err) {
     console.error(`Exception fetching content for ${sectionId}:`, err);
-    // Return the error in a structured way that will be easier to debug
+    // Return a more helpful error message
     const errorMessage = err instanceof Error 
       ? err.message 
-      : JSON.stringify(err);
+      : "Unknown error occurred";
     throw new Error(`Failed to fetch content: ${errorMessage}`);
   }
 };
@@ -47,13 +51,16 @@ export const saveLPContent = async (sectionId: string, content: string) => {
 
     if (error) {
       console.error(`Error saving content for ${sectionId}:`, error);
-      throw error;
+      throw new Error(error.message || "Database error occurred");
     }
     
     console.log(`Content saved successfully for ${sectionId}`);
     return true;
   } catch (error) {
     console.error(`Exception saving content for ${sectionId}:`, error);
-    throw error;
+    const errorMessage = error instanceof Error 
+      ? error.message 
+      : "Unknown error occurred";
+    throw new Error(`Failed to save content: ${errorMessage}`);
   }
 };

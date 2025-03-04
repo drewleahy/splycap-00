@@ -22,6 +22,7 @@ const Schedule = () => {
         return result;
       } catch (error) {
         console.error("Schedule page: Error fetching schedule content:", error);
+        // Re-throw the error so it can be caught by the error boundary
         throw error;
       }
     },
@@ -41,27 +42,36 @@ const Schedule = () => {
       description: "Fetching the latest content from server...",
     });
     
-    // Reset query cache completely
-    console.log("Schedule page: Resetting schedule queries");
-    await queryClient.resetQueries({ queryKey: ["lp-content", "schedule"] });
-    
-    // Fetch fresh data
-    console.log("Schedule page: Refetching schedule content");
-    const result = await refetch();
-    
-    console.log("Schedule page: Refetch result:", result.isSuccess ? "Success" : "Failed");
-    
-    if (result.error) {
-      console.error("Schedule page: Error after refetch:", result.error);
+    try {
+      // Reset query cache completely
+      console.log("Schedule page: Resetting schedule queries");
+      await queryClient.resetQueries({ queryKey: ["lp-content", "schedule"] });
+      
+      // Fetch fresh data
+      console.log("Schedule page: Refetching schedule content");
+      const result = await refetch();
+      
+      console.log("Schedule page: Refetch result:", result.isSuccess ? "Success" : "Failed");
+      
+      if (result.isSuccess) {
+        toast({
+          title: "Content refreshed",
+          description: "The latest content has been loaded.",
+        });
+      } else if (result.error) {
+        console.error("Schedule page: Error after refetch:", result.error);
+        toast({
+          title: "Error refreshing content",
+          description: "Please try again or contact support.",
+          variant: "destructive",
+        });
+      }
+    } catch (refreshError) {
+      console.error("Schedule page: Exception during refresh:", refreshError);
       toast({
         title: "Error refreshing content",
-        description: "Please try again or contact support.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Content refreshed",
-        description: "The latest content has been loaded.",
       });
     }
   };
@@ -71,10 +81,17 @@ const Schedule = () => {
     if (err instanceof Error) {
       return err.message;
     }
-    if (typeof err === 'object' && err !== null) {
-      return JSON.stringify(err, null, 2);
+    if (typeof err === 'string') {
+      return err;
     }
-    return String(err);
+    if (typeof err === 'object' && err !== null) {
+      try {
+        return JSON.stringify(err, null, 2);
+      } catch {
+        return "Error cannot be displayed";
+      }
+    }
+    return String(err) || "Unknown error";
   };
 
   return (
@@ -101,11 +118,11 @@ const Schedule = () => {
               </div>
             ) : error ? (
               <div className="text-red-600 py-4">
-                <p className="font-semibold">Error loading content:</p>
+                <p className="font-semibold">Error loading content. Please try refreshing.</p>
                 <div className="mt-2 bg-gray-100 p-3 rounded overflow-auto max-h-48 text-sm">
                   {formatError(error)}
                 </div>
-                <Button onClick={() => refetch()} variant="destructive" size="sm" className="mt-4">
+                <Button onClick={handleRefresh} variant="destructive" size="sm" className="mt-4">
                   Try Again
                 </Button>
               </div>
@@ -114,7 +131,7 @@ const Schedule = () => {
             ) : (
               <div className="text-gray-600 py-4">
                 <p>No content available. Please add content in the admin panel.</p>
-                <Button onClick={() => refetch()} variant="outline" size="sm" className="mt-2">
+                <Button onClick={handleRefresh} variant="outline" size="sm" className="mt-2">
                   Check Again
                 </Button>
               </div>
