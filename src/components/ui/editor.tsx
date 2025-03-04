@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "./button";
 import {
@@ -86,10 +87,13 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
   const handleFileUpload = async (file: File, type: 'image' | 'file') => {
     try {
       setIsUploading(true);
-      const fileExt = file.name.split('.').pop();
+      
+      // Sanitize the filename to ensure it only contains safe characters
+      const sanitizedFileName = file.name.replace(/[^\x00-\x7F]/g, '');
+      const fileExt = sanitizedFileName.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
       
-      console.log(`Starting upload for ${type}:`, {
+      console.log(`Starting ${type} upload:`, {
         fileName,
         fileType: file.type,
         fileSize: file.size,
@@ -97,22 +101,57 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       });
       
       const bucketName = 'lovable-uploads';
-      const currentPath = fileName; // Simplified path
+      const filePath = fileName;
       
-      const uploadResult = await supabase.storage
-        .from(bucketName)
-        .upload(currentPath, file);
-      
-      if (uploadResult.error) {
-        console.error('Upload error:', uploadResult.error);
-        throw uploadResult.error;
+      // Check if the bucket exists and create it if it doesn't
+      const { data: bucketExists } = await supabase.storage
+        .getBucket(bucketName);
+        
+      if (!bucketExists) {
+        console.log(`Creating bucket ${bucketName}...`);
+        const { error: bucketError } = await supabase.storage
+          .createBucket(bucketName, {
+            public: true,
+            fileSizeLimit: 52428800 // 50MB
+          });
+          
+        if (bucketError) {
+          console.error('Bucket creation error:', bucketError);
+          throw new Error(`Failed to create storage bucket: ${bucketError.message}`);
+        }
       }
       
-      console.log('Upload successful:', uploadResult.data);
+      // Set the correct bucket policy if it's not already public
+      const { error: policyError } = await supabase.storage
+        .from(bucketName)
+        .getPublicUrl(filePath);
+        
+      if (policyError) {
+        console.log('Setting bucket to public...');
+        await supabase.storage.updateBucket(bucketName, {
+          public: true
+        });
+      }
       
+      // Upload the file
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from(bucketName)
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
+      
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw new Error(`Upload failed: ${uploadError.message}`);
+      }
+      
+      console.log('Upload successful:', uploadData);
+      
+      // Get the public URL
       const { data } = supabase.storage
         .from(bucketName)
-        .getPublicUrl(uploadResult.data.path);
+        .getPublicUrl(uploadData?.path || filePath);
       
       const publicUrl = data.publicUrl;
       console.log('Public URL:', publicUrl);
@@ -125,7 +164,7 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
             <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
             <polyline points="13 2 13 9 20 9"></polyline>
           </svg>
-          ${file.name}</a>`;
+          ${sanitizedFileName}</a>`;
         handleFormat('insertHTML', fileLink);
       }
 
@@ -135,9 +174,15 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
       });
     } catch (error) {
       console.error('Upload error:', error);
+      
+      // More descriptive error message
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : 'Unknown error occurred during upload';
+        
       toast({
         title: "Error",
-        description: `Failed to upload ${type}. Please check your permissions or try again later.`,
+        description: `Failed to upload ${type}: ${errorMessage}`,
         variant: "destructive",
       });
     } finally {

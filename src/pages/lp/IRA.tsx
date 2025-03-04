@@ -9,14 +9,16 @@ import { fetchLPContent } from "@/utils/contentUtils";
 const IRA = () => {
   const queryClient = useQueryClient();
   
-  const { data: content, isLoading, error } = useQuery({
+  const { data: content, isLoading, isError, refetch } = useQuery({
     queryKey: ["lp-content", "ira"],
     queryFn: () => fetchLPContent("ira"),
-    staleTime: 30000, // Consider data fresh for 30 seconds
+    staleTime: 0, // Always fetch fresh data
+    retry: 1,
   });
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({ queryKey: ["lp-content", "ira"] });
+    refetch();
   };
 
   return (
@@ -41,10 +43,10 @@ const IRA = () => {
               <div className="flex justify-center py-8">
                 <Loader2 className="w-8 h-8 animate-spin" />
               </div>
-            ) : error ? (
+            ) : isError ? (
               <p className="text-red-600">Error loading content. Please try refreshing.</p>
             ) : content ? (
-              <div dangerouslySetInnerHTML={{ __html: content }} />
+              <div dangerouslySetInnerHTML={{ __html: content }} className="prose max-w-none" />
             ) : (
               <p className="text-gray-600">Content coming soon.</p>
             )}

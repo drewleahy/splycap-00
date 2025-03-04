@@ -15,7 +15,7 @@ export const fetchLPContent = async (sectionId: string) => {
     
     if (error) {
       console.error(`Error fetching content for ${sectionId}:`, error);
-      throw new Error(error.message || "Database error occurred");
+      return `<p class="text-red-600">Error loading content: ${error.message || "Database error occurred"}</p>`;
     }
     
     if (!data || data.length === 0) {
@@ -27,11 +27,10 @@ export const fetchLPContent = async (sectionId: string) => {
     return data[0]?.description || "";
   } catch (err) {
     console.error(`Exception fetching content for ${sectionId}:`, err);
-    // Return a more helpful error message
     const errorMessage = err instanceof Error 
       ? err.message 
       : "Unknown error occurred";
-    throw new Error(`Failed to fetch content: ${errorMessage}`);
+    return `<p class="text-red-600">Failed to fetch content: ${errorMessage}</p>`;
   }
 };
 
