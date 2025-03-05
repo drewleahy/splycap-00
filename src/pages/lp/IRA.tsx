@@ -12,6 +12,7 @@ import { useState } from "react";
 const IRA = () => {
   const { toast } = useToast();
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ url: string, name: string }>>([]);
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
 
   // Updated to use the modern approach without the onError property
   const { data: content, isLoading, isError, refetch } = useQuery({
@@ -44,10 +45,26 @@ const IRA = () => {
   const handleFileUploadSuccess = (fileUrl: string, fileName: string) => {
     console.log("File upload success:", fileUrl, fileName);
     setUploadedFiles(prev => [...prev, { url: fileUrl, name: fileName }]);
+    setIsUploadingFile(false);
     
     toast({
       title: "Document Added",
       description: `${fileName} has been successfully uploaded.`,
+    });
+  };
+
+  const handleFileUploadStart = () => {
+    setIsUploadingFile(true);
+  };
+
+  const handleFileUploadError = (error: string) => {
+    console.error("File upload error:", error);
+    setIsUploadingFile(false);
+    
+    toast({
+      title: "Upload Failed",
+      description: error,
+      variant: "destructive",
     });
   };
 
@@ -142,8 +159,12 @@ const IRA = () => {
             </p>
             
             <SimpleFileUpload 
-              onSuccess={handleFileUploadSuccess} 
+              onSuccess={handleFileUploadSuccess}
+              onError={handleFileUploadError}
+              onStart={handleFileUploadStart}
+              isUploading={isUploadingFile}
               allowedFileTypes={['.pdf', '.doc', '.docx', '.xls', '.xlsx']}
+              forcePhpUpload={true}
             />
           </CardContent>
         </Card>

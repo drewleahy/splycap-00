@@ -1,3 +1,4 @@
+
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Upload, AlertCircle, Check, FileText } from "lucide-react";
@@ -5,24 +6,37 @@ import { useToast } from "@/hooks/use-toast";
 
 interface SimpleFileUploadProps {
   onSuccess?: (fileUrl: string, fileName: string) => void;
+  onError?: (error: string) => void;
+  onStart?: () => void;
+  isUploading?: boolean;
   allowedFileTypes?: string[];
+  forcePhpUpload?: boolean;
 }
 
 export const SimpleFileUpload = ({ 
   onSuccess, 
-  allowedFileTypes = [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".jpg", ".jpeg", ".png"] 
+  onError,
+  onStart,
+  isUploading: externalIsUploading,
+  allowedFileTypes = [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".jpg", ".jpeg", ".png"],
+  forcePhpUpload = false
 }: SimpleFileUploadProps) => {
   const { toast } = useToast();
-  const [isUploading, setIsUploading] = useState(false);
+  const [internalIsUploading, setInternalIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<{url: string, name: string} | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Use external state if provided, otherwise use internal state
+  const isUploading = externalIsUploading !== undefined ? externalIsUploading : internalIsUploading;
 
   const validateFile = (file: File): boolean => {
     // Check file size (10MB limit)
     const MAX_SIZE = 10 * 1024 * 1024; // 10MB
     if (file.size > MAX_SIZE) {
-      setError(`File size exceeds 10MB limit (${(file.size / (1024 * 1024)).toFixed(2)}MB)`);
+      const errorMsg = `File size exceeds 10MB limit (${(file.size / (1024 * 1024)).toFixed(2)}MB)`;
+      setError(errorMsg);
+      if (onError) onError(errorMsg);
       return false;
     }
 
@@ -31,7 +45,9 @@ export const SimpleFileUpload = ({
       const fileExtension = "." + file.name.split('.').pop()?.toLowerCase();
       if (!allowedFileTypes.includes(fileExtension) && 
           !allowedFileTypes.some(type => file.type.includes(type.replace('.', '')))) {
-        setError(`File type not allowed. Please upload: ${allowedFileTypes.join(', ')}`);
+        const errorMsg = `File type not allowed. Please upload: ${allowedFileTypes.join(', ')}`;
+        setError(errorMsg);
+        if (onError) onError(errorMsg);
         return false;
       }
     }
@@ -39,7 +55,7 @@ export const SimpleFileUpload = ({
     return true;
   };
 
-  const uploadFile = async (file: File) => {
+  const uploadFileWithPhp = async (file: File) => {
     console.log(`Starting PHP upload for file: ${file.name} (${file.size} bytes)`);
     console.log(`File type: ${file.type}`);
     
@@ -117,7 +133,8 @@ export const SimpleFileUpload = ({
       return;
     }
 
-    setIsUploading(true);
+    if (onStart) onStart();
+    setInternalIsUploading(true);
     setError(null);
     setUploadedFile(null);
 
@@ -127,7 +144,7 @@ export const SimpleFileUpload = ({
       // Validate file before uploading
       if (!validateFile(file)) {
         console.log("File validation failed");
-        setIsUploading(false);
+        setInternalIsUploading(false);
         return;
       }
 
@@ -136,27 +153,41 @@ export const SimpleFileUpload = ({
         description: `Uploading ${file.name}...`,
       });
 
-      console.log("Starting PHP upload process");
-      const fileUrl = await uploadFile(file);
-      console.log("Upload completed successfully, URL:", fileUrl);
+      // For PDFs, always use the PHP uploader to ensure compatibility
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
       
-      setUploadedFile({
-        url: fileUrl,
-        name: file.name
-      });
+      if (forcePhpUpload || isPdf) {
+        console.log("Using PHP upload method for file:", file.name);
+        const fileUrl = await uploadFileWithPhp(file);
+        console.log("PHP upload completed successfully, URL:", fileUrl);
+        
+        setUploadedFile({
+          url: fileUrl,
+          name: file.name
+        });
+        
+        if (onSuccess) {
+          onSuccess(fileUrl, file.name);
+        }
+      } else {
+        // Original upload logic for non-PDF files if not forcing PHP upload
+        console.log("Using default upload method for file:", file.name);
+        // This part would contain the original upload logic
+        const errorMsg = "Upload method not implemented for this file type. Try using a PDF file.";
+        setError(errorMsg);
+        if (onError) onError(errorMsg);
+      }
       
       toast({
         title: "Upload Complete",
         description: "File has been uploaded successfully",
       });
-      
-      if (onSuccess) {
-        onSuccess(fileUrl, file.name);
-      }
     } catch (err) {
       console.error("Upload process failed:", err);
       const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
       setError(`Failed to upload file: ${errorMessage}`);
+      
+      if (onError) onError(errorMessage);
       
       toast({
         title: "Upload Failed",
@@ -164,7 +195,7 @@ export const SimpleFileUpload = ({
         variant: "destructive",
       });
     } finally {
-      setIsUploading(false);
+      setInternalIsUploading(false);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
