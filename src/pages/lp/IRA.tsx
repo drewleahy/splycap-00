@@ -51,6 +51,34 @@ const IRA = () => {
     });
   };
 
+  // Function to render the documents section
+  const renderDocuments = () => {
+    if (uploadedFiles.length === 0) {
+      return <p className="text-gray-500 italic">No documents have been uploaded yet.</p>;
+    }
+
+    return (
+      <div className="space-y-3">
+        {uploadedFiles.map((file, index) => (
+          <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 border border-gray-200 rounded-md">
+            <FileText className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
+            <div className="overflow-hidden">
+              <p className="text-sm font-medium text-gray-700 mb-1">{file.name}</p>
+              <a 
+                href={file.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm text-blue-600 hover:text-blue-800 underline block truncate"
+              >
+                View Document
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 py-12">
       <div className="max-w-4xl mx-auto px-4">
@@ -84,7 +112,23 @@ const IRA = () => {
             ) : content ? (
               <div dangerouslySetInnerHTML={{ __html: content }} className="prose max-w-none" />
             ) : (
-              <p className="text-gray-600">Content coming soon.</p>
+              <div className="space-y-4">
+                <p className="text-gray-600">No IRA information content has been added yet.</p>
+                {uploadedFiles.length > 0 && (
+                  <div className="mt-6">
+                    <h3 className="font-medium text-gray-800 mb-3">Available IRA Documents</h3>
+                    {renderDocuments()}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {/* Always show uploaded documents below the content */}
+            {content && uploadedFiles.length > 0 && (
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <h3 className="font-medium text-gray-800 mb-3">Available IRA Documents</h3>
+                {renderDocuments()}
+              </div>
             )}
           </CardContent>
         </Card>
@@ -101,30 +145,6 @@ const IRA = () => {
               onSuccess={handleFileUploadSuccess} 
               allowedFileTypes={['.pdf', '.doc', '.docx', '.xls', '.xlsx']}
             />
-            
-            {uploadedFiles.length > 0 && (
-              <div className="mt-6">
-                <h3 className="font-medium text-gray-800 mb-3">Your Uploaded Documents</h3>
-                <div className="space-y-3">
-                  {uploadedFiles.map((file, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 border border-gray-200 rounded-md">
-                      <FileText className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
-                      <div className="overflow-hidden">
-                        <p className="text-sm font-medium text-gray-700 mb-1">{file.name}</p>
-                        <a 
-                          href={file.url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-sm text-blue-600 hover:text-blue-800 underline block truncate"
-                        >
-                          View Document
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>
