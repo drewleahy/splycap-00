@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 
@@ -25,6 +26,14 @@ const partners = [
     linkedin: "https://www.linkedin.com/in/drewleahy/",
     bio: "Drew Leahy is a General Partner at SPLYCAP as a 3x entrepreneur and 3x venture capital fund manager. Previously, he served as a founding partner at Hawke Ventures ($25M AUM), General Partner for a New Zealand venture fund ($50M AUM), and a family office investment manager in alternatives. Drew has developed a comprehensive understanding of venture capital dynamics, from early to late stage investing, and maintains strong relationships within the investment community. His analytical approach and deep market knowledge contribute to SPLYCAP's ability to source and evaluate exceptional investment opportunities.",
     image: "/lovable-uploads/452e0ed4-d482-48a7-b740-0c0d3d1defc7.png"
+  },
+  {
+    name: "Tristan Schaeffer",
+    role: "Venture Partner",
+    location: "Chicago, IL",
+    linkedin: "https://www.linkedin.com/in/tristanschaeff/",
+    bio: "Tristan Schaeffer is a seasoned operator and investor, currently serving as a strategic Venture Partner at SPLYCAP and the Founding Managing Partner at Worldview. A serial entrepreneur, Tristan successfully exited his first company at just 22 and has since built a distinguished career driving growth, forging strategic partnerships, and creating transformative value across multiple sectors.\n\nA recognized leader in the Heartland Economy, Tristan has achieved two successful exits, built a $120M+ credit portfolio, and played a pivotal role in tripling revenue at a nationally leading nonprofit. He has also spearheaded numerous strategic initiatives for some of the nation's largest brands, organizations, and political leaders.\n\nWith an extensive network and deep expertise in the venture ecosystem, Tristan excels at identifying and capitalizing on exceptional investment opportunities, delivering outsized value to SPLYCAP's investor network.",
+    image: "/lovable-uploads/7324186b-c059-42d6-9532-5edc7d9e716d.png"
   },
 ];
 
