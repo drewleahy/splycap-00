@@ -1,11 +1,11 @@
 
 <?php
-// Simple PHP file upload handler with comprehensive error logging
+// Enhanced PHP file upload handler with comprehensive error logging
 
-// Set headers to allow cross-origin requests
+// Set headers to allow cross-origin requests and set proper content type
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 header('Content-Type: application/json');
 
 // Handle preflight OPTIONS request
@@ -37,6 +37,9 @@ logError("Request received: " . json_encode([
 ]));
 
 try {
+    // Log full $_FILES array for debugging
+    logError("Full FILES array: " . json_encode($_FILES));
+    
     // Check if a file was uploaded
     if (empty($_FILES['file'])) {
         logError("No file in request");
@@ -81,14 +84,8 @@ try {
         exit;
     }
 
-    // Additional validation for PDF files
-    $file_extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    if ($file_extension === 'pdf' && $file['type'] !== 'application/pdf') {
-        logError("File extension is PDF but mime type is: " . $file['type']);
-        // Continue anyway, but log the discrepancy
-    }
-
     // Generate a random filename to avoid conflicts
+    $file_extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     $random_filename = uniqid() . '.' . $file_extension;
 
     // Create upload directory if it doesn't exist
@@ -109,9 +106,14 @@ try {
     // Try to upload the file
     if (!move_uploaded_file($file['tmp_name'], $local_path)) {
         logError("Failed to move uploaded file from {$file['tmp_name']} to $local_path - Check permissions");
-        // Additional debug info about the directory
+        
+        // Additional debug info about the directory and permissions
         logError("Upload directory permissions: " . substr(sprintf('%o', fileperms($upload_dir)), -4));
-        logError("PHP process user: " . (function_exists('posix_getpwuid') ? posix_getpwuid(posix_geteuid())['name'] : 'unknown'));
+        if (function_exists('posix_getpwuid')) {
+            logError("PHP process user: " . posix_getpwuid(posix_geteuid())['name']);
+        } else {
+            logError("PHP process user function not available");
+        }
         
         http_response_code(500);
         echo json_encode(['error' => 'Failed to move uploaded file']);
@@ -124,6 +126,19 @@ try {
     $host = $_SERVER['HTTP_HOST'];
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
     $public_url = $protocol . '://' . $host . '/uploads/' . $random_filename;
+    
+    // Add HTTP Cache-Control headers to help with file serving
+    if (in_array($file_extension, ['pdf', 'doc', 'docx', 'xls', 'xlsx'])) {
+        $contentType = 'application/octet-stream';
+        if ($file_extension === 'pdf') {
+            $contentType = 'application/pdf';
+        }
+        
+        logError("Setting content type for $file_extension to $contentType");
+        
+        // Attempt to set file permissions to ensure it's readable by the web server
+        chmod($local_path, 0644);
+    }
     
     $response = [
         'message' => 'File uploaded successfully',
