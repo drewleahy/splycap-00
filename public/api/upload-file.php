@@ -89,7 +89,7 @@ try {
     $random_filename = uniqid() . '.' . $file_extension;
 
     // Create upload directory if it doesn't exist
-    $upload_dir = '../uploads/';
+    $upload_dir = '../lovable-uploads/';
     if (!file_exists($upload_dir)) {
         logError("Creating upload directory: $upload_dir");
         if (!mkdir($upload_dir, 0755, true)) {
@@ -109,11 +109,6 @@ try {
         
         // Additional debug info about the directory and permissions
         logError("Upload directory permissions: " . substr(sprintf('%o', fileperms($upload_dir)), -4));
-        if (function_exists('posix_getpwuid')) {
-            logError("PHP process user: " . posix_getpwuid(posix_geteuid())['name']);
-        } else {
-            logError("PHP process user function not available");
-        }
         
         http_response_code(500);
         echo json_encode(['error' => 'Failed to move uploaded file']);
@@ -125,20 +120,10 @@ try {
     // Return the public URL
     $host = $_SERVER['HTTP_HOST'];
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
-    $public_url = $protocol . '://' . $host . '/uploads/' . $random_filename;
+    $public_url = $protocol . '://' . $host . '/lovable-uploads/' . $random_filename;
     
-    // Add HTTP Cache-Control headers to help with file serving
-    if (in_array($file_extension, ['pdf', 'doc', 'docx', 'xls', 'xlsx'])) {
-        $contentType = 'application/octet-stream';
-        if ($file_extension === 'pdf') {
-            $contentType = 'application/pdf';
-        }
-        
-        logError("Setting content type for $file_extension to $contentType");
-        
-        // Attempt to set file permissions to ensure it's readable by the web server
-        chmod($local_path, 0644);
-    }
+    // Set proper file permissions to ensure it's readable by the web server
+    chmod($local_path, 0644);
     
     $response = [
         'message' => 'File uploaded successfully',

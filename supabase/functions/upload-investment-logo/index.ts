@@ -5,10 +5,12 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
+    console.log("Handling CORS preflight request")
     return new Response(null, { headers: corsHeaders })
   }
 
@@ -78,7 +80,7 @@ serve(async (req) => {
       .from(bucketName)
       .upload(filePath, file, {
         contentType: file.type,
-        upsert: false
+        upsert: true
       })
 
     if (uploadError) {

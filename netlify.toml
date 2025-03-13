@@ -7,6 +7,11 @@
   NODE_VERSION = "20"
 
 [[redirects]]
+  from = "/api/upload-file"
+  to = "/.netlify/functions/upload-file"
+  status = 200
+
+[[redirects]]
   from = "/api/*"
   to = "/api/:splat"
   status = 200
@@ -20,6 +25,12 @@
   for = "/uploads/*"
   [headers.values]
     Content-Type = "application/octet-stream"
-    Content-Disposition = "inline"
+    Content-Disposition = "attachment"
+    Cache-Control = "public, max-age=86400"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/lovable-uploads/*"
+  [headers.values]
     Cache-Control = "public, max-age=86400"
     Access-Control-Allow-Origin = "*"
