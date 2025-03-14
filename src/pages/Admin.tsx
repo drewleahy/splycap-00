@@ -5,19 +5,21 @@ import { CTAEditor } from "@/components/admin/CTAEditor";
 import { FooterEditor } from "@/components/admin/FooterEditor";
 import { LPContentEditor } from "@/components/admin/LPContentEditor";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Upload, Clipboard, CheckCircle2 } from "lucide-react";
+import { RefreshCw, Upload, Clipboard, CheckCircle2, FileText } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminFileUpload } from "@/components/AdminFileUpload";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AdminFileSelector } from "@/components/AdminFileSelector";
 
 const Admin = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [uploadedFiles, setUploadedFiles] = useState<Array<{url: string, name: string}>>([]);
   const [isCopied, setIsCopied] = useState<{[key: string]: boolean}>({});
+  const [selectedAdminFiles, setSelectedAdminFiles] = useState<Array<{id: string, name: string, publicUrl: string}>>([]);
 
   const handleRefreshAll = async () => {
     await Promise.all([
@@ -27,6 +29,7 @@ const Admin = () => {
       queryClient.invalidateQueries({ queryKey: ["footer-content"] }),
       queryClient.invalidateQueries({ queryKey: ["philosophy-content"] }),
       queryClient.invalidateQueries({ queryKey: ["lp-content"] }),
+      queryClient.invalidateQueries({ queryKey: ["admin-files"] }),
     ]);
     
     toast({
@@ -41,6 +44,9 @@ const Admin = () => {
       title: "Upload Success!",
       description: `${name} was uploaded successfully.`,
     });
+    
+    // Refresh the file list
+    queryClient.invalidateQueries({ queryKey: ["admin-files"] });
   };
 
   const handleCopyUrl = (url: string, label: string) => {
@@ -54,6 +60,15 @@ const Admin = () => {
     setTimeout(() => {
       setIsCopied({...isCopied, [label]: false});
     }, 2000);
+  };
+
+  const handleAdminFileSelection = (files: Array<{id: string, name: string, publicUrl: string}>) => {
+    setSelectedAdminFiles(files);
+    
+    toast({
+      title: "Files Selected",
+      description: `${files.length} file(s) selected successfully.`,
+    });
   };
 
   return (

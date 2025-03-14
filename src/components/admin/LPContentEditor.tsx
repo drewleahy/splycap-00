@@ -4,15 +4,19 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, FileText } from "lucide-react";
 import { Editor } from "@/components/ui/editor";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchLPContent, saveLPContent } from "@/utils/contentUtils";
+import { AdminFileSelector } from "@/components/AdminFileSelector";
+import { Button } from "@/components/ui/button";
 
 export const LPContentEditor = () => {
   const { toast } = useToast();
   const [activeSection, setActiveSection] = useState("deck");
   const queryClient = useQueryClient();
+  const [editorRef, setEditorRef] = useState<React.RefObject<HTMLDivElement> | null>(null);
+  const [currentContent, setCurrentContent] = useState<string>("");
 
   const { data: content, isLoading, refetch } = useQuery({
     queryKey: ["lp-content-admin"],
@@ -105,6 +109,12 @@ export const LPContentEditor = () => {
     return sectionContent.length > 0 ? sectionContent[0].description || "" : "";
   };
 
+  const captureEditorRef = (ref: React.RefObject<HTMLDivElement>, initialContent: string) => {
+    setEditorRef(ref);
+    setCurrentContent(initialContent);
+    return ref;
+  };
+
   return (
     <Card className="mb-8">
       <CardHeader className="border-b">
@@ -127,25 +137,46 @@ export const LPContentEditor = () => {
           </div>
 
           <div className="mt-4">
-            {sections.map((section) => (
-              <TabsContent 
-                key={section.id} 
-                value={section.id}
-                className="mt-0 border-0"
-              >
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    {section.title}
-                  </h3>
-                  <div className="rounded-lg">
-                    <Editor
-                      initialContent={getLatestContent(section.id)}
-                      onSave={(content) => handleSave(section.id, content)}
-                    />
+            {sections.map((section) => {
+              const latestContent = getLatestContent(section.id);
+              
+              return (
+                <TabsContent 
+                  key={section.id} 
+                  value={section.id}
+                  className="mt-0 border-0"
+                >
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                        {section.title}
+                      </h3>
+                      
+                      {/* File selector for the active section */}
+                      {activeSection === section.id && editorRef && (
+                        <AdminFileSelector 
+                          buttonText="Insert File" 
+                          multiple={true}
+                          fileTypes={['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png', '.gif']}
+                          editorRef={editorRef}
+                          setContent={setCurrentContent}
+                        />
+                      )}
+                    </div>
+                    
+                    <div className="rounded-lg">
+                      <Editor
+                        initialContent={latestContent}
+                        onSave={(content) => handleSave(section.id, content)}
+                        captureRef={(ref) => captureEditorRef(ref, latestContent)}
+                        content={currentContent}
+                        setContent={setCurrentContent}
+                      />
+                    </div>
                   </div>
-                </div>
-              </TabsContent>
-            ))}
+                </TabsContent>
+              );
+            })}
           </div>
         </Tabs>
       </CardContent>

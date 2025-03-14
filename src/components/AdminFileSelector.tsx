@@ -31,13 +31,17 @@ interface AdminFileSelectorProps {
   multiple?: boolean;
   buttonText?: string;
   fileTypes?: string[];
+  editorRef?: React.RefObject<HTMLDivElement>;
+  setContent?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const AdminFileSelector = ({ 
   onSelect, 
   multiple = false, 
   buttonText = "Select Files", 
-  fileTypes 
+  fileTypes,
+  editorRef,
+  setContent
 }: AdminFileSelectorProps) => {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
@@ -91,13 +95,44 @@ export const AdminFileSelector = ({
   
   // Handle confirm selection
   const handleConfirm = () => {
-    onSelect(selectedFiles);
-    setIsOpen(false);
+    // Check if we should insert into editor directly
+    if (editorRef?.current && setContent) {
+      // Create HTML for file links
+      const fileLinks = selectedFiles.map(file => {
+        const ext = file.name.split('.').pop()?.toLowerCase();
+        
+        // For images, insert image tag
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext || '')) {
+          return `<img src="${file.publicUrl}" alt="${file.name}" class="max-w-full h-auto my-4" />`;
+        } 
+        // For other files, insert a link
+        else {
+          return `<a href="${file.publicUrl}" target="_blank" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 my-2 block">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+              <polyline points="13 2 13 9 20 9"></polyline>
+            </svg>
+            ${file.name}
+          </a>`;
+        }
+      }).join("\n");
+      
+      // Insert at cursor position or at the end
+      document.execCommand('insertHTML', false, fileLinks);
+      
+      // Update the content state with the new HTML
+      setContent(editorRef.current.innerHTML);
+      
+      toast({
+        title: "Files Inserted",
+        description: `${selectedFiles.length} file(s) inserted into the editor.`,
+      });
+    } else {
+      // Regular file selection callback
+      onSelect(selectedFiles);
+    }
     
-    toast({
-      title: "Files Selected",
-      description: `${selectedFiles.length} file(s) selected successfully.`,
-    });
+    setIsOpen(false);
   };
   
   // Reset selection when dialog is opened

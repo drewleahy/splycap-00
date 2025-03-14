@@ -9,12 +9,33 @@ import { useToast } from "@/hooks/use-toast";
 interface EditorProps {
   initialContent: string;
   onSave: (content: string) => void;
+  captureRef?: (ref: React.RefObject<HTMLDivElement>) => React.RefObject<HTMLDivElement>;
+  content?: string;
+  setContent?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const Editor = ({ initialContent, onSave }: EditorProps) => {
+export const Editor = ({ 
+  initialContent, 
+  onSave, 
+  captureRef,
+  content: externalContent,
+  setContent: externalSetContent 
+}: EditorProps) => {
   const { toast } = useToast();
-  const [content, setContent] = useState(initialContent);
+  const [internalContent, setInternalContent] = useState(initialContent);
   const editorRef = useRef<HTMLDivElement>(null);
+  
+  // Use external or internal state based on props
+  const content = externalContent !== undefined ? externalContent : internalContent;
+  const setContent = externalSetContent || setInternalContent;
+  
+  // Share the ref with parent if requested
+  useEffect(() => {
+    if (captureRef) {
+      captureRef(editorRef);
+    }
+  }, [captureRef]);
+  
   const { 
     isUploading, 
     fileInputRef, 
@@ -25,9 +46,21 @@ export const Editor = ({ initialContent, onSave }: EditorProps) => {
 
   useEffect(() => {
     if (editorRef.current) {
-      editorRef.current.innerHTML = initialContent;
+      // Only update if the content is different to avoid cursor jumps
+      if (editorRef.current.innerHTML !== initialContent) {
+        editorRef.current.innerHTML = initialContent;
+      }
     }
   }, [initialContent]);
+
+  // Update when external content changes
+  useEffect(() => {
+    if (externalContent !== undefined && editorRef.current) {
+      if (editorRef.current.innerHTML !== externalContent) {
+        editorRef.current.innerHTML = externalContent;
+      }
+    }
+  }, [externalContent]);
 
   const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
     const newContent = e.currentTarget.innerHTML;
