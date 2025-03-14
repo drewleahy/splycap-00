@@ -23,8 +23,12 @@ export const fetchLPContent = async (sectionId: string) => {
       return "";
     }
     
-    console.log(`Content retrieved for ${sectionId}:`, data[0]?.description ? "Content found" : "No content");
-    return data[0]?.description || "";
+    const content = data[0]?.description || "";
+    console.log(`Content retrieved for ${sectionId}:`, content ? "Content found" : "No content");
+    if (content) {
+      console.log(`Content sample for ${sectionId}:`, content.substring(0, 100) + "...");
+    }
+    return content;
   } catch (err) {
     console.error(`Exception fetching content for ${sectionId}:`, err);
     const errorMessage = err instanceof Error 
@@ -36,10 +40,13 @@ export const fetchLPContent = async (sectionId: string) => {
 
 export const saveLPContent = async (sectionId: string, content: string) => {
   console.log(`Saving LP content for section: ${sectionId}`, content ? "Content present" : "No content");
+  if (content) {
+    console.log(`Content sample being saved for ${sectionId}:`, content.substring(0, 100) + "...");
+  }
   
   try {
-    // Process content to ensure links are properly formatted
-    const processedContent = content.trim();
+    // Ensure content is a string to prevent issues
+    const processedContent = (content || "").trim();
     
     // Insert a new record instead of using upsert
     const { data, error } = await supabase

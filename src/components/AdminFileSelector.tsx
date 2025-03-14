@@ -98,30 +98,36 @@ export const AdminFileSelector = ({
     // Check if we should insert into editor directly
     if (editorRef?.current && setContent) {
       // Create HTML for file links
-      const fileLinks = selectedFiles.map(file => {
+      selectedFiles.forEach(file => {
         const ext = file.name.split('.').pop()?.toLowerCase();
         
         // For images, insert image tag
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext || '')) {
-          return `<img src="${file.publicUrl}" alt="${file.name}" class="max-w-full h-auto my-4" />`;
+          const imgHtml = `<img src="${file.publicUrl}" alt="${file.name}" class="max-w-full h-auto my-4" />`;
+          console.log("Inserting image:", imgHtml);
+          document.execCommand('insertHTML', false, imgHtml);
         } 
         // For other files, insert a link
         else {
-          return `<a href="${file.publicUrl}" target="_blank" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 my-2 block">
+          const linkHtml = `<p><a href="${file.publicUrl}" target="_blank" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 my-2">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
               <polyline points="13 2 13 9 20 9"></polyline>
             </svg>
             ${file.name}
-          </a>`;
+          </a></p>`;
+          console.log("Inserting link:", linkHtml);
+          document.execCommand('insertHTML', false, linkHtml);
         }
-      }).join("\n");
+      });
       
-      // Insert at cursor position or at the end
-      document.execCommand('insertHTML', false, fileLinks);
+      // Ensure editor has focus before attempting to insert content
+      editorRef.current.focus();
       
       // Update the content state with the new HTML
       setContent(editorRef.current.innerHTML);
+      
+      console.log("Updated editor content:", editorRef.current.innerHTML);
       
       toast({
         title: "Files Inserted",

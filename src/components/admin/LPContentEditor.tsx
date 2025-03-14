@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -42,6 +42,8 @@ export const LPContentEditor = () => {
   const handleSave = async (sectionId: string, content: string) => {
     try {
       console.log(`LPContentEditor: Saving content for ${sectionId}...`, content ? "Content present" : "No content");
+      console.log("Content sample:", content.substring(0, 200));
+      
       await saveLPContent(sectionId, content);
 
       toast({
@@ -49,7 +51,7 @@ export const LPContentEditor = () => {
         description: "Content updated successfully",
       });
 
-      // Invalidate ALL queries
+      // Force refresh of content
       console.log("LPContentEditor: Invalidating all queries...");
       await queryClient.invalidateQueries();
       
@@ -73,6 +75,13 @@ export const LPContentEditor = () => {
       });
     }
   };
+
+  // Add this effect to log the content when it changes
+  useEffect(() => {
+    if (activeSection && currentContent) {
+      console.log(`Current content for ${activeSection}:`, currentContent.substring(0, 100) + "...");
+    }
+  }, [activeSection, currentContent]);
 
   if (isLoading) {
     return (
@@ -105,8 +114,12 @@ export const LPContentEditor = () => {
       .filter(c => c.section_id === `lp-${sectionId}`)
       .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
     
-    console.log(`LPContentEditor: Latest content for ${sectionId}:`, sectionContent.length > 0 ? "Found" : "None");
-    return sectionContent.length > 0 ? sectionContent[0].description || "" : "";
+    const latestContent = sectionContent.length > 0 ? sectionContent[0].description || "" : "";
+    console.log(`LPContentEditor: Latest content for ${sectionId}:`, latestContent ? "Found" : "None");
+    if (latestContent) {
+      console.log(`Content sample for ${sectionId}:`, latestContent.substring(0, 100) + "...");
+    }
+    return latestContent;
   };
 
   const captureEditorRef = (ref: React.RefObject<HTMLDivElement>, initialContent: string) => {

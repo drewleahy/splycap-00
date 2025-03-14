@@ -22,7 +22,7 @@ export const Editor = ({
   setContent: externalSetContent 
 }: EditorProps) => {
   const { toast } = useToast();
-  const [internalContent, setInternalContent] = useState(initialContent);
+  const [internalContent, setInternalContent] = useState(initialContent || "");
   const editorRef = useRef<HTMLDivElement>(null);
   
   // Use external or internal state based on props
@@ -44,8 +44,10 @@ export const Editor = ({
     handleFileSelect 
   } = useFileUpload(setContent, editorRef);
 
+  // Initialize editor with content
   useEffect(() => {
-    if (editorRef.current) {
+    if (editorRef.current && initialContent) {
+      console.log("Setting initial content:", initialContent.substring(0, 100) + "...");
       // Only update if the content is different to avoid cursor jumps
       if (editorRef.current.innerHTML !== initialContent) {
         editorRef.current.innerHTML = initialContent || '';
@@ -56,6 +58,7 @@ export const Editor = ({
   // Update when external content changes
   useEffect(() => {
     if (externalContent !== undefined && editorRef.current) {
+      console.log("External content updated:", externalContent?.substring(0, 100) + "...");
       if (editorRef.current.innerHTML !== externalContent) {
         editorRef.current.innerHTML = externalContent || '';
       }
@@ -64,7 +67,13 @@ export const Editor = ({
 
   const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
     const newContent = e.currentTarget.innerHTML;
+    console.log("Content changed via input:", newContent.substring(0, 100) + "...");
     setContent(newContent);
+  };
+
+  const handleSaveClick = () => {
+    console.log("Saving content:", content.substring(0, 100) + "...");
+    onSave(content);
   };
 
   return (
@@ -99,12 +108,12 @@ export const Editor = ({
         suppressContentEditableWarning
         onInput={handleInput}
         className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        dangerouslySetInnerHTML={initialContent ? { __html: initialContent } : undefined}
+        dangerouslySetInnerHTML={{ __html: initialContent }}
       />
       
       <Button 
         className="w-full bg-blue-600 hover:bg-blue-700"
-        onClick={() => onSave(content)}
+        onClick={handleSaveClick}
         disabled={isUploading}
       >
         <Save className="w-4 h-4 mr-2" />
