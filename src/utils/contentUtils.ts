@@ -39,10 +39,8 @@ export const fetchLPContent = async (sectionId: string) => {
 };
 
 export const saveLPContent = async (sectionId: string, content: string) => {
-  console.log(`Saving LP content for section: ${sectionId}`, content ? "Content present" : "No content");
-  if (content) {
-    console.log(`Content sample being saved for ${sectionId}:`, content.substring(0, 100) + "...");
-  }
+  console.log(`Saving LP content for section: ${sectionId}`);
+  console.log(`Content to save for ${sectionId}:`, content.substring(0, 100) + "...");
   
   try {
     // Ensure content is a string to prevent issues

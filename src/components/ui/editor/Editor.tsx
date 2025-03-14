@@ -44,16 +44,13 @@ export const Editor = ({
     handleFileSelect 
   } = useFileUpload(setContent, editorRef);
 
-  // Initialize editor with content
+  // Initialize editor with content - only once on mount
   useEffect(() => {
     if (editorRef.current && initialContent) {
-      console.log("Setting initial content:", initialContent.substring(0, 100) + "...");
-      // Only update if the content is different to avoid cursor jumps
-      if (editorRef.current.innerHTML !== initialContent) {
-        editorRef.current.innerHTML = initialContent || '';
-      }
+      console.log("Setting initial content on mount");
+      editorRef.current.innerHTML = initialContent || '';
     }
-  }, [initialContent]);
+  }, []); // Empty dependency array - only run once
 
   // Update when external content changes
   useEffect(() => {
@@ -65,16 +62,24 @@ export const Editor = ({
     }
   }, [externalContent]);
 
+  // Handle input changes from typing in the editor
   const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
     const newContent = e.currentTarget.innerHTML;
-    console.log("Content changed via input:", newContent.substring(0, 100) + "...");
+    console.log("Editor content changed:", newContent.substring(0, 100) + "...");
     setContent(newContent);
   };
 
   const handleSaveClick = () => {
-    console.log("Saving content:", content.substring(0, 100) + "...");
-    onSave(content);
+    // Get the most up-to-date content directly from the editorRef
+    const currentContent = editorRef.current?.innerHTML || content;
+    console.log("Saving content:", currentContent.substring(0, 100) + "...");
+    onSave(currentContent);
   };
+
+  // For debugging - log to console whenever content changes
+  useEffect(() => {
+    console.log("Content state updated:", content.substring(0, 100) + "...");
+  }, [content]);
 
   return (
     <div className="space-y-4">
@@ -108,7 +113,6 @@ export const Editor = ({
         suppressContentEditableWarning
         onInput={handleInput}
         className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        dangerouslySetInnerHTML={{ __html: initialContent }}
       />
       
       <Button 

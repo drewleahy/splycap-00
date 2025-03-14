@@ -93,41 +93,44 @@ export const AdminFileSelector = ({
     return <File className="w-5 h-5 text-gray-500" />;
   };
   
-  // Handle confirm selection
+  // Handle confirm selection with direct insertion into the editor
   const handleConfirm = () => {
     // Check if we should insert into editor directly
     if (editorRef?.current && setContent) {
-      // Create HTML for file links
+      // First focus the editor to ensure cursor position is available
+      editorRef.current.focus();
+      
+      // Create HTML for selected files
+      let insertedContent = '';
+      
       selectedFiles.forEach(file => {
         const ext = file.name.split('.').pop()?.toLowerCase();
         
-        // For images, insert image tag
+        // For images, create image tag
         if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext || '')) {
-          const imgHtml = `<img src="${file.publicUrl}" alt="${file.name}" class="max-w-full h-auto my-4" />`;
-          console.log("Inserting image:", imgHtml);
-          document.execCommand('insertHTML', false, imgHtml);
+          insertedContent += `<img src="${file.publicUrl}" alt="${file.name}" class="max-w-full h-auto my-4" />`;
         } 
-        // For other files, insert a link
+        // For other files, create a link
         else {
-          const linkHtml = `<p><a href="${file.publicUrl}" target="_blank" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 my-2">
+          insertedContent += `<p><a href="${file.publicUrl}" target="_blank" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 my-2">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
               <polyline points="13 2 13 9 20 9"></polyline>
             </svg>
             ${file.name}
           </a></p>`;
-          console.log("Inserting link:", linkHtml);
-          document.execCommand('insertHTML', false, linkHtml);
         }
       });
       
-      // Ensure editor has focus before attempting to insert content
-      editorRef.current.focus();
+      console.log("Content to insert:", insertedContent);
       
-      // Update the content state with the new HTML
-      setContent(editorRef.current.innerHTML);
+      // Direct insertion into editor content
+      document.execCommand('insertHTML', false, insertedContent);
       
-      console.log("Updated editor content:", editorRef.current.innerHTML);
+      // Update content state with new HTML
+      const newContent = editorRef.current.innerHTML;
+      setContent(newContent);
+      console.log("Updated editor content:", newContent);
       
       toast({
         title: "Files Inserted",

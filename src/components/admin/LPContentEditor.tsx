@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchLPContent, saveLPContent } from "@/utils/contentUtils";
 import { AdminFileSelector } from "@/components/AdminFileSelector";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export const LPContentEditor = () => {
   const { toast } = useToast();
@@ -17,6 +17,18 @@ export const LPContentEditor = () => {
   const queryClient = useQueryClient();
   const [editorRef, setEditorRef] = useState<React.RefObject<HTMLDivElement> | null>(null);
   const [currentContent, setCurrentContent] = useState<string>("");
+  const [contentUpdated, setContentUpdated] = useState(false);
+
+  const [lastDebugInfo, setLastDebugInfo] = useState<{
+    action: string;
+    content: string;
+    timestamp: number;
+  }>({ action: "init", content: "", timestamp: Date.now() });
+
+  const addDebugInfo = (action: string, content: string) => {
+    console.log(`DEBUG [${action}]:`, content.substring(0, 100) + "...");
+    setLastDebugInfo({ action, content, timestamp: Date.now() });
+  };
 
   const { data: content, isLoading, refetch } = useQuery({
     queryKey: ["lp-content-admin"],
@@ -36,13 +48,13 @@ export const LPContentEditor = () => {
       console.log("LPContentEditor: Fetched content sections:", data?.length || 0);
       return data || [];
     },
-    staleTime: 0, // Always fetch fresh data
+    staleTime: 0,
   });
 
   const handleSave = async (sectionId: string, content: string) => {
     try {
+      addDebugInfo("handleSave", content);
       console.log(`LPContentEditor: Saving content for ${sectionId}...`, content ? "Content present" : "No content");
-      console.log("Content sample:", content.substring(0, 200));
       
       await saveLPContent(sectionId, content);
 
@@ -51,19 +63,14 @@ export const LPContentEditor = () => {
         description: "Content updated successfully",
       });
 
-      // Force refresh of content
-      console.log("LPContentEditor: Invalidating all queries...");
       await queryClient.invalidateQueries();
       
-      // Specifically invalidate any related LP content queries
       await queryClient.invalidateQueries({ queryKey: ["lp-content"] });
       await queryClient.invalidateQueries({ queryKey: ["lp-content", sectionId] });
       await queryClient.invalidateQueries({ queryKey: ["lp-content-admin"] });
       
-      console.log(`LPContentEditor: Invalidated queries for section: ${sectionId}`);
-      
-      // Force refetch current content
       await refetch();
+      setContentUpdated(false);
       
       console.log("LPContentEditor: Content saved and cache invalidated successfully");
     } catch (error) {
@@ -76,12 +83,21 @@ export const LPContentEditor = () => {
     }
   };
 
-  // Add this effect to log the content when it changes
+  useEffect(() => {
+    if (activeSection) {
+      const latestContent = getLatestContent(activeSection);
+      console.log(`Switching to section ${activeSection}, setting content:`, latestContent.substring(0, 100) + "...");
+      setCurrentContent(latestContent);
+      setContentUpdated(false);
+    }
+  }, [activeSection, content]);
+
   useEffect(() => {
     if (activeSection && currentContent) {
-      console.log(`Current content for ${activeSection}:`, currentContent.substring(0, 100) + "...");
+      addDebugInfo("content-update", currentContent);
+      setContentUpdated(true);
     }
-  }, [activeSection, currentContent]);
+  }, [currentContent]);
 
   if (isLoading) {
     return (
@@ -106,7 +122,6 @@ export const LPContentEditor = () => {
     { id: "agreements", title: "LP Agreements" },
   ];
 
-  // Get the most recent content for each section
   const getLatestContent = (sectionId: string) => {
     if (!content) return "";
     
@@ -122,18 +137,13 @@ export const LPContentEditor = () => {
     return latestContent;
   };
 
-  const captureEditorRef = (ref: React.RefObject<HTMLDivElement>, initialContent: string) => {
+  const captureEditorRef = (ref: React.RefObject<HTMLDivElement>) => {
     setEditorRef(ref);
-    setCurrentContent(initialContent);
     return ref;
   };
 
-  // Add a dummy onSelect handler that will not be used
-  // since we're using the editorRef and setContent props directly
   const handleFileSelect = (files: any[]) => {
     console.log("Files selected:", files);
-    // This function won't be used because we're using editorRef and setContent props
-    // but it satisfies the TypeScript requirement
   };
 
   return (
@@ -173,7 +183,12 @@ export const LPContentEditor = () => {
                         {section.title}
                       </h3>
                       
-                      {/* File selector for the active section */}
+                      {activeSection === section.id && contentUpdated && (
+                        <Badge variant="outline" className="bg-yellow-50 text-yellow-800 border-yellow-300">
+                          Unsaved changes
+                        </Badge>
+                      )}
+                      
                       {activeSection === section.id && editorRef && (
                         <AdminFileSelector 
                           buttonText="Insert File" 
@@ -181,7 +196,7 @@ export const LPContentEditor = () => {
                           fileTypes={['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png', '.gif']}
                           editorRef={editorRef}
                           setContent={setCurrentContent}
-                          onSelect={handleFileSelect} // Add the required onSelect prop
+                          onSelect={handleFileSelect}
                         />
                       )}
                     </div>
@@ -190,11 +205,19 @@ export const LPContentEditor = () => {
                       <Editor
                         initialContent={latestContent}
                         onSave={(content) => handleSave(section.id, content)}
-                        captureRef={(ref) => captureEditorRef(ref, latestContent)}
+                        captureRef={(ref) => captureEditorRef(ref)}
                         content={currentContent}
                         setContent={setCurrentContent}
                       />
                     </div>
+                    
+                    {process.env.NODE_ENV === 'development' && (
+                      <div className="mt-4 p-3 bg-gray-100 rounded text-xs">
+                        <p>Debug: Last action: {lastDebugInfo.action} at {new Date(lastDebugInfo.timestamp).toLocaleTimeString()}</p>
+                        <p>Content state: {currentContent.length > 0 ? 'Has content' : 'Empty'}</p>
+                        <p>First 50 chars: {currentContent.substring(0, 50)}</p>
+                      </div>
+                    )}
                   </div>
                 </TabsContent>
               );
