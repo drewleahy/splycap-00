@@ -10,9 +10,61 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminFileUpload } from "@/components/AdminFileUpload";
-import { useState, useRef } from "react";
+import { useState, useRef, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdminFileSelector } from "@/components/AdminFileSelector";
+
+// Error boundary component to catch errors in child components
+const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
+  const [hasError, setHasError] = useState(false);
+  const { toast } = useToast();
+
+  if (hasError) {
+    return (
+      <div className="p-6 border border-red-300 bg-red-50 rounded-md">
+        <h3 className="text-lg font-medium text-red-800 mb-2">Component Error</h3>
+        <p className="text-red-600">
+          There was an error loading this component. Please refresh the page or try again later.
+        </p>
+        <Button 
+          variant="outline" 
+          className="mt-4" 
+          onClick={() => setHasError(false)}
+        >
+          Try Again
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <ErrorCatcher onError={() => {
+      setHasError(true);
+      toast({
+        title: "Component Error",
+        description: "There was a problem loading a component. The error has been logged.",
+        variant: "destructive"
+      });
+    }}>
+      {children}
+    </ErrorCatcher>
+  );
+};
+
+// Helper component to catch errors
+class ErrorCatcher extends React.Component<{
+  children: React.ReactNode;
+  onError: () => void;
+}> {
+  componentDidCatch(error: Error) {
+    console.error("Component error caught:", error);
+    this.props.onError();
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
 
 const Admin = () => {
   const queryClient = useQueryClient();
@@ -90,15 +142,27 @@ const Admin = () => {
         
         <TabsContent value="website" className="space-y-8">
           <div className="space-y-8">
-            <WealthPerspectiveEditor />
-            <PartnersEditor />
-            <CTAEditor />
-            <FooterEditor />
+            <ErrorBoundary>
+              <WealthPerspectiveEditor />
+            </ErrorBoundary>
+            <ErrorBoundary>
+              <PartnersEditor />
+            </ErrorBoundary>
+            <ErrorBoundary>
+              <CTAEditor />
+            </ErrorBoundary>
+            <ErrorBoundary>
+              <FooterEditor />
+            </ErrorBoundary>
           </div>
         </TabsContent>
         
         <TabsContent value="lp" className="mt-6">
-          <LPContentEditor />
+          <ErrorBoundary>
+            <Suspense fallback={<div className="p-6 border rounded animate-pulse">Loading LP Content Editor...</div>}>
+              <LPContentEditor />
+            </Suspense>
+          </ErrorBoundary>
         </TabsContent>
         
         <TabsContent value="tools" className="mt-6">

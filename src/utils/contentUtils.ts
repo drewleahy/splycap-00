@@ -40,11 +40,16 @@ export const fetchLPContent = async (sectionId: string) => {
 
 export const saveLPContent = async (sectionId: string, content: string) => {
   console.log(`Saving LP content for section: ${sectionId}`);
-  console.log(`Content to save for ${sectionId}:`, content.substring(0, 100) + "...");
   
   try {
     // Ensure content is a string to prevent issues
-    const processedContent = (content || "").trim();
+    const processedContent = typeof content === 'string' ? content.trim() : '';
+    
+    console.log(`Content to save for ${sectionId}:`, 
+      processedContent.length > 100 
+        ? processedContent.substring(0, 100) + "..." 
+        : processedContent
+    );
     
     // Insert a new record instead of using upsert
     const { data, error } = await supabase
@@ -83,14 +88,20 @@ export const insertContentIntoEditor = (editorRef: React.RefObject<HTMLDivElemen
     // Focus the editor first
     editorRef.current.focus();
     
-    // Use execCommand to insert HTML at the current cursor position
-    document.execCommand('insertHTML', false, content);
+    // Ensure content is a string
+    const safeContent = typeof content === 'string' ? content : String(content);
     
-    console.log("Content inserted successfully:", content.substring(0, 100) + "...");
+    // Use execCommand to insert HTML at the current cursor position
+    document.execCommand('insertHTML', false, safeContent);
+    
+    console.log("Content inserted successfully:", 
+      safeContent.length > 100 
+        ? safeContent.substring(0, 100) + "..." 
+        : safeContent
+    );
     return true;
   } catch (error) {
     console.error("Error inserting content into editor:", error);
     return false;
   }
 };
-
