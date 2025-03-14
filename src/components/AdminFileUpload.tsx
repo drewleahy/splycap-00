@@ -1,7 +1,7 @@
 
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, Upload, AlertCircle, Check, FileText } from "lucide-react";
+import { Loader2, Upload, AlertCircle, Check, FileText, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
@@ -28,6 +28,7 @@ export const AdminFileUpload = ({
   const [internalIsUploading, setInternalIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<{url: string, name: string} | null>(null);
+  const [diagnosticInfo, setDiagnosticInfo] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Use external state if provided, otherwise use internal state
@@ -58,191 +59,123 @@ export const AdminFileUpload = ({
     return true;
   };
 
-  // Function to upload file directly to PHP endpoint
-  const uploadFileWithPhp = async (file: File) => {
-    console.log(`Starting PHP upload for file: ${file.name} (${file.size} bytes)`);
-    
-    const formData = new FormData();
-    formData.append("file", file);
-    
-    try {
-      // Timeout for the fetch request to avoid hanging
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-      
-      const response = await fetch("/api/upload-file.php", {
-        method: "POST",
-        body: formData,
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeoutId);
-      
-      console.log("PHP upload response:", {
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok
-      });
-      
-      if (!response.ok) {
-        let errorText;
-        try {
-          const errorData = await response.json();
-          errorText = errorData.error || `Upload failed with status: ${response.status}`;
-        } catch (e) {
-          errorText = await response.text();
-        }
-        
-        throw new Error(`PHP upload failed: ${errorText}`);
-      }
-      
-      let data;
-      try {
-        data = await response.json();
-      } catch (e) {
-        const text = await response.text();
-        console.log("Raw response:", text);
-        throw new Error("Invalid server response");
-      }
-      
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      
-      if (!data.publicUrl) {
-        throw new Error("No file URL returned from server");
-      }
-      
-      console.log("PHP upload successful, received URL:", data.publicUrl);
-      return data.publicUrl;
-    } catch (error) {
-      console.error("PHP upload error:", error);
-      throw error;
-    }
-  };
-
-  // Function to upload file using JS service worker
-  const uploadViaJsProxy = async (file: File) => {
-    console.log(`Starting JS proxy upload for file: ${file.name} (${file.size} bytes)`);
-    
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    try {
-      // Timeout for the fetch request
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-      
-      const response = await fetch('/api/upload-file', {
-        method: 'POST',
-        body: formData,
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeoutId);
-      
-      console.log("JS proxy upload response:", {
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok
-      });
-      
-      if (!response.ok) {
-        let errorText;
-        try {
-          const errorData = await response.json();
-          errorText = errorData.error || `Upload failed with status: ${response.status}`;
-        } catch (e) {
-          errorText = await response.text();
-        }
-        
-        throw new Error(`JS upload failed: ${errorText}`);
-      }
-      
-      let data;
-      try {
-        data = await response.json();
-      } catch (e) {
-        const text = await response.text();
-        console.log("Raw response:", text);
-        throw new Error("Invalid server response");
-      }
-      
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      
-      if (!data.publicUrl) {
-        throw new Error("No file URL returned from server");
-      }
-      
-      console.log("JS proxy upload successful, received URL:", data.publicUrl);
-      return data.publicUrl;
-    } catch (error) {
-      console.error("JS proxy upload error:", error);
-      throw error;
-    }
-  };
-
-  // Function to upload file directly to Supabase
-  const uploadViaDirectSupabase = async (file: File) => {
+  // Uploads file directly to Supabase with enhanced error handling
+  const uploadToSupabase = async (file: File) => {
     console.log(`Starting direct Supabase upload for file: ${file.name} (${file.size} bytes)`);
     
     const formData = new FormData();
     formData.append('file', file);
     
+    let diagnosticLog = `Attempting Supabase upload for ${file.name}\n`;
+    
     try {
-      // Timeout for the fetch request
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      // Collect environment info for diagnostics
+      diagnosticLog += `Browser: ${navigator.userAgent}\n`;
+      diagnosticLog += `URL: ${window.location.href}\n`;
       
-      const response = await fetch('https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file', {
+      const url = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
+      diagnosticLog += `Upload URL: ${url}\n`;
+      
+      // Test connectivity first with a HEAD request
+      diagnosticLog += "Testing connectivity...\n";
+      try {
+        const testConnection = await fetch(url, { 
+          method: 'HEAD',
+          mode: 'cors'
+        });
+        diagnosticLog += `Connection test: ${testConnection.status} ${testConnection.statusText}\n`;
+      } catch (testError) {
+        diagnosticLog += `Connection test failed: ${testError.message}\n`;
+        // Continue anyway, the main request might still work
+      }
+      
+      // Set longer timeout for large files
+      const timeout = Math.max(30000, file.size / 1024); // Minimum 30s, or 1s per KB
+      diagnosticLog += `Setting timeout: ${timeout}ms\n`;
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        diagnosticLog += "Request timed out, aborting\n";
+        controller.abort();
+      }, timeout);
+      
+      // Attempt the upload with full diagnostics
+      diagnosticLog += "Sending upload request...\n";
+      const startTime = Date.now();
+      
+      const response = await fetch(url, {
         method: 'POST',
         body: formData,
-        signal: controller.signal
+        signal: controller.signal,
+        mode: 'cors',
+        credentials: 'omit', // Don't send cookies
+        headers: {
+          // No auth headers needed
+        }
       });
       
       clearTimeout(timeoutId);
+      const endTime = Date.now();
+      diagnosticLog += `Response received in ${endTime - startTime}ms\n`;
+      diagnosticLog += `Status: ${response.status} ${response.statusText}\n`;
       
-      console.log("Direct Supabase upload response:", {
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok
+      // Check HTTP headers in the response
+      const headers = {};
+      response.headers.forEach((value, key) => {
+        headers[key] = value;
       });
+      diagnosticLog += `Headers: ${JSON.stringify(headers)}\n`;
       
       if (!response.ok) {
-        let errorText;
+        let errorText = "Unknown error";
         try {
+          // Try to parse as JSON first
           const errorData = await response.json();
           errorText = errorData.error || `Upload failed with status: ${response.status}`;
+          diagnosticLog += `Error JSON: ${JSON.stringify(errorData)}\n`;
         } catch (e) {
+          // If not JSON, get as text
           errorText = await response.text();
+          diagnosticLog += `Error text: ${errorText}\n`;
         }
         
-        throw new Error(`Supabase upload failed: ${errorText}`);
+        throw new Error(`Upload failed with status: ${response.status}. ${errorText}`);
       }
       
+      // Try to parse the successful response
       let data;
+      const rawResponse = await response.text();
+      diagnosticLog += `Raw response: ${rawResponse}\n`;
+      
       try {
-        data = await response.json();
+        data = JSON.parse(rawResponse);
+        diagnosticLog += `Parsed JSON response: ${JSON.stringify(data)}\n`;
       } catch (e) {
-        const text = await response.text();
-        console.log("Raw response:", text);
+        diagnosticLog += `Failed to parse JSON: ${e.message}\n`;
         throw new Error("Invalid server response");
       }
       
       if (data.error) {
+        diagnosticLog += `Server returned error: ${data.error}\n`;
         throw new Error(data.error);
       }
       
       if (!data.publicUrl) {
+        diagnosticLog += `No publicUrl in response\n`;
         throw new Error("No file URL returned from server");
       }
       
-      console.log("Direct Supabase upload successful, received URL:", data.publicUrl);
+      diagnosticLog += `Upload successful, URL: ${data.publicUrl}\n`;
+      setDiagnosticInfo(diagnosticLog);
       return data.publicUrl;
     } catch (error) {
-      console.error("Direct Supabase upload error:", error);
+      diagnosticLog += `Final error: ${error.message}\n`;
+      if (error.stack) {
+        diagnosticLog += `Stack trace: ${error.stack}\n`;
+      }
+      
+      console.error("Upload diagnostic log:", diagnosticLog);
+      setDiagnosticInfo(diagnosticLog);
       throw error;
     }
   };
@@ -256,6 +189,7 @@ export const AdminFileUpload = ({
     if (onStart) onStart();
     setInternalIsUploading(true);
     setError(null);
+    setDiagnosticInfo(null);
     setUploadedFile(null);
 
     try {
@@ -272,48 +206,11 @@ export const AdminFileUpload = ({
         description: `Uploading ${file.name}...`,
       });
 
-      // Try multiple upload methods in sequence
-      let fileUrl: string | null = null;
-      let lastError: Error | null = null;
-      
-      // Method 1: Try PHP upload first (most reliable for static hosting)
+      // Try direct Supabase upload
       try {
-        fileUrl = await uploadFileWithPhp(file);
-        console.log("PHP upload succeeded");
-      } catch (err) {
-        console.error("PHP upload failed, trying JS proxy:", err);
-        lastError = err as Error;
-      }
-      
-      // Method 2: If Method 1 failed, try JS proxy upload
-      if (!fileUrl) {
-        try {
-          fileUrl = await uploadViaJsProxy(file);
-          console.log("JS proxy upload succeeded");
-        } catch (err) {
-          console.error("JS proxy upload failed, trying direct Supabase:", err);
-          lastError = err as Error;
-        }
-      }
-      
-      // Method 3: If Method 2 failed, try direct Supabase upload
-      if (!fileUrl) {
-        try {
-          fileUrl = await uploadViaDirectSupabase(file);
-          console.log("Direct Supabase upload succeeded");
-        } catch (err) {
-          console.error("Direct Supabase upload failed:", err);
-          lastError = err as Error;
-          
-          // If all methods failed, throw the last error
-          if (!fileUrl) {
-            throw lastError;
-          }
-        }
-      }
-      
-      // If we have a file URL, the upload was successful
-      if (fileUrl) {
+        console.log("Attempting direct Supabase upload...");
+        const fileUrl = await uploadToSupabase(file);
+        
         setUploadedFile({
           url: fileUrl,
           name: file.name
@@ -327,11 +224,23 @@ export const AdminFileUpload = ({
           title: "Upload Complete",
           description: "File has been uploaded successfully",
         });
+      } catch (err) {
+        console.error("Upload failed:", err);
+        const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+        setError(`Failed to upload file: ${errorMessage}`);
+        
+        if (onError) onError(errorMessage);
+        
+        toast({
+          title: "Upload Failed",
+          description: errorMessage,
+          variant: "destructive",
+        });
       }
     } catch (err) {
-      console.error("All upload methods failed:", err);
+      console.error("File processing failed:", err);
       const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
-      setError(`Failed to upload file: ${errorMessage}`);
+      setError(`Failed to process file: ${errorMessage}`);
       
       if (onError) onError(errorMessage);
       
@@ -350,6 +259,7 @@ export const AdminFileUpload = ({
 
   const resetUpload = () => {
     setError(null);
+    setDiagnosticInfo(null);
     setUploadedFile(null);
   };
 
@@ -401,6 +311,20 @@ export const AdminFileUpload = ({
               </>
             )}
           </div>
+          
+          {diagnosticInfo && (
+            <div className="mt-4">
+              <details className="text-xs">
+                <summary className="text-sm font-medium cursor-pointer text-gray-600 flex items-center">
+                  <RefreshCw className="w-3 h-3 mr-1" /> 
+                  Upload Diagnostics
+                </summary>
+                <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto text-gray-600 max-h-40">
+                  {diagnosticInfo}
+                </pre>
+              </details>
+            </div>
+          )}
         </div>
       ) : (
         <div className="p-4 bg-green-50 border border-green-200 rounded-lg">

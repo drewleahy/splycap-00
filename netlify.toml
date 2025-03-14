@@ -11,6 +11,8 @@
   from = "/api/upload-file"
   to = "/.netlify/functions/upload-file"
   status = 200
+  force = true
+  headers = { Access-Control-Allow-Origin = "*", Access-Control-Allow-Methods = "GET, POST, OPTIONS", Access-Control-Allow-Headers = "Content-Type, Authorization, X-Requested-With" }
 
 [[redirects]]
   from = "/api/*"
@@ -45,6 +47,7 @@
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
     Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    Service-Worker-Allowed = "/"
 
 # Service worker headers
 [[headers]]
