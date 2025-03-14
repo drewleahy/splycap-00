@@ -7,6 +7,7 @@ import { Loader2, FileText } from "lucide-react";
 import { fetchLPContent } from "@/utils/contentUtils";
 import { useToast } from "@/hooks/use-toast";
 import { SimpleFileUpload } from "@/components/SimpleFileUpload";
+import { AdminFileSelector } from "@/components/AdminFileSelector";
 import { useState } from "react";
 
 const IRA = () => {
@@ -65,6 +66,38 @@ const IRA = () => {
       title: "Upload Failed",
       description: error,
       variant: "destructive",
+    });
+  };
+
+  // Handle selection of admin-uploaded files
+  const handleAdminFileSelection = (files: Array<{ id: string, name: string, publicUrl: string }>) => {
+    console.log("Selected admin files:", files);
+    
+    // Add selected files to the uploadedFiles state
+    const newFiles = files.map(file => ({
+      url: file.publicUrl,
+      name: file.name
+    }));
+    
+    setUploadedFiles(prev => {
+      // Filter out any duplicates based on URL
+      const existingUrls = prev.map(file => file.url);
+      const uniqueNewFiles = newFiles.filter(file => !existingUrls.includes(file.url));
+      
+      if (uniqueNewFiles.length === 0) {
+        toast({
+          title: "No new files",
+          description: "All selected files are already in your list.",
+        });
+        return prev;
+      }
+      
+      toast({
+        title: "Files Added",
+        description: `${uniqueNewFiles.length} file(s) have been added to your documents.`,
+      });
+      
+      return [...prev, ...uniqueNewFiles];
     });
   };
 
@@ -152,20 +185,42 @@ const IRA = () => {
 
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Upload IRA Documents</h2>
-            <p className="text-gray-600 mb-4">
-              Upload your IRA application forms, transfer documents, or other relevant files here.
-              We accept PDF files and other document formats.
-            </p>
+            <h2 className="text-xl font-semibold mb-4">Document Management</h2>
             
-            <SimpleFileUpload 
-              onSuccess={handleFileUploadSuccess}
-              onError={handleFileUploadError}
-              onStart={handleFileUploadStart}
-              isUploading={isUploadingFile}
-              allowedFileTypes={['.pdf', '.doc', '.docx', '.xls', '.xlsx']}
-              forcePhpUpload={true}
-            />
+            <div className="space-y-6">
+              {/* Admin File Selector Section */}
+              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <h3 className="text-lg font-medium mb-3">Select Admin-Uploaded Files</h3>
+                <p className="text-gray-600 mb-4">
+                  Browse and select files that have been uploaded by administrators.
+                </p>
+                
+                <AdminFileSelector 
+                  onSelect={handleAdminFileSelection}
+                  multiple={true}
+                  buttonText="Browse Admin Files"
+                  fileTypes={['.pdf', '.doc', '.docx', '.xls', '.xlsx']}
+                />
+              </div>
+              
+              {/* User File Upload Section */}
+              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <h3 className="text-lg font-medium mb-3">Upload Your Own Files</h3>
+                <p className="text-gray-600 mb-4">
+                  Upload your IRA application forms, transfer documents, or other relevant files here.
+                  We accept PDF files and other document formats.
+                </p>
+                
+                <SimpleFileUpload 
+                  onSuccess={handleFileUploadSuccess}
+                  onError={handleFileUploadError}
+                  onStart={handleFileUploadStart}
+                  isUploading={isUploadingFile}
+                  allowedFileTypes={['.pdf', '.doc', '.docx', '.xls', '.xlsx']}
+                  forcePhpUpload={true}
+                />
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
