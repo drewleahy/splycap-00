@@ -41,7 +41,7 @@ export const LPContentEditor = () => {
 
   const handleSave = async (sectionId: string, content: string) => {
     try {
-      console.log(`LPContentEditor: Saving content for ${sectionId}...`);
+      console.log(`LPContentEditor: Saving content for ${sectionId}...`, content ? "Content present" : "No content");
       await saveLPContent(sectionId, content);
 
       toast({

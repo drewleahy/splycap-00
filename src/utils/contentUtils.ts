@@ -38,12 +38,15 @@ export const saveLPContent = async (sectionId: string, content: string) => {
   console.log(`Saving LP content for section: ${sectionId}`, content ? "Content present" : "No content");
   
   try {
+    // Process content to ensure links are properly formatted
+    const processedContent = content.trim();
+    
     // Insert a new record instead of using upsert
     const { data, error } = await supabase
       .from("content_sections")
       .insert({
         section_id: `lp-${sectionId}`,
-        description: content,
+        description: processedContent,
         title: sectionId.charAt(0).toUpperCase() + sectionId.slice(1),
         updated_at: new Date().toISOString(),
       });

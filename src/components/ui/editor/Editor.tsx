@@ -48,7 +48,7 @@ export const Editor = ({
     if (editorRef.current) {
       // Only update if the content is different to avoid cursor jumps
       if (editorRef.current.innerHTML !== initialContent) {
-        editorRef.current.innerHTML = initialContent;
+        editorRef.current.innerHTML = initialContent || '';
       }
     }
   }, [initialContent]);
@@ -57,7 +57,7 @@ export const Editor = ({
   useEffect(() => {
     if (externalContent !== undefined && editorRef.current) {
       if (editorRef.current.innerHTML !== externalContent) {
-        editorRef.current.innerHTML = externalContent;
+        editorRef.current.innerHTML = externalContent || '';
       }
     }
   }, [externalContent]);
@@ -99,6 +99,7 @@ export const Editor = ({
         suppressContentEditableWarning
         onInput={handleInput}
         className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        dangerouslySetInnerHTML={initialContent ? { __html: initialContent } : undefined}
       />
       
       <Button 

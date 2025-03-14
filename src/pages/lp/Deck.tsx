@@ -12,7 +12,7 @@ const Deck = () => {
   const { data: content, isLoading, error } = useQuery({
     queryKey: ["lp-content", "deck"],
     queryFn: () => fetchLPContent("deck"),
-    staleTime: 30000, // Consider data fresh for 30 seconds
+    staleTime: 0, // Always fetch fresh data
   });
 
   const handleRefresh = () => {
@@ -44,7 +44,10 @@ const Deck = () => {
             ) : error ? (
               <p className="text-red-600">Error loading content. Please try refreshing.</p>
             ) : content ? (
-              <div dangerouslySetInnerHTML={{ __html: content }} />
+              <div 
+                dangerouslySetInnerHTML={{ __html: content }} 
+                className="prose prose-lg max-w-none"
+              />
             ) : (
               <p className="text-gray-600">Content coming soon.</p>
             )}
