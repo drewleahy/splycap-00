@@ -58,6 +58,7 @@ export const AdminFileUpload = ({
     return true;
   };
 
+  // Function to upload file directly to PHP endpoint
   const uploadFileWithPhp = async (file: File) => {
     console.log(`Starting PHP upload for file: ${file.name} (${file.size} bytes)`);
     
@@ -65,15 +66,19 @@ export const AdminFileUpload = ({
     formData.append("file", file);
     
     try {
-      const url = "/api/upload-file.php";
-      console.log("Sending POST request to:", url);
+      // Timeout for the fetch request to avoid hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
       
-      const response = await fetch(url, {
+      const response = await fetch("/api/upload-file.php", {
         method: "POST",
         body: formData,
+        signal: controller.signal
       });
       
-      console.log("Response received", {
+      clearTimeout(timeoutId);
+      
+      console.log("PHP upload response:", {
         status: response.status,
         statusText: response.statusText,
         ok: response.ok
@@ -88,7 +93,7 @@ export const AdminFileUpload = ({
           errorText = await response.text();
         }
         
-        throw new Error(`Upload failed with status: ${response.status}. ${errorText}`);
+        throw new Error(`PHP upload failed: ${errorText}`);
       }
       
       let data;
@@ -108,41 +113,136 @@ export const AdminFileUpload = ({
         throw new Error("No file URL returned from server");
       }
       
-      console.log("Upload successful, received URL:", data.publicUrl);
+      console.log("PHP upload successful, received URL:", data.publicUrl);
       return data.publicUrl;
     } catch (error) {
-      console.error("Upload error:", error);
+      console.error("PHP upload error:", error);
       throw error;
     }
   };
 
-  const uploadViaDirectApi = async (file: File) => {
-    console.log(`Starting direct API upload for: ${file.name}`);
+  // Function to upload file using JS service worker
+  const uploadViaJsProxy = async (file: File) => {
+    console.log(`Starting JS proxy upload for file: ${file.name} (${file.size} bytes)`);
     
     const formData = new FormData();
     formData.append('file', file);
     
     try {
-      // Use simple fetch API for the upload
+      // Timeout for the fetch request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
       const response = await fetch('/api/upload-file', {
         method: 'POST',
         body: formData,
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      console.log("JS proxy upload response:", {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok
       });
       
       if (!response.ok) {
-        throw new Error(`Upload failed with status: ${response.status}`);
+        let errorText;
+        try {
+          const errorData = await response.json();
+          errorText = errorData.error || `Upload failed with status: ${response.status}`;
+        } catch (e) {
+          errorText = await response.text();
+        }
+        
+        throw new Error(`JS upload failed: ${errorText}`);
       }
       
-      const data = await response.json();
-      console.log("Upload successful, received data:", data);
+      let data;
+      try {
+        data = await response.json();
+      } catch (e) {
+        const text = await response.text();
+        console.log("Raw response:", text);
+        throw new Error("Invalid server response");
+      }
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
       
       if (!data.publicUrl) {
         throw new Error("No file URL returned from server");
       }
       
+      console.log("JS proxy upload successful, received URL:", data.publicUrl);
       return data.publicUrl;
     } catch (error) {
-      console.error("Direct API upload failed:", error);
+      console.error("JS proxy upload error:", error);
+      throw error;
+    }
+  };
+
+  // Function to upload file directly to Supabase
+  const uploadViaDirectSupabase = async (file: File) => {
+    console.log(`Starting direct Supabase upload for file: ${file.name} (${file.size} bytes)`);
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      // Timeout for the fetch request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
+      const response = await fetch('https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file', {
+        method: 'POST',
+        body: formData,
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      console.log("Direct Supabase upload response:", {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok
+      });
+      
+      if (!response.ok) {
+        let errorText;
+        try {
+          const errorData = await response.json();
+          errorText = errorData.error || `Upload failed with status: ${response.status}`;
+        } catch (e) {
+          errorText = await response.text();
+        }
+        
+        throw new Error(`Supabase upload failed: ${errorText}`);
+      }
+      
+      let data;
+      try {
+        data = await response.json();
+      } catch (e) {
+        const text = await response.text();
+        console.log("Raw response:", text);
+        throw new Error("Invalid server response");
+      }
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      if (!data.publicUrl) {
+        throw new Error("No file URL returned from server");
+      }
+      
+      console.log("Direct Supabase upload successful, received URL:", data.publicUrl);
+      return data.publicUrl;
+    } catch (error) {
+      console.error("Direct Supabase upload error:", error);
       throw error;
     }
   };
@@ -174,29 +274,40 @@ export const AdminFileUpload = ({
 
       // Try multiple upload methods in sequence
       let fileUrl: string | null = null;
-      let error: Error | null = null;
+      let lastError: Error | null = null;
       
-      // Method 1: Try direct API upload first
+      // Method 1: Try PHP upload first (most reliable for static hosting)
       try {
-        fileUrl = await uploadViaDirectApi(file);
-        console.log("Direct API upload succeeded");
+        fileUrl = await uploadFileWithPhp(file);
+        console.log("PHP upload succeeded");
       } catch (err) {
-        console.error("Direct API upload failed, trying PHP fallback:", err);
-        error = err as Error;
+        console.error("PHP upload failed, trying JS proxy:", err);
+        lastError = err as Error;
       }
       
-      // Method 2: If Method 1 failed, try PHP upload
+      // Method 2: If Method 1 failed, try JS proxy upload
       if (!fileUrl) {
         try {
-          fileUrl = await uploadFileWithPhp(file);
-          console.log("PHP upload succeeded");
+          fileUrl = await uploadViaJsProxy(file);
+          console.log("JS proxy upload succeeded");
         } catch (err) {
-          console.error("PHP upload failed:", err);
-          error = err as Error;
+          console.error("JS proxy upload failed, trying direct Supabase:", err);
+          lastError = err as Error;
+        }
+      }
+      
+      // Method 3: If Method 2 failed, try direct Supabase upload
+      if (!fileUrl) {
+        try {
+          fileUrl = await uploadViaDirectSupabase(file);
+          console.log("Direct Supabase upload succeeded");
+        } catch (err) {
+          console.error("Direct Supabase upload failed:", err);
+          lastError = err as Error;
           
-          // If both methods failed, throw the last error
+          // If all methods failed, throw the last error
           if (!fileUrl) {
-            throw error;
+            throw lastError;
           }
         }
       }

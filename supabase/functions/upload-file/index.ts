@@ -57,10 +57,10 @@ serve(async (req) => {
 
     // Create the bucket if it doesn't exist (this requires admin privileges)
     try {
-      const { data: bucketExists } = await supabase.storage.getBucket(bucketName)
+      const { data: bucketExists, error: bucketError } = await supabase.storage.getBucket(bucketName)
       
-      if (!bucketExists) {
-        console.log(`Bucket ${bucketName} does not exist, creating it...`)
+      if (bucketError || !bucketExists) {
+        console.log(`Bucket ${bucketName} does not exist or error checking, creating it...`)
         const { error: createBucketError } = await supabase.storage.createBucket(bucketName, {
           public: true,
           fileSizeLimit: 10485760, // 10MB

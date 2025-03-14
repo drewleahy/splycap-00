@@ -29,9 +29,38 @@ async function handleRequest(request) {
       });
     }
     
-    // Forward to Supabase Edge Function
+    // Try to upload directly to the PHP endpoint first (more reliable in many cases)
+    try {
+      console.log("Attempting to upload via local PHP endpoint");
+      const phpResponse = await fetch("/api/upload-file.php", {
+        method: 'POST',
+        body: request.body,
+        headers: request.headers
+      });
+      
+      if (phpResponse.ok) {
+        const phpData = await phpResponse.text();
+        console.log("PHP upload succeeded");
+        return new Response(phpData, {
+          status: phpResponse.status,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+          }
+        });
+      } else {
+        console.log("PHP upload failed, trying Supabase fallback");
+      }
+    } catch (phpError) {
+      console.error("PHP upload attempt failed:", phpError.message);
+      // Continue to Supabase fallback
+    }
+    
+    // Forward to Supabase Edge Function as fallback
     const supabaseUrl = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
-    console.log("Forwarding to:", supabaseUrl);
+    console.log("Forwarding to Supabase Edge Function:", supabaseUrl);
     
     const response = await fetch(supabaseUrl, {
       method: 'POST',
@@ -44,7 +73,7 @@ async function handleRequest(request) {
     
     // Get response data
     const responseData = await response.text();
-    console.log("Response status:", response.status);
+    console.log("Supabase response status:", response.status);
     
     // Return the response with CORS headers
     return new Response(responseData, {

@@ -6,6 +6,7 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# API endpoint redirection
 [[redirects]]
   from = "/api/upload-file"
   to = "/.netlify/functions/upload-file"
@@ -16,11 +17,13 @@
   to = "/api/:splat"
   status = 200
 
+# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
+# Header configurations for uploads
 [[headers]]
   for = "/uploads/*"
   [headers.values]
@@ -34,3 +37,11 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
     Access-Control-Allow-Origin = "*"
+
+# Add headers for API endpoints to handle CORS properly
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept, Authorization"
