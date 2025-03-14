@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminFileUpload } from "@/components/AdminFileUpload";
 import { useState, useRef, Suspense } from "react";
+import React from "react"; // Add explicit React import for the class component
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdminFileSelector } from "@/components/AdminFileSelector";
 
