@@ -1,4 +1,3 @@
-
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Upload, AlertCircle, Check, FileText } from "lucide-react";
@@ -55,22 +54,29 @@ export const SimpleFileUpload = ({
     return true;
   };
 
-  const uploadFileWithPhp = async (file: File) => {
-    console.log(`Starting PHP upload for file: ${file.name} (${file.size} bytes)`);
+  // Simplified direct upload to Supabase
+  const uploadDirectToSupabase = async (file: File) => {
+    console.log(`Starting direct Supabase upload for file: ${file.name} (${file.size} bytes)`);
     console.log(`File type: ${file.type}`);
     
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
     
     try {
       // Log the URL we're sending to
-      const url = "/api/upload-file.php";
-      console.log("Sending POST request to:", url);
+      const url = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
+      console.log("Sending POST request directly to Supabase:", url);
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
       
       const response = await fetch(url, {
         method: "POST",
         body: formData,
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
       
       console.log("Response received", {
         status: response.status,
@@ -153,13 +159,11 @@ export const SimpleFileUpload = ({
         description: `Uploading ${file.name}...`,
       });
 
-      // For PDFs, always use the PHP uploader to ensure compatibility
-      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-      
-      if (forcePhpUpload || isPdf) {
-        console.log("Using PHP upload method for file:", file.name);
-        const fileUrl = await uploadFileWithPhp(file);
-        console.log("PHP upload completed successfully, URL:", fileUrl);
+      // Direct upload to Supabase Edge Function
+      try {
+        console.log("Using direct Supabase upload for file:", file.name);
+        const fileUrl = await uploadDirectToSupabase(file);
+        console.log("Upload completed successfully, URL:", fileUrl);
         
         setUploadedFile({
           url: fileUrl,
@@ -169,23 +173,28 @@ export const SimpleFileUpload = ({
         if (onSuccess) {
           onSuccess(fileUrl, file.name);
         }
-      } else {
-        // Original upload logic for non-PDF files if not forcing PHP upload
-        console.log("Using default upload method for file:", file.name);
-        // This part would contain the original upload logic
-        const errorMsg = "Upload method not implemented for this file type. Try using a PDF file.";
-        setError(errorMsg);
-        if (onError) onError(errorMsg);
+        
+        toast({
+          title: "Upload Complete",
+          description: "File has been uploaded successfully",
+        });
+      } catch (uploadError) {
+        console.error("Upload process failed:", uploadError);
+        const errorMessage = uploadError instanceof Error ? uploadError.message : "Unknown error occurred";
+        setError(`Failed to upload file: ${errorMessage}`);
+        
+        if (onError) onError(errorMessage);
+        
+        toast({
+          title: "Upload Failed",
+          description: errorMessage,
+          variant: "destructive",
+        });
       }
-      
-      toast({
-        title: "Upload Complete",
-        description: "File has been uploaded successfully",
-      });
     } catch (err) {
-      console.error("Upload process failed:", err);
+      console.error("File processing failed:", err);
       const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
-      setError(`Failed to upload file: ${errorMessage}`);
+      setError(`Failed to process file: ${errorMessage}`);
       
       if (onError) onError(errorMessage);
       

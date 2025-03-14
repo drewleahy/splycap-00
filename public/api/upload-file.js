@@ -4,10 +4,11 @@
 
 async function handleRequest(request) {
   try {
-    console.log("JS upload proxy received request");
+    console.log("[Upload Worker] Received request", request.method);
     
     // For OPTIONS requests, return CORS headers
     if (request.method === 'OPTIONS') {
+      console.log("[Upload Worker] Handling OPTIONS request");
       return new Response(null, {
         headers: {
           'Access-Control-Allow-Origin': '*',
@@ -20,6 +21,7 @@ async function handleRequest(request) {
     
     // Only handle POST requests
     if (request.method !== 'POST') {
+      console.log("[Upload Worker] Method not allowed:", request.method);
       return new Response(JSON.stringify({ error: 'Method not allowed' }), {
         headers: {
           'Content-Type': 'application/json',
@@ -29,68 +31,100 @@ async function handleRequest(request) {
       });
     }
     
-    // Try to upload directly to the PHP endpoint first (more reliable in many cases)
+    // Handle direct upload to Supabase
     try {
-      console.log("Attempting to upload via local PHP endpoint");
-      const phpResponse = await fetch("/api/upload-file.php", {
+      console.log("[Upload Worker] Uploading directly to Supabase");
+      
+      // Create a copy of the request body for upload
+      const formData = await request.formData();
+      const file = formData.get('file');
+      
+      if (!file) {
+        console.error("[Upload Worker] No file in request");
+        throw new Error("No file found in request");
+      }
+      
+      console.log("[Upload Worker] File received:", file.name, file.size, "bytes");
+      
+      // Create a new FormData object for the Supabase request
+      const supabaseFormData = new FormData();
+      supabaseFormData.append('file', file);
+      
+      // Supabase Edge Function URL
+      const supabaseUrl = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
+      console.log("[Upload Worker] Forwarding to:", supabaseUrl);
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        console.log("[Upload Worker] Request timeout - aborting");
+        controller.abort();
+      }, 30000); // 30 second timeout
+      
+      const response = await fetch(supabaseUrl, {
         method: 'POST',
-        body: request.body,
-        headers: request.headers
+        headers: {
+          // No auth headers in service worker for security
+          'Accept': 'application/json',
+        },
+        body: supabaseFormData,
+        signal: controller.signal
       });
       
-      if (phpResponse.ok) {
-        const phpData = await phpResponse.text();
-        console.log("PHP upload succeeded");
-        return new Response(phpData, {
-          status: phpResponse.status,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
-          }
-        });
-      } else {
-        console.log("PHP upload failed, trying Supabase fallback");
+      clearTimeout(timeoutId);
+      
+      console.log("[Upload Worker] Supabase response status:", response.status);
+      
+      // Get response data
+      let responseData;
+      let responseText;
+      
+      try {
+        responseText = await response.text();
+        console.log("[Upload Worker] Raw response:", responseText);
+        responseData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error("[Upload Worker] Failed to parse response:", parseError);
+        console.log("[Upload Worker] Response text:", responseText);
+        throw new Error(`Invalid response from server: ${responseText.substring(0, 100)}...`);
       }
-    } catch (phpError) {
-      console.error("PHP upload attempt failed:", phpError.message);
-      // Continue to Supabase fallback
+      
+      if (!response.ok) {
+        console.error("[Upload Worker] Error response:", responseData);
+        throw new Error(responseData.error || `Upload failed with status: ${response.status}`);
+      }
+      
+      // Return the response with CORS headers
+      return new Response(JSON.stringify(responseData), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type',
+        }
+      });
+    } catch (error) {
+      console.error("[Upload Worker] Error:", error);
+      
+      return new Response(JSON.stringify({
+        error: 'Upload error',
+        message: error.message || 'Unknown error',
+        stack: error.stack
+      }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        }
+      });
     }
-    
-    // Forward to Supabase Edge Function as fallback
-    const supabaseUrl = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
-    console.log("Forwarding to Supabase Edge Function:", supabaseUrl);
-    
-    const response = await fetch(supabaseUrl, {
-      method: 'POST',
-      headers: {
-        // Strip authentication headers if present
-        'Content-Type': request.headers.get('Content-Type'),
-      },
-      body: await request.arrayBuffer()
-    });
-    
-    // Get response data
-    const responseData = await response.text();
-    console.log("Supabase response status:", response.status);
-    
-    // Return the response with CORS headers
-    return new Response(responseData, {
-      status: response.status,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      }
-    });
   } catch (error) {
-    console.error("JS upload proxy error:", error);
+    console.error("[Upload Worker] Fatal error:", error);
     
     return new Response(JSON.stringify({
       error: 'Proxy error',
-      message: error.message || 'Unknown error'
+      message: error.message || 'Unknown error',
+      stack: error.stack
     }), {
       status: 500,
       headers: {
@@ -103,5 +137,8 @@ async function handleRequest(request) {
 
 // Set up event listener
 self.addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
+  if (event.request.url.includes('/api/upload-file')) {
+    console.log("[Upload Worker] Intercepting fetch for:", event.request.url);
+    event.respondWith(handleRequest(event.request));
+  }
 });
