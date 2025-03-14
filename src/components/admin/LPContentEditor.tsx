@@ -115,6 +115,14 @@ export const LPContentEditor = () => {
     return ref;
   };
 
+  // Add a dummy onSelect handler that will not be used
+  // since we're using the editorRef and setContent props directly
+  const handleFileSelect = (files: any[]) => {
+    console.log("Files selected:", files);
+    // This function won't be used because we're using editorRef and setContent props
+    // but it satisfies the TypeScript requirement
+  };
+
   return (
     <Card className="mb-8">
       <CardHeader className="border-b">
@@ -160,6 +168,7 @@ export const LPContentEditor = () => {
                           fileTypes={['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png', '.gif']}
                           editorRef={editorRef}
                           setContent={setCurrentContent}
+                          onSelect={handleFileSelect} // Add the required onSelect prop
                         />
                       )}
                     </div>
