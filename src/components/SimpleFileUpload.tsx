@@ -1,3 +1,4 @@
+
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Upload, AlertCircle, Check, FileText } from "lucide-react";
@@ -139,7 +140,7 @@ export const SimpleFileUpload = ({
 
   const handleFileUpload = async (file: File, type: 'image' | 'file') => {
     try {
-      setIsUploading(true);
+      setInternalIsUploading(true);
       console.log(`Starting ${type} upload:`, file.name);
       
       // Try different upload methods in sequence
@@ -213,7 +214,7 @@ export const SimpleFileUpload = ({
         variant: "destructive",
       });
     } finally {
-      setIsUploading(false);
+      setInternalIsUploading(false);
     }
   };
 
@@ -236,6 +237,28 @@ export const SimpleFileUpload = ({
     const file = e.target.files?.[0];
     if (file) {
       handleFileUpload(file, 'file');
+    }
+  };
+
+  // Generic file change handler (called from the input)
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Decide how to handle the file based on type
+      if (file.type.startsWith('image/')) {
+        handleImageSelect(e);
+      } else {
+        handleFileSelect(e);
+      }
+    }
+  };
+
+  // Reset the form to upload another file
+  const resetUpload = () => {
+    setUploadedFile(null);
+    setError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
