@@ -71,3 +71,26 @@ export const saveLPContent = async (sectionId: string, content: string) => {
     throw new Error(`Failed to save content: ${errorMessage}`);
   }
 };
+
+// Helper function to safely insert content into the editor
+export const insertContentIntoEditor = (editorRef: React.RefObject<HTMLDivElement>, content: string) => {
+  if (!editorRef.current) {
+    console.error("Editor reference is not available");
+    return false;
+  }
+
+  try {
+    // Focus the editor first
+    editorRef.current.focus();
+    
+    // Use execCommand to insert HTML at the current cursor position
+    document.execCommand('insertHTML', false, content);
+    
+    console.log("Content inserted successfully:", content.substring(0, 100) + "...");
+    return true;
+  } catch (error) {
+    console.error("Error inserting content into editor:", error);
+    return false;
+  }
+};
+

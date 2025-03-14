@@ -1,195 +1,132 @@
 
-import { useState, useRef, RefObject } from "react";
+import { useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { uploadFile } from "@/api/uploadFile";
+import { insertContentIntoEditor } from "@/utils/contentUtils";
 
 export const useFileUpload = (
   setContent: React.Dispatch<React.SetStateAction<string>>,
-  editorRef: RefObject<HTMLDivElement>
+  editorRef: React.RefObject<HTMLDivElement>
 ) => {
-  const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  // Function to format text in the editor
-  const handleFormat = (command: string, value?: string) => {
-    document.execCommand(command, false, value);
-    if (editorRef.current) {
-      setContent(editorRef.current.innerHTML);
-    }
-  };
-
-  // Primary upload method using the Edge Function
-  const uploadViaEdgeFunction = async (file: File): Promise<string> => {
-    console.log("Uploading via Edge Function");
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      // Use the edge function directly
-      const response = await fetch('/api/upload-file', {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Unknown upload error');
-      }
-      
-      const data = await response.json();
-      console.log("Edge function upload successful:", data.publicUrl);
-      return data.publicUrl;
-    } catch (error) {
-      console.error('Edge function upload error:', error);
-      throw error;
-    }
-  };
-
-  // Fallback method using direct Supabase storage upload
-  const uploadViaSupabaseStorage = async (file: File): Promise<string> => {
-    console.log("Uploading via Supabase Storage");
-    const sanitizedFileName = file.name.replace(/[^\x00-\x7F]/g, '');
-    const fileExt = sanitizedFileName.split('.').pop();
-    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+  // Create a function to handle direct storage uploads if needed
+  const uploadToStorage = async (file: File): Promise<string> => {
+    console.log("Uploading file to Supabase storage:", file.name);
+    
+    // Generate a unique file name
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${crypto.randomUUID()}.${fileExt}`;
     const bucketName = 'lovable-uploads';
     
-    // Try a simple approach - direct upload without signed URLs
-    const { data, error: uploadError } = await supabase.storage
+    // Upload file to Storage
+    const { data, error } = await supabase.storage
       .from(bucketName)
       .upload(fileName, file, {
         cacheControl: '3600',
         upsert: true
       });
     
-    if (uploadError) throw uploadError;
+    if (error) throw error;
     
-    const { data: urlData } = supabase.storage
+    // Get the public URL
+    const { data: { publicUrl } } = supabase.storage
       .from(bucketName)
       .getPublicUrl(data?.path || fileName);
     
-    console.log("Supabase storage upload successful:", urlData.publicUrl);
-    return urlData.publicUrl;
+    return publicUrl;
   };
 
-  // Last resort: use the public edge function
-  const uploadViaPublicEdgeFunction = async (file: File): Promise<string> => {
-    console.log("Uploading via Public Edge Function");
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      // Use the full edge function URL directly without authentication
-      const url = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
-      
-      const response = await fetch(url, {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Response not OK:", response.status, errorText);
-        throw new Error(`Upload failed with status ${response.status}: ${errorText}`);
-      }
-      
-      const data = await response.json();
-      console.log("Public edge function upload successful:", data.publicUrl);
-      return data.publicUrl;
-    } catch (error) {
-      console.error('Public edge function upload error:', error);
-      throw error;
+  const insertImage = (url: string, alt: string = "Uploaded image") => {
+    console.log("Inserting image:", url);
+    
+    const imageHtml = `<img src="${url}" alt="${alt}" style="max-width: 100%; height: auto; margin: 10px 0;" />`;
+    
+    // Insert at cursor position
+    const success = insertContentIntoEditor(editorRef, imageHtml);
+    
+    if (success && editorRef.current) {
+      setContent(editorRef.current.innerHTML);
+      console.log("Image inserted successfully", editorRef.current.innerHTML.substring(0, 100) + "...");
     }
   };
 
-  const handleFileUpload = async (file: File, type: 'image' | 'file') => {
+  const insertFile = (url: string, fileName: string) => {
+    console.log("Inserting file link:", url);
+    
+    const fileHtml = `<a href="${url}" target="_blank" class="inline-flex items-center px-4 py-2 my-2 bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 text-gray-800 text-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      ${fileName}
+    </a>`;
+    
+    // Insert at cursor position
+    const success = insertContentIntoEditor(editorRef, fileHtml);
+    
+    if (success && editorRef.current) {
+      setContent(editorRef.current.innerHTML);
+      console.log("File link inserted successfully", editorRef.current.innerHTML.substring(0, 100) + "...");
+    }
+  };
+
+  // Handle image upload
+  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
     try {
       setIsUploading(true);
-      console.log(`Starting ${type} upload:`, file.name);
+      console.log("Selected image for upload:", file.name);
       
-      let publicUrl;
-      let uploadMethods = [
-        { name: "Edge Function", fn: uploadViaEdgeFunction },
-        { name: "Supabase Storage", fn: uploadViaSupabaseStorage },
-        { name: "Public Edge Function", fn: uploadViaPublicEdgeFunction }
-      ];
-      
-      let lastError;
-      
-      // Try each upload method in sequence until one works
-      for (const method of uploadMethods) {
-        try {
-          console.log(`Trying upload method: ${method.name}`);
-          publicUrl = await method.fn(file);
-          console.log(`Upload succeeded with ${method.name}`);
-          break; // Exit the loop if upload is successful
-        } catch (error) {
-          console.error(`Upload failed with ${method.name}:`, error);
-          lastError = error;
-          // Continue to the next method
-        }
+      // Try uploadFile function first
+      try {
+        const fileUrl = await uploadFile(file);
+        insertImage(fileUrl, file.name);
+      } catch (uploadError) {
+        console.error("Error with uploadFile, trying direct storage upload:", uploadError);
+        // Fallback to direct storage upload
+        const fileUrl = await uploadToStorage(file);
+        insertImage(fileUrl, file.name);
       }
-      
-      if (!publicUrl) {
-        throw new Error(`All upload methods failed. Last error: ${lastError?.message || 'Unknown error'}`);
-      }
-
-      if (type === 'image') {
-        handleFormat('insertImage', publicUrl);
-      } else {
-        // For non-image files, create a nice file link
-        const sanitizedFileName = file.name.replace(/[^\x00-\x7F]/g, '');
-        const fileLink = `<a href="${publicUrl}" target="_blank" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-            <polyline points="13 2 13 9 20 9"></polyline>
-          </svg>
-          ${sanitizedFileName}</a>`;
-        handleFormat('insertHTML', fileLink);
-      }
-
-      toast({
-        title: "Success",
-        description: `${type === 'image' ? 'Image' : 'File'} uploaded successfully`,
-      });
     } catch (error) {
-      console.error('Final upload error:', error);
-      
-      // More descriptive error message
-      const errorMessage = error instanceof Error 
-        ? error.message 
-        : 'Unknown error occurred during upload';
-        
-      toast({
-        title: "Error",
-        description: `Failed to upload ${type}: ${errorMessage}`,
-        variant: "destructive",
-      });
+      console.error("Image upload failed:", error);
     } finally {
       setIsUploading(false);
-    }
-  };
-
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        toast({
-          title: "Error",
-          description: "Please select an image file",
-          variant: "destructive",
-        });
-        return;
+      if (imageInputRef.current) {
+        imageInputRef.current.value = '';
       }
-      handleFileUpload(file, 'image');
     }
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle file upload
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      handleFileUpload(file, 'file');
+    if (!file) return;
+    
+    try {
+      setIsUploading(true);
+      console.log("Selected file for upload:", file.name);
+      
+      // Try uploadFile function first
+      try {
+        const fileUrl = await uploadFile(file);
+        insertFile(fileUrl, file.name);
+      } catch (uploadError) {
+        console.error("Error with uploadFile, trying direct storage upload:", uploadError);
+        // Fallback to direct storage upload
+        const fileUrl = await uploadToStorage(file);
+        insertFile(fileUrl, file.name);
+      }
+    } catch (error) {
+      console.error("File upload failed:", error);
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 

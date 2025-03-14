@@ -46,9 +46,12 @@ export const Editor = ({
 
   // Initialize editor with content - only once on mount
   useEffect(() => {
-    if (editorRef.current && initialContent) {
-      console.log("Setting initial content on mount");
+    if (editorRef.current) {
+      console.log("Setting initial content on mount:", initialContent?.substring(0, 100));
       editorRef.current.innerHTML = initialContent || '';
+      
+      // Force a content update to ensure state is synchronized
+      setContent(initialContent || '');
     }
   }, []); // Empty dependency array - only run once
 
@@ -74,12 +77,12 @@ export const Editor = ({
     const currentContent = editorRef.current?.innerHTML || content;
     console.log("Saving content:", currentContent.substring(0, 100) + "...");
     onSave(currentContent);
+    
+    toast({
+      title: "Content saved",
+      description: "Your changes have been saved successfully.",
+    });
   };
-
-  // For debugging - log to console whenever content changes
-  useEffect(() => {
-    console.log("Content state updated:", content.substring(0, 100) + "...");
-  }, [content]);
 
   return (
     <div className="space-y-4">
@@ -113,6 +116,7 @@ export const Editor = ({
         suppressContentEditableWarning
         onInput={handleInput}
         className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        data-placeholder="Start typing here..."
       />
       
       <Button 
