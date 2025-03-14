@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Upload, AlertCircle, Check, FileText, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AdminFileUploadProps {
   onSuccess?: (fileUrl: string, fileName: string) => void;
@@ -59,7 +60,7 @@ export const AdminFileUpload = ({
     return true;
   };
 
-  // Uploads file directly to Supabase with enhanced error handling
+  // Uploads file directly to Supabase with enhanced error handling and auth
   const uploadToSupabase = async (file: File) => {
     console.log(`Starting direct Supabase upload for file: ${file.name} (${file.size} bytes)`);
     
@@ -73,15 +74,32 @@ export const AdminFileUpload = ({
       diagnosticLog += `Browser: ${navigator.userAgent}\n`;
       diagnosticLog += `URL: ${window.location.href}\n`;
       
+      // Get authentication token from Supabase session
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        diagnosticLog += `Error getting auth session: ${sessionError.message}\n`;
+        // Continue without auth, will try anonymous upload
+      }
+      
+      const accessToken = sessionData?.session?.access_token;
+      diagnosticLog += `Auth token available: ${!!accessToken}\n`;
+      
       const url = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
       diagnosticLog += `Upload URL: ${url}\n`;
       
       // Test connectivity first with a HEAD request
       diagnosticLog += "Testing connectivity...\n";
       try {
+        const headers: HeadersInit = {};
+        if (accessToken) {
+          headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+        
         const testConnection = await fetch(url, { 
           method: 'HEAD',
-          mode: 'cors'
+          mode: 'cors',
+          headers
         });
         diagnosticLog += `Connection test: ${testConnection.status} ${testConnection.statusText}\n`;
       } catch (testError) {
@@ -103,15 +121,26 @@ export const AdminFileUpload = ({
       diagnosticLog += "Sending upload request...\n";
       const startTime = Date.now();
       
+      // Create headers with auth token if available
+      const headers: HeadersInit = {
+        'Accept': 'application/json',
+        'Origin': window.location.origin
+      };
+      
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+        diagnosticLog += "Including authorization header\n";
+      } else {
+        diagnosticLog += "No authorization header available\n";
+      }
+      
       const response = await fetch(url, {
         method: 'POST',
         body: formData,
         signal: controller.signal,
         mode: 'cors',
         credentials: 'omit', // Don't send cookies
-        headers: {
-          // No auth headers needed
-        }
+        headers
       });
       
       clearTimeout(timeoutId);
@@ -120,11 +149,11 @@ export const AdminFileUpload = ({
       diagnosticLog += `Status: ${response.status} ${response.statusText}\n`;
       
       // Check HTTP headers in the response
-      const headers = {};
+      const responseHeaders = {};
       response.headers.forEach((value, key) => {
-        headers[key] = value;
+        responseHeaders[key] = value;
       });
-      diagnosticLog += `Headers: ${JSON.stringify(headers)}\n`;
+      diagnosticLog += `Headers: ${JSON.stringify(responseHeaders)}\n`;
       
       if (!response.ok) {
         let errorText = "Unknown error";
@@ -180,6 +209,47 @@ export const AdminFileUpload = ({
     }
   };
 
+  // Alternative method: Use direct storage upload
+  const uploadToStorage = async (file: File) => {
+    console.log("Attempting direct storage upload (fallback method)");
+    let diagnosticLog = `Attempting direct storage upload for ${file.name}\n`;
+    
+    try {
+      // Generate a unique file name
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const bucketName = 'lovable-uploads';
+      
+      diagnosticLog += `Uploading to bucket: ${bucketName}, path: ${fileName}\n`;
+      
+      // Upload the file directly to storage
+      const { data, error: uploadError } = await supabase.storage
+        .from(bucketName)
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
+      
+      if (uploadError) {
+        diagnosticLog += `Storage upload error: ${JSON.stringify(uploadError)}\n`;
+        throw uploadError;
+      }
+      
+      // Get the public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from(bucketName)
+        .getPublicUrl(data?.path || fileName);
+      
+      diagnosticLog += `Storage upload successful, URL: ${publicUrl}\n`;
+      setDiagnosticInfo(diagnosticLog);
+      return publicUrl;
+    } catch (error) {
+      diagnosticLog += `Storage upload failed: ${error.message}\n`;
+      setDiagnosticInfo(diagnosticLog);
+      throw error;
+    }
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) {
@@ -206,9 +276,10 @@ export const AdminFileUpload = ({
         description: `Uploading ${file.name}...`,
       });
 
-      // Try direct Supabase upload
+      // Try multiple upload methods
       try {
-        console.log("Attempting direct Supabase upload...");
+        // Try edge function with auth first
+        console.log("Attempting edge function upload with auth...");
         const fileUrl = await uploadToSupabase(file);
         
         setUploadedFile({
@@ -225,17 +296,38 @@ export const AdminFileUpload = ({
           description: "File has been uploaded successfully",
         });
       } catch (err) {
-        console.error("Upload failed:", err);
-        const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
-        setError(`Failed to upload file: ${errorMessage}`);
+        console.error("Edge function upload failed, trying storage upload:", err);
         
-        if (onError) onError(errorMessage);
-        
-        toast({
-          title: "Upload Failed",
-          description: errorMessage,
-          variant: "destructive",
-        });
+        try {
+          // Try direct storage upload as fallback
+          const fileUrl = await uploadToStorage(file);
+          
+          setUploadedFile({
+            url: fileUrl,
+            name: file.name
+          });
+          
+          if (onSuccess) {
+            onSuccess(fileUrl, file.name);
+          }
+          
+          toast({
+            title: "Upload Complete",
+            description: "File has been uploaded successfully (via storage)",
+          });
+        } catch (storageErr) {
+          console.error("All upload methods failed:", storageErr);
+          const errorMessage = storageErr instanceof Error ? storageErr.message : "Unknown error occurred";
+          setError(`Failed to upload file: ${errorMessage}`);
+          
+          if (onError) onError(errorMessage);
+          
+          toast({
+            title: "Upload Failed",
+            description: errorMessage,
+            variant: "destructive",
+          });
+        }
       }
     } catch (err) {
       console.error("File processing failed:", err);

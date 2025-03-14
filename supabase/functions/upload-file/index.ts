@@ -41,6 +41,49 @@ serve(async (req) => {
   try {
     console.log("Processing upload request");
     
+    // Check for authorization
+    const authHeader = req.headers.get('Authorization');
+    console.log(`Authorization header present: ${!!authHeader}`);
+    
+    // Get Supabase credentials from environment
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error("Missing Supabase credentials");
+      return new Response(
+        JSON.stringify({ error: 'Server configuration error', details: 'Missing credentials' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+      );
+    }
+    
+    // Initialize Supabase client with service role key for admin access
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    
+    // Verify user authentication if auth header is present
+    let userId = null;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.replace('Bearer ', '');
+      try {
+        // Verify the JWT token
+        const { data: userData, error: authError } = await supabase.auth.getUser(token);
+        
+        if (authError) {
+          console.error("Auth error:", authError);
+          // Continue without user ID, will use service role
+        } else if (userData?.user) {
+          userId = userData.user.id;
+          console.log(`Authenticated user: ${userId}`);
+        }
+      } catch (authError) {
+        console.error("Token verification error:", authError);
+        // Continue without user ID, will use service role
+      }
+    } else {
+      console.log("No authentication token provided");
+      // Still proceed with upload using service role
+    }
+    
     let formData;
     try {
       formData = await req.formData();
@@ -65,20 +108,6 @@ serve(async (req) => {
 
     // Log file information
     console.log(`Processing file: ${file.name}, type: ${file.type}, size: ${file.size} bytes`);
-
-    // Get Supabase credentials from environment
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-
-    if (!supabaseUrl || !supabaseServiceKey) {
-      console.error("Missing Supabase credentials");
-      return new Response(
-        JSON.stringify({ error: 'Server configuration error', details: 'Missing credentials' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Sanitize filename to ensure it only contains safe characters
     const sanitizedFileName = file.name.replace(/[^\x00-\x7F]/g, '');
@@ -134,6 +163,35 @@ serve(async (req) => {
       .getPublicUrl(filePath);
 
     console.log(`File uploaded successfully. Public URL: ${publicUrl}`);
+
+    // Record upload in metadata table if user is authenticated
+    if (userId) {
+      try {
+        console.log(`Recording upload metadata for user ${userId}`);
+        // This would insert into a hypothetical uploads table
+        // You could uncomment this if you create that table
+        /*
+        const { error: metadataError } = await supabase
+          .from('uploads')
+          .insert({
+            user_id: userId,
+            file_path: filePath,
+            file_name: sanitizedFileName,
+            content_type: file.type,
+            size_bytes: file.size,
+            public_url: publicUrl
+          });
+        
+        if (metadataError) {
+          console.error("Error recording upload metadata:", metadataError);
+          // Continue anyway, the upload itself was successful
+        }
+        */
+      } catch (metadataError) {
+        console.error("Failed to record upload metadata:", metadataError);
+        // Continue anyway, the upload itself was successful
+      }
+    }
 
     // Success response with CORS headers
     return new Response(

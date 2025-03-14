@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Upload, AlertCircle, Check, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SimpleFileUploadProps {
   onSuccess?: (fileUrl: string, fileName: string) => void;
@@ -54,166 +55,188 @@ export const SimpleFileUpload = ({
     return true;
   };
 
-  // Simplified direct upload to Supabase
-  const uploadDirectToSupabase = async (file: File) => {
-    console.log(`Starting direct Supabase upload for file: ${file.name} (${file.size} bytes)`);
-    console.log(`File type: ${file.type}`);
+  // Upload directly to Supabase storage (no edge function)
+  const uploadViaStorage = async (file: File): Promise<string> => {
+    console.log("Uploading directly to Supabase Storage");
+    
+    // Generate a unique filename
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const bucketName = 'lovable-uploads';
+    
+    // Upload directly to storage
+    const { data, error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: true
+      });
+    
+    if (uploadError) throw uploadError;
+    
+    const { data: urlData } = supabase.storage
+      .from(bucketName)
+      .getPublicUrl(data?.path || fileName);
+    
+    console.log("Storage upload successful:", urlData.publicUrl);
+    return urlData.publicUrl;
+  };
+
+  // Upload using the edge function with authentication
+  const uploadViaEdgeFunction = async (file: File): Promise<string> => {
+    console.log("Uploading via authenticated Edge Function");
+    
+    // Get authentication token
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error getting auth session:", sessionError);
+      throw new Error("Authentication error: " + sessionError.message);
+    }
+    
+    const accessToken = sessionData?.session?.access_token;
+    if (!accessToken) {
+      console.warn("No authentication token available, will attempt anonymous upload");
+    } else {
+      console.log("Auth token available, will use for upload");
+    }
     
     const formData = new FormData();
     formData.append('file', file);
     
-    try {
-      // Log the URL we're sending to
-      const url = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
-      console.log("Sending POST request directly to Supabase:", url);
-      
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-      
-      const response = await fetch(url, {
-        method: "POST",
-        body: formData,
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeoutId);
-      
-      console.log("Response received", {
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok
-      });
-      
-      if (!response.ok) {
-        let errorText;
-        try {
-          // Try to parse as JSON first
-          const errorData = await response.json();
-          errorText = errorData.error || `Upload failed with status: ${response.status}`;
-        } catch (e) {
-          // If not JSON, get as text
-          errorText = await response.text();
-        }
-        
-        console.error("Upload failed:", {
-          status: response.status,
-          statusText: response.statusText,
-          responseText: errorText
-        });
-        throw new Error(`Upload failed with status: ${response.status}. ${errorText}`);
-      }
-      
-      let data;
-      try {
-        data = await response.json();
-        console.log("Parsed response data:", data);
-      } catch (e) {
-        console.error("Failed to parse response as JSON:", e);
-        const text = await response.text();
-        console.log("Raw response:", text);
-        throw new Error("Invalid server response");
-      }
-      
-      if (data.error) {
-        console.error("Server returned error:", data.error);
-        throw new Error(data.error);
-      }
-      
-      if (!data.publicUrl) {
-        console.error("No publicUrl in response:", data);
-        throw new Error("No file URL returned from server");
-      }
-      
-      console.log("Upload successful, received URL:", data.publicUrl);
-      return data.publicUrl;
-    } catch (error) {
-      console.error("Upload error:", error);
-      throw error;
+    const headers: HeadersInit = {
+      'Accept': 'application/json'
+    };
+    
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
     }
+    
+    const url = "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file";
+    console.log("Sending upload request to:", url);
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+    
+    if (!response.ok) {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        const text = await response.text();
+        throw new Error(`Upload failed with status: ${response.status}. Response: ${text.substring(0, 200)}`);
+      }
+      
+      throw new Error(errorData.error || `Upload failed with status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log("Edge function upload successful:", data.publicUrl);
+    return data.publicUrl;
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) {
-      console.log("No file selected");
-      return;
-    }
-
-    if (onStart) onStart();
-    setInternalIsUploading(true);
-    setError(null);
-    setUploadedFile(null);
-
+  const handleFileUpload = async (file: File, type: 'image' | 'file') => {
     try {
-      console.log("File selected:", file.name, file.type, file.size, "bytes");
+      setIsUploading(true);
+      console.log(`Starting ${type} upload:`, file.name);
       
-      // Validate file before uploading
-      if (!validateFile(file)) {
-        console.log("File validation failed");
-        setInternalIsUploading(false);
-        return;
+      // Try different upload methods in sequence
+      let publicUrl;
+      let lastError;
+      
+      // Try edge function with auth first
+      try {
+        console.log("Trying authenticated edge function upload");
+        publicUrl = await uploadViaEdgeFunction(file);
+      } catch (error) {
+        console.error("Edge function upload failed:", error);
+        lastError = error;
+        
+        // Fall back to direct storage upload
+        try {
+          console.log("Trying direct storage upload");
+          publicUrl = await uploadViaStorage(file);
+        } catch (storageError) {
+          console.error("Storage upload failed:", storageError);
+          lastError = storageError;
+        }
+      }
+      
+      if (!publicUrl) {
+        throw new Error(`All upload methods failed. Last error: ${lastError?.message || 'Unknown error'}`);
       }
 
-      toast({
-        title: "Uploading",
-        description: `Uploading ${file.name}...`,
-      });
-
-      // Direct upload to Supabase Edge Function
-      try {
-        console.log("Using direct Supabase upload for file:", file.name);
-        const fileUrl = await uploadDirectToSupabase(file);
-        console.log("Upload completed successfully, URL:", fileUrl);
-        
+      // Format the result depending on file type
+      if (type === 'image') {
         setUploadedFile({
-          url: fileUrl,
+          url: publicUrl,
           name: file.name
         });
         
         if (onSuccess) {
-          onSuccess(fileUrl, file.name);
+          onSuccess(publicUrl, file.name);
         }
-        
-        toast({
-          title: "Upload Complete",
-          description: "File has been uploaded successfully",
+      } else {
+        setUploadedFile({
+          url: publicUrl,
+          name: file.name
         });
-      } catch (uploadError) {
-        console.error("Upload process failed:", uploadError);
-        const errorMessage = uploadError instanceof Error ? uploadError.message : "Unknown error occurred";
-        setError(`Failed to upload file: ${errorMessage}`);
         
-        if (onError) onError(errorMessage);
-        
-        toast({
-          title: "Upload Failed",
-          description: errorMessage,
-          variant: "destructive",
-        });
+        if (onSuccess) {
+          onSuccess(publicUrl, file.name);
+        }
       }
-    } catch (err) {
-      console.error("File processing failed:", err);
-      const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
-      setError(`Failed to process file: ${errorMessage}`);
+
+      toast({
+        title: "Success",
+        description: `${type === 'image' ? 'Image' : 'File'} uploaded successfully`,
+      });
+    } catch (error) {
+      console.error('Final upload error:', error);
       
-      if (onError) onError(errorMessage);
+      // More descriptive error message
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : 'Unknown error occurred during upload';
+        
+      setError(errorMessage);
+      
+      if (onError) {
+        onError(errorMessage);
+      }
       
       toast({
-        title: "Upload Failed",
-        description: errorMessage,
+        title: "Error",
+        description: `Failed to upload ${type}: ${errorMessage}`,
         variant: "destructive",
       });
     } finally {
-      setInternalIsUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
+      setIsUploading(false);
     }
   };
 
-  const resetUpload = () => {
-    setError(null);
-    setUploadedFile(null);
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Error",
+          description: "Please select an image file",
+          variant: "destructive",
+        });
+        return;
+      }
+      handleFileUpload(file, 'image');
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileUpload(file, 'file');
+    }
   };
 
   return (
