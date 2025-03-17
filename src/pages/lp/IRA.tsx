@@ -6,14 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Loader2, FileText } from "lucide-react";
 import { fetchLPContent } from "@/utils/contentUtils";
 import { useToast } from "@/hooks/use-toast";
-import { SimpleFileUpload } from "@/components/SimpleFileUpload";
-import { AdminFileSelector } from "@/components/AdminFileSelector";
 import { useState } from "react";
 
 const IRA = () => {
   const { toast } = useToast();
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ url: string, name: string }>>([]);
-  const [isUploadingFile, setIsUploadingFile] = useState(false);
 
   // Updated to use the modern approach without the onError property
   const { data: content, isLoading, isError, refetch } = useQuery({
@@ -43,68 +40,10 @@ const IRA = () => {
     refetch();
   };
 
-  const handleFileUploadSuccess = (fileUrl: string, fileName: string) => {
-    console.log("File upload success:", fileUrl, fileName);
-    setUploadedFiles(prev => [...prev, { url: fileUrl, name: fileName }]);
-    setIsUploadingFile(false);
-    
-    toast({
-      title: "Document Added",
-      description: `${fileName} has been successfully uploaded.`,
-    });
-  };
-
-  const handleFileUploadStart = () => {
-    setIsUploadingFile(true);
-  };
-
-  const handleFileUploadError = (error: string) => {
-    console.error("File upload error:", error);
-    setIsUploadingFile(false);
-    
-    toast({
-      title: "Upload Failed",
-      description: error,
-      variant: "destructive",
-    });
-  };
-
-  // Handle selection of admin-uploaded files
-  const handleAdminFileSelection = (files: Array<{ id: string, name: string, publicUrl: string }>) => {
-    console.log("Selected admin files:", files);
-    
-    // Add selected files to the uploadedFiles state
-    const newFiles = files.map(file => ({
-      url: file.publicUrl,
-      name: file.name
-    }));
-    
-    setUploadedFiles(prev => {
-      // Filter out any duplicates based on URL
-      const existingUrls = prev.map(file => file.url);
-      const uniqueNewFiles = newFiles.filter(file => !existingUrls.includes(file.url));
-      
-      if (uniqueNewFiles.length === 0) {
-        toast({
-          title: "No new files",
-          description: "All selected files are already in your list.",
-        });
-        return prev;
-      }
-      
-      toast({
-        title: "Files Added",
-        description: `${uniqueNewFiles.length} file(s) have been added to your documents.`,
-      });
-      
-      return [...prev, ...uniqueNewFiles];
-    });
-  };
-
   // Function to render the documents section
   const renderDocuments = () => {
     if (uploadedFiles.length === 0) {
-      return <p className="text-gray-500 italic">No documents have been uploaded yet.</p>;
+      return <p className="text-gray-500 italic">No documents available at this time.</p>;
     }
 
     return (
@@ -185,42 +124,16 @@ const IRA = () => {
 
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Document Management</h2>
-            
-            <div className="space-y-6">
-              {/* Admin File Selector Section */}
-              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-medium mb-3">Select Admin-Uploaded Files</h3>
-                <p className="text-gray-600 mb-4">
-                  Browse and select files that have been uploaded by administrators.
-                </p>
-                
-                <AdminFileSelector 
-                  onSelect={handleAdminFileSelection}
-                  multiple={true}
-                  buttonText="Browse Admin Files"
-                  fileTypes={['.pdf', '.doc', '.docx', '.xls', '.xlsx']}
-                />
-              </div>
-              
-              {/* User File Upload Section */}
-              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-medium mb-3">Upload Your Own Files</h3>
-                <p className="text-gray-600 mb-4">
-                  Upload your IRA application forms, transfer documents, or other relevant files here.
-                  We accept PDF files and other document formats.
-                </p>
-                
-                <SimpleFileUpload 
-                  onSuccess={handleFileUploadSuccess}
-                  onError={handleFileUploadError}
-                  onStart={handleFileUploadStart}
-                  isUploading={isUploadingFile}
-                  allowedFileTypes={['.pdf', '.doc', '.docx', '.xls', '.xlsx']}
-                  forcePhpUpload={true}
-                />
-              </div>
-            </div>
+            <h2 className="text-xl font-semibold mb-4">IRA Investment Options</h2>
+            <p className="text-gray-600 mb-4">
+              For information on how to invest through your IRA, please reach out to our team
+              or consult with your financial advisor. Documents related to IRA investments will be 
+              made available through this portal once your account is established.
+            </p>
+            <p className="text-gray-600">
+              Please note that all document uploads and file management are handled through
+              our administrative portal for security purposes.
+            </p>
           </CardContent>
         </Card>
       </div>
