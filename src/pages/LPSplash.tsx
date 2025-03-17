@@ -73,11 +73,11 @@ const LPSplash = () => {
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <img 
-          src="/lovable-uploads/c6fb9ea1-fa44-4ca1-8737-7db9ecac7648.png" 
-          alt="Mountain background" 
+          src="/lovable-uploads/b775e78f-bfa7-4461-bacc-8661144da34b.png" 
+          alt="Sparkler background" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-60"></div>
       </div>
 
       {/* Content */}
