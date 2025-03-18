@@ -1,6 +1,7 @@
 
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const partners = [
   {
@@ -38,6 +39,7 @@ const partners = [
 ];
 
 export const Partners = () => {
+  const isMobile = useIsMobile();
   // Split the partners into two groups - main partners and Tristan
   const mainPartners = partners.slice(0, 3);
   const tristanPartner = partners[3];
@@ -80,38 +82,66 @@ export const Partners = () => {
           ))}
         </div>
         
-        {/* Tristan's card - full width and centered */}
+        {/* Tristan's card - desktop: horizontal layout, mobile: same as others */}
         <div className="max-w-4xl mx-auto">
           <motion.div
             key={tristanPartner.name}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="bg-white p-8 rounded-lg shadow-sm flex flex-col md:flex-row items-center md:items-start gap-8"
+            className={`bg-white p-8 rounded-lg shadow-sm ${isMobile ? 'text-center flex flex-col' : 'flex flex-col md:flex-row items-center md:items-start gap-8'}`}
           >
-            <div className="flex flex-col items-center shrink-0">
-              <div className="w-32 h-32 mb-6 rounded-full overflow-hidden">
-                <img 
-                  src={tristanPartner.image} 
-                  alt={tristanPartner.name}
-                  className="w-full h-full object-cover grayscale"
-                />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900">{tristanPartner.name}</h3>
-              <p className="text-gray-600 mb-4">{tristanPartner.role}</p>
-              <p className="text-gray-800 mb-4">{tristanPartner.location}</p>
-              <a
-                href={tristanPartner.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-            </div>
-            <div>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-line">{tristanPartner.bio}</p>
-            </div>
+            {isMobile ? (
+              // Mobile layout - matches the other partner cards
+              <>
+                <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden">
+                  <img 
+                    src={tristanPartner.image} 
+                    alt={tristanPartner.name}
+                    className="w-full h-full object-cover grayscale"
+                  />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-gray-900">{tristanPartner.name}</h3>
+                <p className="text-gray-600 mb-4">{tristanPartner.role}</p>
+                <p className="text-gray-700 mb-6 text-sm leading-relaxed whitespace-pre-line">{tristanPartner.bio}</p>
+                <p className="text-gray-800 mb-4">{tristanPartner.location}</p>
+                <a
+                  href={tristanPartner.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              </>
+            ) : (
+              // Desktop layout - horizontal with image on left
+              <>
+                <div className="flex flex-col items-center shrink-0">
+                  <div className="w-32 h-32 mb-6 rounded-full overflow-hidden">
+                    <img 
+                      src={tristanPartner.image} 
+                      alt={tristanPartner.name}
+                      className="w-full h-full object-cover grayscale"
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-gray-900">{tristanPartner.name}</h3>
+                  <p className="text-gray-600 mb-4">{tristanPartner.role}</p>
+                  <p className="text-gray-800 mb-4">{tristanPartner.location}</p>
+                  <a
+                    href={tristanPartner.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors"
+                  >
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                </div>
+                <div>
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{tristanPartner.bio}</p>
+                </div>
+              </>
+            )}
           </motion.div>
         </div>
       </div>
