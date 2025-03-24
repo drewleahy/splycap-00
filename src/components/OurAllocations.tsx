@@ -1,3 +1,4 @@
+
 export const OurAllocations = () => {
   const logos = [
     {
@@ -71,6 +72,14 @@ export const OurAllocations = () => {
     {
       src: "/lovable-uploads/5f3d7c57-b791-4127-b87e-dd898c8357ba.png",
       alt: "Intelligems Logo"
+    },
+    {
+      src: "/lovable-uploads/2b0068bb-a1bb-46d0-8513-688eaa647c20.png",
+      alt: "Chord Logo"
+    },
+    {
+      src: "/lovable-uploads/0e8c689e-e877-4f7c-bd16-08603e970237.png",
+      alt: "Vela Logo"
     }
   ];
 
