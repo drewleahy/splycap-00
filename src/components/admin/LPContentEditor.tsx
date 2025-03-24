@@ -1,14 +1,14 @@
+
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, FileText } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Editor } from "@/components/ui/editor";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchLPContent, saveLPContent } from "@/utils/contentUtils";
 import { AdminFileSelector } from "@/components/AdminFileSelector";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export const LPContentEditor = () => {
@@ -118,8 +118,6 @@ export const LPContentEditor = () => {
     { id: "bio", title: "Team Bio" },
     { id: "workflow", title: "Workflow" },
     { id: "ira", title: "IRA Information" },
-    { id: "mockup", title: "LP Portal Mockup" },
-    { id: "agreements", title: "LP Agreements" },
   ];
 
   const getLatestContent = (sectionId: string) => {

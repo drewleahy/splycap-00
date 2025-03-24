@@ -17,8 +17,6 @@ import Screening from "./pages/lp/Screening";
 import Bio from "./pages/lp/Bio";
 import Workflow from "./pages/lp/Workflow";
 import IRA from "./pages/lp/IRA";
-import Mockup from "./pages/lp/Mockup";
-import Agreements from "./pages/lp/Agreements";
 
 const queryClient = new QueryClient();
 
@@ -42,8 +40,6 @@ const App = () => (
           <Route path="/LP-Splash/Bio" element={<Bio />} />
           <Route path="/LP-Splash/Workflow" element={<Workflow />} />
           <Route path="/LP-Splash/IRA" element={<IRA />} />
-          <Route path="/LP-Splash/Mockup" element={<Mockup />} />
-          <Route path="/LP-Splash/Agreements" element={<Agreements />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

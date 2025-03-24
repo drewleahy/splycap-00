@@ -53,18 +53,6 @@ const LPSplash = () => {
         { name: "Workflow", path: "/LP-Splash/Workflow" },
         { name: "Direct IRA Investment Information", path: "/LP-Splash/IRA" }
       ]
-    },
-    {
-      title: "LP PORTAL",
-      items: [
-        { name: "Mockup", path: "/LP-Splash/Mockup" }
-      ]
-    },
-    {
-      title: "LEGAL CONTRACTS",
-      items: [
-        { name: "LP Agreements", path: "/LP-Splash/Agreements" }
-      ]
     }
   ];
 
