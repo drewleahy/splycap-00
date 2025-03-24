@@ -52,7 +52,7 @@ const LPSplash = () => {
   const operationsSection = {
     title: "OPERATIONS",
     items: [
-      { name: "Workflow", path: "/LP-Splash/Workflow" },
+      { name: "Investment Workflow & Reporting", path: "/LP-Splash/Workflow" },
       { name: "Direct IRA Investment Information", path: "/LP-Splash/IRA" }
     ]
   };
