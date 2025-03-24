@@ -44,7 +44,7 @@ const LPSplash = () => {
     {
       title: "TEAM AND ADVISORS",
       items: [
-        { name: "Bio", path: "/LP-Splash/Bio" }
+        { name: "Team Bios", path: "/LP-Splash/Bio" }
       ]
     }
   ];
