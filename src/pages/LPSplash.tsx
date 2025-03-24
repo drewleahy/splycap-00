@@ -18,7 +18,7 @@ const Section = ({ title, items }: { title: string; items: { name: string; path:
 );
 
 const LPSplash = () => {
-  const sections = [
+  const regularSections = [
     {
       title: "SPLY CAPITAL",
       items: [
@@ -46,15 +46,16 @@ const LPSplash = () => {
       items: [
         { name: "Bio", path: "/LP-Splash/Bio" }
       ]
-    },
-    {
-      title: "OPERATIONS",
-      items: [
-        { name: "Workflow", path: "/LP-Splash/Workflow" },
-        { name: "Direct IRA Investment Information", path: "/LP-Splash/IRA" }
-      ]
     }
   ];
+
+  const operationsSection = {
+    title: "OPERATIONS",
+    items: [
+      { name: "Workflow", path: "/LP-Splash/Workflow" },
+      { name: "Direct IRA Investment Information", path: "/LP-Splash/IRA" }
+    ]
+  };
 
   return (
     <div className="relative min-h-screen">
@@ -82,10 +83,18 @@ const LPSplash = () => {
             </h1>
           </div>
           
-          <div className="grid gap-8 md:grid-cols-2">
-            {sections.map((section, index) => (
+          {/* Regular sections in grid */}
+          <div className="grid gap-8 md:grid-cols-2 mb-12">
+            {regularSections.map((section, index) => (
               <Section key={index} title={section.title} items={section.items} />
             ))}
+          </div>
+
+          {/* Operations section centered */}
+          <div className="flex justify-center">
+            <div className="max-w-md w-full">
+              <Section title={operationsSection.title} items={operationsSection.items} />
+            </div>
           </div>
         </div>
       </div>
