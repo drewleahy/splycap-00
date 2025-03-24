@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 
 const Section = ({ title, items }: { title: string; items: { name: string; path: string }[] }) => (
-  <Card className="mb-8 hover:shadow-lg transition-shadow">
+  <Card className="hover:shadow-lg transition-shadow">
     <CardContent className="p-6">
       <h2 className="text-xl font-semibold mb-4 text-sply-dark">{title}</h2>
       <ul className="space-y-2">
@@ -84,7 +84,7 @@ const LPSplash = () => {
           </div>
           
           {/* Regular sections in grid */}
-          <div className="grid gap-8 md:grid-cols-2 mb-12">
+          <div className="grid gap-8 md:grid-cols-2 mb-8">
             {regularSections.map((section, index) => (
               <Section key={index} title={section.title} items={section.items} />
             ))}
