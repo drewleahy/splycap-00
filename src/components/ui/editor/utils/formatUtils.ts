@@ -1,4 +1,3 @@
-
 import { RefObject } from "react";
 
 export const formatUtils = (
@@ -45,6 +44,9 @@ export const formatUtils = (
         linkElement.setAttribute('target', '_blank');
         linkElement.setAttribute('rel', 'noopener noreferrer');
         
+        // Add link styling classes
+        linkElement.classList.add('text-blue-600', 'underline', 'hover:text-blue-800');
+        
         // Ensure the link has the selected text
         if (linkElement.textContent !== selectedText) {
           linkElement.textContent = selectedText;
@@ -58,28 +60,22 @@ export const formatUtils = (
     }
   };
   
-  // Helper function to find link element in a range
   const findLinkInRange = (range: Range): HTMLAnchorElement | null => {
-    // Check common ancestor container
     let container = range.commonAncestorContainer;
     
-    // If it's a text node, use its parent
     if (container.nodeType === Node.TEXT_NODE) {
       container = container.parentNode;
     }
     
-    // Check if container is an anchor
     if (container && (container as HTMLElement).tagName === 'A') {
       return container as HTMLAnchorElement;
     }
     
-    // Look for an anchor within the selection
     const tempDiv = document.createElement('div');
     tempDiv.appendChild(range.cloneContents());
     const anchor = tempDiv.querySelector('a');
     
     if (anchor) {
-      // Find the actual anchor in the document that matches this one
       const nodes = document.createTreeWalker(
         editorRef.current as Node,
         NodeFilter.SHOW_ELEMENT,
@@ -97,7 +93,6 @@ export const formatUtils = (
       }
     }
     
-    // As a fallback, check if the selection now contains an anchor
     if (editorRef.current) {
       const newSelection = window.getSelection();
       if (newSelection && newSelection.rangeCount > 0) {
@@ -112,11 +107,9 @@ export const formatUtils = (
     return null;
   };
   
-  // Helper function to find the nearest anchor element
   const findNearestAnchor = (node: Node): HTMLAnchorElement | null => {
     let current: Node | null = node;
     
-    // Walk up the DOM tree to find an anchor
     while (current) {
       if (current.nodeType === Node.ELEMENT_NODE && 
           (current as HTMLElement).tagName === 'A') {
