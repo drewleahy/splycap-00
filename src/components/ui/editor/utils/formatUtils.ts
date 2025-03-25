@@ -27,7 +27,26 @@ export const formatUtils = (
     const url = prompt("Enter URL:");
     if (url) {
       editorRef.current?.focus();
+      // Use createLink command which properly creates anchor tags
       handleFormat("createLink", url);
+      
+      // Add target="_blank" to the created link
+      const range = selection.getRangeAt(0);
+      const anchorNode = range.commonAncestorContainer;
+      
+      // Find the nearest anchor tag
+      let anchor: HTMLAnchorElement | null = null;
+      if (anchorNode.nodeType === Node.ELEMENT_NODE && (anchorNode as HTMLElement).tagName === 'A') {
+        anchor = anchorNode as HTMLAnchorElement;
+      } else if (anchorNode.parentNode && (anchorNode.parentNode as HTMLElement).tagName === 'A') {
+        anchor = anchorNode.parentNode as HTMLAnchorElement;
+      }
+
+      // Set attributes on the anchor if found
+      if (anchor) {
+        anchor.setAttribute('target', '_blank');
+        anchor.setAttribute('rel', 'noopener noreferrer');
+      }
     }
   };
 

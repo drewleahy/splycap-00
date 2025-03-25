@@ -72,6 +72,38 @@ export const Editor = ({
     setContent(newContent);
   };
 
+  // Handle clicks within the editor to properly handle links
+  const handleEditorClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Find if we clicked on a link
+    const target = e.target as HTMLElement;
+    const linkElement = target.closest('a');
+    
+    if (linkElement && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault(); // Prevent default editor behavior
+      
+      // Show a toast with link URL
+      toast({
+        title: "Link",
+        description: (
+          <div>
+            <p>Link: {linkElement.textContent}</p>
+            <p className="mt-1">
+              <a 
+                href={linkElement.href} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Open in new tab
+              </a>
+            </p>
+          </div>
+        ),
+      });
+    }
+  };
+
   const handleSaveClick = () => {
     // Get the most up-to-date content directly from the editorRef
     const currentContent = editorRef.current?.innerHTML || content;
@@ -115,6 +147,7 @@ export const Editor = ({
         contentEditable
         suppressContentEditableWarning
         onInput={handleInput}
+        onClick={handleEditorClick}
         className="min-h-[200px] p-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         data-placeholder="Start typing here..."
       />
