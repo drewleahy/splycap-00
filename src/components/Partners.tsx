@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
+// Define partners explicitly without Omar
 const partners = [
   {
     name: "Tyler Williams",
