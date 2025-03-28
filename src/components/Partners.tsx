@@ -13,14 +13,6 @@ const partners = [
     image: "/lovable-uploads/4d28451c-7efa-4856-983e-004c1c3a5142.png"
   },
   {
-    name: "Omar Marquez",
-    role: "General Partner",
-    location: "Portland, OR",
-    linkedin: "https://www.linkedin.com/in/omarquezportland/",
-    bio: "Omar Marquez brings a wealth of experience in investment management and business development to SPLY Capital. As a General Partner, he specializes in identifying high-potential investment opportunities and building strategic partnerships. Omar's background includes extensive work in private markets, where he has demonstrated a strong track record of successful investments and portfolio management. His approach combines rigorous analysis with innovative thinking to uncover unique investment opportunities.",
-    image: "/lovable-uploads/d4ba0cd2-04c8-44f5-9b52-bd4cca8dbacd.png"
-  },
-  {
     name: "Drew Leahy",
     role: "General Partner",
     location: "Ann Arbor, MI",
@@ -41,16 +33,16 @@ const partners = [
 export const Partners = () => {
   const isMobile = useIsMobile();
   // Split the partners into two groups - main partners and Tristan
-  const mainPartners = partners.slice(0, 3);
-  const tristanPartner = partners[3];
+  const mainPartners = partners.slice(0, 2);
+  const tristanPartner = partners[2];
 
   return (
     <section className="py-20 px-4 bg-gray-50">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">Our Partners</h2>
         
-        {/* Main partners - 3 column layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        {/* Main partners - now a 2 column layout since we removed Omar */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {mainPartners.map((partner, index) => (
             <motion.div
               key={partner.name}

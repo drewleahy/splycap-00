@@ -27,6 +27,7 @@ export const PartnersEditor = () => {
       const { data, error } = await supabase
         .from("partners")
         .select("*")
+        .not('name', 'eq', 'Omar Marquez') // Exclude Omar Marquez from query results
         .order("created_at");
       
       if (error) throw error;
@@ -79,6 +80,16 @@ export const PartnersEditor = () => {
 
   const handleAddPartner = async () => {
     try {
+      // Don't allow adding a partner named Omar Marquez
+      if (formData.name.toLowerCase() === 'omar marquez') {
+        toast({
+          title: "Error",
+          description: "This partner name is not allowed",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { error } = await supabase
         .from("partners")
         .insert({
