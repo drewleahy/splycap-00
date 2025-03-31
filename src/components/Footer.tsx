@@ -1,4 +1,3 @@
-
 import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -20,7 +19,7 @@ export const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Our Locations</h4>
             <div className="space-y-2">
-              {["Dallas, TX", "Portland, OR", "Ann Arbor, MI"].map((location) => (
+              {["Dallas, TX", "Ann Arbor, MI"].map((location) => (
                 <div key={location} className="flex items-center text-gray-600">
                   <MapPin className="w-4 h-4 mr-2" />
                   <span>{location}</span>
