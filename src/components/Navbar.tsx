@@ -32,9 +32,7 @@ export const Navbar = () => {
           </Button>
         ) : (
           <div className="flex space-x-6">
-            <Link to="/" className="text-white hover:text-gray-300 transition-colors">
-              Home
-            </Link>
+            {/* Home link removed from here */}
           </div>
         )}
       </div>
@@ -43,9 +41,7 @@ export const Navbar = () => {
       {isMobile && isMenuOpen && (
         <div className="absolute top-full left-0 right-0 bg-black/90 py-4 px-6">
           <div className="flex flex-col space-y-4">
-            <Link to="/" className="text-white hover:text-gray-300 transition-colors">
-              Home
-            </Link>
+            {/* Also removed Home link from mobile menu */}
           </div>
         </div>
       )}
