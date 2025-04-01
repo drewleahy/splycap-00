@@ -1,4 +1,5 @@
-import { MapPin } from "lucide-react";
+
+import { MapPin, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Footer = () => {
@@ -28,14 +29,18 @@ export const Footer = () => {
             </div>
           </div>
           <div>
-            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+            <h4 className="text-lg font-semibold mb-4">Connect</h4>
             <div className="space-y-2">
-              <div>
-                <Link to="/LP-Splash" className="text-gray-600 hover:text-sply-purple transition-colors">
-                  LP Data Room
-                </Link>
-              </div>
-              <p className="text-gray-600">
+              <a 
+                href="https://www.linkedin.com/company/splycapital" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center text-gray-600 hover:text-sply-purple transition-colors"
+              >
+                <Linkedin className="w-4 h-4 mr-2" />
+                <span>LinkedIn</span>
+              </a>
+              <p className="text-gray-600 mt-2">
                 For general inquiries:
                 <br />
                 info@splycapital.com
