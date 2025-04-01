@@ -1,4 +1,3 @@
-
 export const OurAllocations = () => {
   const logos = [
     {
@@ -66,8 +65,8 @@ export const OurAllocations = () => {
       alt: "Acolyte Health Logo"
     },
     {
-      src: "/lovable-uploads/20984042-437c-48c8-b0ee-3f06cb799dce.png",
-      alt: "Burgerville Logo"
+      src: "/lovable-uploads/9f5f8b29-afe0-4d68-8ab6-b0ed9f6d88ec.png", // New Digs logo
+      alt: "Digs Logo"
     },
     {
       src: "/lovable-uploads/5f3d7c57-b791-4127-b87e-dd898c8357ba.png",
