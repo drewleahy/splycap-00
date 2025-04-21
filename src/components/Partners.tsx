@@ -34,7 +34,7 @@ const horizontalPartners = [
   },
   {
     name: "Vishnupriya R. Bohra",
-    role: "Venture Partner, Trinity SFO",
+    role: "Venture Partner",
     location: "Dubai, UAE",
     linkedin: "https://www.linkedin.com/in/vishnupriya-bohra/",
     bio: `Trinity SFO is a Dubai-based single-family office with deep roots in real estate and alternative investments, lead by Vishnupriya R. Bohra. The Bohra family was among the earliest underwriters in Dubai’s real estate boom, underwriting AED 8 billion across 13 towers between 2006 and 2007. Over time, the family expanded into public markets and private equity, including a successful early investment in India’s National Stock Exchange in 2017.
@@ -42,7 +42,7 @@ const horizontalPartners = [
 A graduate of UCLA with Phi Beta Kappa honors in Econometrics & Quantitative Economics, Vishnupriya brings a research-driven, values-led approach to investing. She began her career in M&A at a boutique investment bank before joining her family’s investment business. During her time in Los Angeles, she also launched a startup and led community events focused on conscious living.
 
 Trinity SFO works selectively with venture funds and investment platforms as a distribution partner across the GCC and India. With close ties to the Indian UHNI community in the UAE, Trinity introduces high-conviction investors to pre-IPO and alternative investment opportunities—playing a trusted, strategic role in bridging capital with global innovation.`,
-    image: "/lovable-uploads/14827d67-e806-4cc3-adeb-fab3ef45cd1e.png",
+    image: "/lovable-uploads/66e270bb-ccb6-4ac3-8666-bbb20da6a31c.png",
   }
 ];
 
@@ -153,3 +153,4 @@ export const Partners = () => {
     </section>
   );
 };
+
