@@ -49,9 +49,11 @@ Trinity SFO works selectively with venture funds and investment platforms as a d
     role: "Venture Partner",
     location: "Columbus, OH",
     linkedin: "https://www.linkedin.com/in/mannylarcher/",
-    bio: `Manny Larcher has dedicated his career empowering businesses utilizing disruptive digital tools. After exiting a venture backed startup in the tele-health space, he cofounded a creative agency working with startups, family offices, and enterprises. When the pandemic made it challenging for businesses to connect with resources, he launched Colaeb to simplify access to education, new customers, and capital, now working with thousands of businesses worldwide. 
+    bio: `Manny Larcher has dedicated his career empowering businesses. After exiting a venture backed startup to a global healthcare services and products company, he cofounded a highly sought out consulting firm, supporting clients through 7, 8, and 9 figure exits. 
 
-Beyond tech, Manny is a mentor and advocate for startup ecosystems, supporting founders and hosting industry events connecting for businesses.`,
+During the pandemic, he launched Colaeb, a software company which 10x access to resources, supporting thousands of businesses worldwide. His work connecting early-stage technology companies with critical funding has had a meaningful impact to Ohio’s tech ecosystem, his home state.
+
+Manny has received endorsement from organizations like Social Justice Awards and the Better Business Bureau, an affable speaker at numerous Universities and industry events, connecting with leaders and mentoring the next generation. `,
     image: "/lovable-uploads/1f3af4bf-0d62-4977-ad4e-fb50c0bb64e4.png",
   },
 ];
