@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -43,7 +42,15 @@ A graduate of UCLA with Phi Beta Kappa honors in Econometrics & Quantitative Eco
 
 Trinity SFO works selectively with venture funds and investment platforms as a distribution partner across the GCC and India. With close ties to the Indian UHNI community in the UAE, Trinity introduces high-conviction investors to pre-IPO and alternative investment opportunities—playing a trusted, strategic role in bridging capital with global innovation.`,
     image: "/lovable-uploads/66e270bb-ccb6-4ac3-8666-bbb20da6a31c.png",
-  }
+  },
+  {
+    name: "Manny Larcher",
+    role: "Venture Partner",
+    location: "Columbus, OH",
+    linkedin: "https://www.linkedin.com/in/mannylarcher/",
+    bio: "",
+    image: "",
+  },
 ];
 
 export const Partners = () => {
@@ -153,4 +160,3 @@ export const Partners = () => {
     </section>
   );
 };
-
