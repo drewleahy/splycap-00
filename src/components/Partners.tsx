@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -41,7 +42,7 @@ const horizontalPartners = [
 A graduate of UCLA with Phi Beta Kappa honors in Econometrics & Quantitative Economics, Vishnupriya brings a research-driven, values-led approach to investing. She began her career in M&A at a boutique investment bank before joining her family’s investment business. During her time in Los Angeles, she also launched a startup and led community events focused on conscious living.
 
 Trinity SFO works selectively with venture funds and investment platforms as a distribution partner across the GCC and India. With close ties to the Indian UHNI community in the UAE, Trinity introduces high-conviction investors to pre-IPO and alternative investment opportunities—playing a trusted, strategic role in bridging capital with global innovation.`,
-    image: "/lovable-uploads/66e270bb-ccb6-4ac3-8666-bbb20da6a31c.png",
+    image: "/lovable-uploads/2d33db90-72e3-4386-91fc-76821dc65dc1.png",
   },
   {
     name: "Manny Larcher",
@@ -162,3 +163,4 @@ export const Partners = () => {
     </section>
   );
 };
+
