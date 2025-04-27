@@ -9,6 +9,60 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      commissions: {
+        Row: {
+          amount: number
+          created_at: string
+          deal_id: string | null
+          id: string
+          lp_id: string | null
+          partner_id: string | null
+          payout_date: string | null
+          percentage: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          deal_id?: string | null
+          id?: string
+          lp_id?: string | null
+          partner_id?: string | null
+          payout_date?: string | null
+          percentage: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          deal_id?: string | null
+          id?: string
+          lp_id?: string | null
+          partner_id?: string | null
+          payout_date?: string | null
+          percentage?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commissions_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commissions_lp_id_fkey"
+            columns: ["lp_id"]
+            isOneToOne: false
+            referencedRelation: "limited_partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       content_sections: {
         Row: {
           created_at: string
@@ -66,6 +120,104 @@ export type Database = {
         }
         Relationships: []
       }
+      deals: {
+        Row: {
+          allocation_amount: number
+          company_website: string | null
+          created_at: string
+          created_by: string | null
+          deal_name: string
+          founder_linkedin_profiles: string[] | null
+          founder_names: string[] | null
+          funding_round_details: string | null
+          id: string
+          investment_thesis: string | null
+          notes: string | null
+          stage: string
+          status: string
+          tags: string[] | null
+          updated_at: string
+          valuation: number | null
+          visibility: string
+        }
+        Insert: {
+          allocation_amount: number
+          company_website?: string | null
+          created_at?: string
+          created_by?: string | null
+          deal_name: string
+          founder_linkedin_profiles?: string[] | null
+          founder_names?: string[] | null
+          funding_round_details?: string | null
+          id?: string
+          investment_thesis?: string | null
+          notes?: string | null
+          stage: string
+          status?: string
+          tags?: string[] | null
+          updated_at?: string
+          valuation?: number | null
+          visibility?: string
+        }
+        Update: {
+          allocation_amount?: number
+          company_website?: string | null
+          created_at?: string
+          created_by?: string | null
+          deal_name?: string
+          founder_linkedin_profiles?: string[] | null
+          founder_names?: string[] | null
+          funding_round_details?: string | null
+          id?: string
+          investment_thesis?: string | null
+          notes?: string | null
+          stage?: string
+          status?: string
+          tags?: string[] | null
+          updated_at?: string
+          valuation?: number | null
+          visibility?: string
+        }
+        Relationships: []
+      }
+      documents: {
+        Row: {
+          created_at: string
+          deal_id: string | null
+          file_name: string
+          file_type: string
+          id: string
+          storage_path: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          deal_id?: string | null
+          file_name: string
+          file_type: string
+          id?: string
+          storage_path: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          deal_id?: string | null
+          file_name?: string
+          file_type?: string
+          id?: string
+          storage_path?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       investment_focus_items: {
         Row: {
           created_at: string
@@ -92,6 +244,77 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      limited_partners: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          entity_name: string
+          id: string
+          investment_amount: number | null
+          relationship_notes: string | null
+          tags: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          entity_name: string
+          id?: string
+          investment_amount?: number | null
+          relationship_notes?: string | null
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          entity_name?: string
+          id?: string
+          investment_amount?: number | null
+          relationship_notes?: string | null
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lp_contacts: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          lp_id: string | null
+          name: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          lp_id?: string | null
+          name: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          lp_id?: string | null
+          name?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lp_contacts_lp_id_fkey"
+            columns: ["lp_id"]
+            isOneToOne: false
+            referencedRelation: "limited_partners"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       partners: {
         Row: {
@@ -144,6 +367,36 @@ export type Database = {
           name?: string
           updated_at?: string
           website_url?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          phone: string | null
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          phone?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          role?: string
+          updated_at?: string
         }
         Relationships: []
       }

@@ -1,45 +1,34 @@
 
 import { Hero } from "@/components/Hero";
-import { InvestmentFocus } from "@/components/InvestmentFocus";
-import { Partners } from "@/components/Partners";
 import { CTASection } from "@/components/CTASection";
-import { Footer } from "@/components/Footer";
+import { InvestmentFocus } from "@/components/InvestmentFocus";
 import { InvestmentPhilosophy } from "@/components/InvestmentPhilosophy";
 import { OurAllocations } from "@/components/OurAllocations";
+import { Partners } from "@/components/Partners";
 import { PodcastSection } from "@/components/PodcastSection";
-import { AnimatedWords } from "@/components/AnimatedWords";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
-const Index = () => {
-  const isMobile = useIsMobile();
-
+export default function Index() {
   return (
-    <div className="min-h-screen">
-      <Navbar />
+    <div>
+      <div className="fixed top-6 right-6 z-50">
+        <Link 
+          to="/venturepartners/auth" 
+          className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md hover:bg-gray-100 transition-colors text-sm font-medium"
+        >
+          Venture Partner Portal <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
       <Hero />
-      <AnimatedWords />
-      {isMobile ? (
-        <>
-          <InvestmentPhilosophy />
-          <InvestmentFocus />
-          <Partners />
-          <OurAllocations />
-          <PodcastSection />
-        </>
-      ) : (
-        <>
-          <InvestmentFocus />
-          <InvestmentPhilosophy />
-          <Partners />
-          <OurAllocations />
-          <PodcastSection />
-        </>
-      )}
+      <InvestmentPhilosophy />
+      <InvestmentFocus />
+      <OurAllocations />
+      <Partners />
+      <PodcastSection />
       <CTASection />
       <Footer />
     </div>
   );
-};
-
-export default Index;
+}
