@@ -8,12 +8,14 @@ export const useDeals = () => {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { toast } = useToast();
 
   const fetchDeals = useCallback(async () => {
     try {
       setIsLoading(true);
       setIsError(false);
+      setErrorMessage(null);
       
       const { data, error } = await supabase
         .from("deals")
@@ -22,6 +24,14 @@ export const useDeals = () => {
         
       if (error) {
         console.error("Supabase error fetching deals:", error);
+        
+        let message = "Could not load deals. Please try again later.";
+        if (error.message?.includes("infinite recursion")) {
+          message = "Database policy error. Please contact an administrator.";
+          console.log("This is an RLS policy error in Supabase that requires administrator attention.");
+        }
+        
+        setErrorMessage(message);
         throw error;
       }
       
@@ -32,18 +42,18 @@ export const useDeals = () => {
       setIsError(true);
       toast({
         title: "Error",
-        description: "Could not load deals. Please try again later.",
+        description: errorMessage || "Could not load deals. Please try again later.",
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
     }
-  }, [toast]);
+  }, [toast, errorMessage]);
 
   // Fetch deals on mount
   useEffect(() => {
     fetchDeals();
   }, [fetchDeals]);
 
-  return { deals, isLoading, isError, fetchDeals };
+  return { deals, isLoading, isError, errorMessage, fetchDeals };
 };

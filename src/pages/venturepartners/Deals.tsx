@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function Deals() {
   const { user } = useAuth();
-  const { deals, isLoading, isError, fetchDeals } = useDeals();
+  const { deals, isLoading, isError, errorMessage, fetchDeals } = useDeals();
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filter deals based on search term
@@ -56,7 +56,12 @@ export default function Deals() {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>
-            Could not load deals. Please try refreshing or try again later.
+            {errorMessage || "Could not load deals. Please try refreshing or try again later."}
+            {errorMessage?.includes("administrator") && (
+              <p className="mt-2 text-sm">
+                There appears to be an issue with the database configuration. This requires administrator attention.
+              </p>
+            )}
           </AlertDescription>
         </Alert>
       )}
