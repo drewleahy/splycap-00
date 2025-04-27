@@ -18,6 +18,8 @@ export const useDeals = () => {
       setIsError(false);
       setErrorMessage(null);
       
+      console.log("Fetching deals from Supabase...");
+      
       const { data, error } = await supabase
         .from("deals")
         .select("*")
@@ -25,14 +27,7 @@ export const useDeals = () => {
         
       if (error) {
         console.error("Supabase error fetching deals:", error);
-        
-        let message = "Could not load deals. Please try again later.";
-        if (error.message?.includes("infinite recursion")) {
-          message = "Database policy error. Please contact an administrator.";
-          console.log("This is an RLS policy error in Supabase that requires administrator attention.");
-        }
-        
-        setErrorMessage(message);
+        setErrorMessage("Could not load deals. Please try again later.");
         throw error;
       }
       
@@ -41,18 +36,22 @@ export const useDeals = () => {
     } catch (error) {
       console.error("Error fetching deals:", error);
       setIsError(true);
-      toast({
-        title: "Error",
-        description: errorMessage || "Could not load deals. Please try again later.",
-        variant: "destructive",
-      });
+      
+      // Only show toast if this isn't our first fetch attempt
+      if (hasAttemptedFetch) {
+        toast({
+          title: "Error",
+          description: errorMessage || "Could not load deals. Please try again later.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setHasAttemptedFetch(true);
       setIsLoading(false);
     }
-  }, [toast, errorMessage]);
+  }, [toast, errorMessage, hasAttemptedFetch]);
 
-  // Fetch deals on mount - but only once, not repeatedly if there's an RLS error
+  // Fetch deals on mount - only once
   useEffect(() => {
     if (!hasAttemptedFetch) {
       fetchDeals();
