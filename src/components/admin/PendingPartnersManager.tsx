@@ -21,12 +21,17 @@ export const PendingPartnersManager = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("*")
+        .select("*, auth.users(email)")
         .eq("status", "pending")
         .order("created_at");
       
       if (error) throw error;
-      return data;
+      
+      // Map the data to include the email from the joined users table
+      return data.map(partner => ({
+        ...partner,
+        email: partner.auth?.users?.email || "No email available"
+      }));
     },
   });
 

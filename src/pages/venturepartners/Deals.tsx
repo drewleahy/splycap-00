@@ -29,8 +29,9 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { FileText, Search, Plus, Filter } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { FileText, Search, Plus, Filter, FileUp } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { SimpleFileUpload } from "@/components/SimpleFileUpload";
 
 type Deal = {
   id: string;
@@ -40,6 +41,8 @@ type Deal = {
   stage: string;
   created_at: string;
   status: string;
+  pitch_deck_url?: string;
+  pitch_deck_name?: string;
 };
 
 export default function Deals() {
@@ -48,15 +51,20 @@ export default function Deals() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [deckFile, setDeckFile] = useState<{ url: string; name: string } | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
-    fetchDeals();
+    if (user) {
+      fetchDeals();
+    }
   }, [user]);
 
   const fetchDeals = async () => {
     try {
       if (!user) return;
       
+      setIsLoading(true);
       const { data, error } = await supabase
         .from("deals")
         .select("*")
@@ -90,6 +98,8 @@ export default function Deals() {
         stage: formData.get("stage") as string,
         investment_thesis: formData.get("investmentThesis") as string,
         created_by: user?.id,
+        pitch_deck_url: deckFile?.url || null,
+        pitch_deck_name: deckFile?.name || null,
       };
       
       const { error } = await supabase.from("deals").insert(dealData);
@@ -103,6 +113,7 @@ export default function Deals() {
       
       fetchDeals();
       setIsAddDialogOpen(false);
+      setDeckFile(null);
     } catch (error) {
       console.error("Error adding deal:", error);
       toast({
@@ -113,6 +124,22 @@ export default function Deals() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleFileUploadSuccess = (url: string, name: string) => {
+    setDeckFile({ url, name });
+    toast({
+      title: "File uploaded",
+      description: "Pitch deck uploaded successfully",
+    });
+  };
+
+  const handleFileUploadError = (error: string) => {
+    toast({
+      title: "Upload error",
+      description: error,
+      variant: "destructive",
+    });
   };
 
   const filteredDeals = deals.filter(deal =>
@@ -202,6 +229,36 @@ export default function Deals() {
                     placeholder="Why is this a good investment opportunity?"
                   />
                 </div>
+                <div className="grid grid-cols-4 items-start gap-4">
+                  <label className="text-right font-medium mt-2">
+                    Pitch Deck
+                  </label>
+                  <div className="col-span-3">
+                    {deckFile ? (
+                      <div className="flex items-center space-x-2 p-2 border rounded">
+                        <FileText className="h-5 w-5 text-blue-500" />
+                        <span className="text-sm font-medium truncate">{deckFile.name}</span>
+                        <Button 
+                          type="button" 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={() => setDeckFile(null)}
+                        >
+                          Change
+                        </Button>
+                      </div>
+                    ) : (
+                      <SimpleFileUpload 
+                        onSuccess={handleFileUploadSuccess}
+                        onError={handleFileUploadError}
+                        allowedFileTypes={[".pdf", ".ppt", ".pptx"]}
+                      />
+                    )}
+                    <p className="text-xs text-gray-500 mt-1">
+                      Upload a PDF or PowerPoint pitch deck (max. 10MB)
+                    </p>
+                  </div>
+                </div>
               </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
@@ -256,6 +313,7 @@ export default function Deals() {
                 <TableHead>Valuation</TableHead>
                 <TableHead>Stage</TableHead>
                 <TableHead>Created</TableHead>
+                <TableHead>Pitch Deck</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -273,6 +331,20 @@ export default function Deals() {
                   </TableCell>
                   <TableCell>
                     {new Date(deal.created_at).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    {deal.pitch_deck_url ? (
+                      <a 
+                        href={deal.pitch_deck_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center text-blue-600 hover:text-blue-800"
+                      >
+                        <FileText className="h-4 w-4 mr-1" /> View
+                      </a>
+                    ) : (
+                      <span className="text-gray-400 text-sm">No deck</span>
+                    )}
                   </TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${

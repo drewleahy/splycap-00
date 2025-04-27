@@ -1,16 +1,19 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "@/components/ui/toast";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Auth() {
   const navigate = useNavigate();
   const { signIn, signUp, user } = useAuth();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [pendingApproval, setPendingApproval] = useState(false);
 
@@ -80,6 +83,12 @@ export default function Auth() {
     }
   };
 
+  // Add signOut function
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    setPendingApproval(false);
+  };
+
   if (pendingApproval) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -91,10 +100,7 @@ export default function Auth() {
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => {
-              setPendingApproval(false);
-              signOut();
-            }}
+            onClick={signOut}
           >
             Back to Sign In
           </Button>
