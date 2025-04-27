@@ -44,17 +44,17 @@ function App() {
           
           {/* LP Routes */}
           <Route path="/lp" element={<LPSplash />} />
-          <Route element={<LPLayout />}>
-            <Route path="/lp/bio" element={<Bio />} />
-            <Route path="/lp/criteria" element={<Criteria />} />
-            <Route path="/lp/deck" element={<Deck />} />
-            <Route path="/lp/ira" element={<IRA />} />
-            <Route path="/lp/memos" element={<Memos />} />
-            <Route path="/lp/protocol" element={<Protocol />} />
-            <Route path="/lp/schedule" element={<Schedule />} />
-            <Route path="/lp/screening" element={<Screening />} />
-            <Route path="/lp/thesis" element={<Thesis />} />
-            <Route path="/lp/workflow" element={<Workflow />} />
+          <Route path="/lp" element={<LPLayout />}>
+            <Route path="bio" element={<Bio />} />
+            <Route path="criteria" element={<Criteria />} />
+            <Route path="deck" element={<Deck />} />
+            <Route path="ira" element={<IRA />} />
+            <Route path="memos" element={<Memos />} />
+            <Route path="protocol" element={<Protocol />} />
+            <Route path="schedule" element={<Schedule />} />
+            <Route path="screening" element={<Screening />} />
+            <Route path="thesis" element={<Thesis />} />
+            <Route path="workflow" element={<Workflow />} />
           </Route>
           
           {/* Venture Partner Routes */}
