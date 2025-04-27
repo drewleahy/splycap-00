@@ -85,4 +85,4 @@ export const DealsTable = ({ deals }: DealsTableProps) => {
       </Table>
     </div>
   );
-}
+};

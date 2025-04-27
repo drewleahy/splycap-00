@@ -1,6 +1,5 @@
 
-import { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search as SearchIcon, Filter, RefreshCw, FileText, AlertCircle } from "lucide-react";
@@ -10,32 +9,19 @@ import { AddDealDialog } from "@/components/deals/AddDealDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function Deals() {
-  const { user } = useAuth();
-  const { deals, isLoading, isError, errorMessage, fetchDeals } = useDeals();
+  const { deals, isLoading, error, refetch } = useDeals();
   const [searchTerm, setSearchTerm] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [hasAppliedFix, setHasAppliedFix] = useState(false);
 
   // Filter deals based on search term
   const filteredDeals = deals.filter(deal =>
     deal.deal_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Automatically try a refresh after the RLS fix
-  useEffect(() => {
-    if (!isLoading && !hasAppliedFix) {
-      handleRefresh();
-      setHasAppliedFix(true);
-    }
-  }, [isLoading, hasAppliedFix]);
-
   const handleRefresh = async () => {
-    try {
-      setIsRefreshing(true);
-      await fetchDeals();
-    } finally {
-      setIsRefreshing(false);
-    }
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
   };
 
   return (
@@ -51,7 +37,7 @@ export default function Deals() {
             <RefreshCw className={`mr-2 h-4 w-4 ${(isLoading || isRefreshing) ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
-          <AddDealDialog onDealAdded={fetchDeals} />
+          <AddDealDialog onDealAdded={refetch} />
         </div>
       </div>
 
@@ -70,28 +56,30 @@ export default function Deals() {
         </Button>
       </div>
 
-      {isError && (
+      {/* Error display */}
+      {error && (
         <Alert variant="destructive" className="mb-6">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>Error loading deals</AlertTitle>
           <AlertDescription>
-            {errorMessage || "Could not load deals. Please try refreshing or try again later."}
+            {error.message}
           </AlertDescription>
         </Alert>
       )}
 
+      {/* Loading, empty state, or deals table */}
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
-      ) : deals.length === 0 && !isError ? (
+      ) : deals.length === 0 && !error ? (
         <div className="flex flex-col items-center justify-center h-64 border rounded-lg">
           <FileText className="h-16 w-16 text-gray-400 mb-4" />
           <h3 className="text-lg font-medium">No deals found</h3>
           <p className="text-sm text-gray-500 mb-4">
             You haven't added any deals yet.
           </p>
-          <AddDealDialog onDealAdded={fetchDeals} />
+          <AddDealDialog onDealAdded={refetch} />
         </div>
       ) : (
         <DealsTable deals={filteredDeals} />
