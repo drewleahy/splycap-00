@@ -9,6 +9,7 @@ export const useDeals = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [hasAttemptedFetch, setHasAttemptedFetch] = useState(false);
   const { toast } = useToast();
 
   const fetchDeals = useCallback(async () => {
@@ -46,14 +47,17 @@ export const useDeals = () => {
         variant: "destructive",
       });
     } finally {
+      setHasAttemptedFetch(true);
       setIsLoading(false);
     }
   }, [toast, errorMessage]);
 
-  // Fetch deals on mount
+  // Fetch deals on mount - but only once, not repeatedly if there's an RLS error
   useEffect(() => {
-    fetchDeals();
-  }, [fetchDeals]);
+    if (!hasAttemptedFetch) {
+      fetchDeals();
+    }
+  }, [fetchDeals, hasAttemptedFetch]);
 
-  return { deals, isLoading, isError, errorMessage, fetchDeals };
+  return { deals, isLoading, isError, errorMessage, fetchDeals, hasAttemptedFetch };
 };
