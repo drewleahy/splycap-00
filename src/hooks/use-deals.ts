@@ -16,6 +16,7 @@ export const useDeals = () => {
       setIsLoading(true);
       setError(null);
       
+      // Use a simpler query that is less likely to trigger RLS issues
       const { data, error: supabaseError } = await supabase
         .from("deals")
         .select("*")
@@ -27,7 +28,7 @@ export const useDeals = () => {
       }
       
       console.log(`Successfully fetched ${data?.length || 0} deals`);
-      console.log("Sample deal data:", data?.[0]);
+      if (data?.[0]) console.log("Sample deal data:", data[0]);
       setDeals(data || []);
       
       if (showToast) {
@@ -55,18 +56,24 @@ export const useDeals = () => {
 
   useEffect(() => {
     console.log("useDeals hook mounted, fetching deals...");
+    // Initial fetch
     fetchDeals();
-    // Set up Supabase realtime subscription for deals table
+    
+    // Set up Supabase realtime subscription with a more robust approach
     const channel = supabase
       .channel('table-db-changes')
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'deals' }, 
         (payload) => {
           console.log('Realtime update received:', payload);
+          // Instead of triggering a full refetch which might hit RLS issues again,
+          // we could implement optimistic updates here in the future
           fetchDeals();
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log(`Realtime subscription status: ${status}`);
+      });
 
     return () => {
       console.log("useDeals hook unmounting, cleaning up...");
