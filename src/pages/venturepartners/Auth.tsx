@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -7,13 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "@/components/ui/toast";
 
 export default function Auth() {
   const navigate = useNavigate();
   const { signIn, signUp, user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  
-  // Redirect if already authenticated
+  const [pendingApproval, setPendingApproval] = useState(false);
+
   React.useEffect(() => {
     if (user) {
       navigate("/venturepartners/dashboard");
@@ -30,9 +30,27 @@ export default function Auth() {
     
     try {
       await signIn(email, password);
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("status")
+        .eq("id", user?.id)
+        .single();
+
+      if (profile?.status === "pending") {
+        setPendingApproval(true);
+        return;
+      } else if (profile?.status === "rejected") {
+        throw new Error("Your application has been rejected");
+      }
+
       navigate("/venturepartners/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Sign in failed:", error);
+      toast({
+        title: "Sign in failed",
+        description: error.message,
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -50,14 +68,41 @@ export default function Auth() {
     
     try {
       await signUp(email, password, firstName, lastName);
-      // We don't navigate here because the user will need to verify their email
-    } catch (error) {
-      console.error("Sign up failed:", error);
+      setPendingApproval(true);
+    } catch (error: any) {
+      toast({
+        title: "Sign up failed",
+        description: error.message,
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
   };
-  
+
+  if (pendingApproval) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold text-center mb-4">Application Pending</h2>
+          <p className="text-gray-600 text-center mb-4">
+            Your application is currently under review. You will be notified once it has been approved.
+          </p>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => {
+              setPendingApproval(false);
+              signOut();
+            }}
+          >
+            Back to Sign In
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md px-4">
@@ -99,7 +144,6 @@ export default function Auth() {
                       <label htmlFor="password" className="text-sm font-medium">
                         Password
                       </label>
-                      {/* Implement password reset later */}
                       <a href="#" className="text-sm text-blue-600 hover:underline">
                         Forgot password?
                       </a>

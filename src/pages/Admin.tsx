@@ -1,4 +1,3 @@
-
 import { WealthPerspectiveEditor } from "@/components/admin/WealthPerspectiveEditor";
 import { PartnersEditor } from "@/components/admin/PartnersEditor";
 import { CTAEditor } from "@/components/admin/CTAEditor";
@@ -11,11 +10,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminFileUpload } from "@/components/AdminFileUpload";
 import { useState, useRef, Suspense } from "react";
-import React from "react"; // Add explicit React import for the class component
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdminFileSelector } from "@/components/AdminFileSelector";
+import { PendingPartnersManager } from "@/components/admin/PendingPartnersManager";
 
-// Error boundary component to catch errors in child components
 const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   const [hasError, setHasError] = useState(false);
   const { toast } = useToast();
@@ -52,7 +51,6 @@ const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Helper component to catch errors
 class ErrorCatcher extends React.Component<{
   children: React.ReactNode;
   onError: () => void;
@@ -98,7 +96,6 @@ const Admin = () => {
       description: `${name} was uploaded successfully.`,
     });
     
-    // Refresh the file list
     queryClient.invalidateQueries({ queryKey: ["admin-files"] });
   };
 
@@ -138,6 +135,7 @@ const Admin = () => {
         <TabsList className="mb-8">
           <TabsTrigger value="website">Website Content</TabsTrigger>
           <TabsTrigger value="lp">LP Data Room</TabsTrigger>
+          <TabsTrigger value="partners">Partner Applications</TabsTrigger>
           <TabsTrigger value="tools">Admin Tools</TabsTrigger>
         </TabsList>
         
@@ -163,6 +161,12 @@ const Admin = () => {
             <Suspense fallback={<div className="p-6 border rounded animate-pulse">Loading LP Content Editor...</div>}>
               <LPContentEditor />
             </Suspense>
+          </ErrorBoundary>
+        </TabsContent>
+        
+        <TabsContent value="partners">
+          <ErrorBoundary>
+            <PendingPartnersManager />
           </ErrorBoundary>
         </TabsContent>
         
