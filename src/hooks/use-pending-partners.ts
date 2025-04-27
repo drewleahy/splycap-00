@@ -22,7 +22,9 @@ export const usePendingPartners = () => {
 
       return (profiles || []).map(profile => ({
         ...profile,
-        email: profile.email?.[0]?.email || "No email available"
+        // Fix the type error by properly accessing the email from the joined data
+        // The join returns an array of objects, so we need to access the first item
+        email: Array.isArray(profile.email) && profile.email.length > 0 ? profile.email[0]?.email : "No email available"
       })) as PendingPartner[];
     },
   });
