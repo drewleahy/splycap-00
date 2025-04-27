@@ -1,16 +1,17 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Filter, RefreshCw, FileText } from "lucide-react";
+import { Search as SearchIcon, Filter, RefreshCw, FileText, AlertCircle } from "lucide-react";
 import { useDeals } from "@/hooks/use-deals";
 import { DealsTable } from "@/components/deals/DealsTable";
 import { AddDealDialog } from "@/components/deals/AddDealDialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function Deals() {
   const { user } = useAuth();
-  const { deals, isLoading, fetchDeals } = useDeals();
+  const { deals, isLoading, isError, fetchDeals } = useDeals();
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filter deals based on search term
@@ -23,7 +24,11 @@ export default function Deals() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Deals</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={fetchDeals} disabled={isLoading}>
+          <Button 
+            variant="outline" 
+            onClick={() => fetchDeals()} 
+            disabled={isLoading}
+          >
             <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
@@ -33,7 +38,7 @@ export default function Deals() {
 
       <div className="flex gap-4 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <Input
             placeholder="Search deals..."
             value={searchTerm}
@@ -46,11 +51,21 @@ export default function Deals() {
         </Button>
       </div>
 
+      {isError && (
+        <Alert variant="destructive" className="mb-6">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
+            Could not load deals. Please try refreshing or try again later.
+          </AlertDescription>
+        </Alert>
+      )}
+
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
-      ) : deals.length === 0 ? (
+      ) : deals.length === 0 && !isError ? (
         <div className="flex flex-col items-center justify-center h-64 border rounded-lg">
           <FileText className="h-16 w-16 text-gray-400 mb-4" />
           <h3 className="text-lg font-medium">No deals found</h3>

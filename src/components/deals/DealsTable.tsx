@@ -16,6 +16,10 @@ interface DealsTableProps {
 }
 
 export const DealsTable = ({ deals }: DealsTableProps) => {
+  if (!deals || deals.length === 0) {
+    return null;
+  }
+
   return (
     <div className="border rounded-lg overflow-hidden">
       <Table>
@@ -81,4 +85,4 @@ export const DealsTable = ({ deals }: DealsTableProps) => {
       </Table>
     </div>
   );
-};
+}
