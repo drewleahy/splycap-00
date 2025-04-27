@@ -39,15 +39,15 @@ export const DealsTable = ({ deals }: DealsTableProps) => {
           {deals.map((deal) => (
             <TableRow key={deal.id}>
               <TableCell className="font-medium">{deal.deal_name}</TableCell>
-              <TableCell>${deal.allocation_amount.toLocaleString()}</TableCell>
+              <TableCell>${deal.allocation_amount?.toLocaleString() || 0}</TableCell>
               <TableCell>
                 {deal.valuation ? `$${deal.valuation.toLocaleString()}` : "N/A"}
               </TableCell>
               <TableCell className="capitalize">
-                {deal.stage.replace("_", " ")}
+                {deal.stage?.replace("_", " ") || "N/A"}
               </TableCell>
               <TableCell>
-                {new Date(deal.created_at).toLocaleDateString()}
+                {deal.created_at ? new Date(deal.created_at).toLocaleDateString() : "N/A"}
               </TableCell>
               <TableCell>
                 {deal.pitch_deck_url ? (
@@ -71,7 +71,7 @@ export const DealsTable = ({ deals }: DealsTableProps) => {
                     ? "bg-gray-100 text-gray-800"
                     : "bg-blue-100 text-blue-800"
                 }`}>
-                  {deal.status.charAt(0).toUpperCase() + deal.status.slice(1)}
+                  {deal.status ? (deal.status.charAt(0).toUpperCase() + deal.status.slice(1)) : "Unknown"}
                 </span>
               </TableCell>
               <TableCell className="text-right">

@@ -7,18 +7,25 @@ import { useDeals } from "@/hooks/use-deals";
 import { DealsTable } from "@/components/deals/DealsTable";
 import { AddDealDialog } from "@/components/deals/AddDealDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Deals() {
+  const { user } = useAuth();
   const { deals, isLoading, error, refetch } = useDeals();
   const [searchTerm, setSearchTerm] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  console.log("Deals page rendered, user:", user?.id);
+  console.log("Deals loaded:", deals.length, "Loading status:", isLoading);
+  if (error) console.error("Error in Deals component:", error);
+
   // Filter deals based on search term
   const filteredDeals = deals.filter(deal =>
-    deal.deal_name.toLowerCase().includes(searchTerm.toLowerCase())
+    deal.deal_name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleRefresh = async () => {
+    console.log("Manual refresh triggered");
     setIsRefreshing(true);
     await refetch();
     setIsRefreshing(false);
@@ -56,6 +63,17 @@ export default function Deals() {
         </Button>
       </div>
 
+      {/* Auth status debugging */}
+      {!user && (
+        <Alert className="mb-6">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Authentication issue</AlertTitle>
+          <AlertDescription>
+            You don't appear to be logged in. This might affect your ability to view deals.
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Error display */}
       {error && (
         <Alert variant="destructive" className="mb-6">
@@ -71,6 +89,7 @@ export default function Deals() {
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+          <span className="ml-3 text-lg font-medium">Loading deals...</span>
         </div>
       ) : deals.length === 0 && !error ? (
         <div className="flex flex-col items-center justify-center h-64 border rounded-lg">

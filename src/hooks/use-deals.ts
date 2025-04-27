@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { Deal } from "@/types/deal";
@@ -12,22 +12,22 @@ export const useDeals = () => {
 
   const fetchDeals = useCallback(async (showToast = false) => {
     try {
+      console.log("Starting to fetch deals from Supabase...");
       setIsLoading(true);
       setError(null);
-      
-      console.log("Fetching deals from Supabase...");
       
       const { data, error: supabaseError } = await supabase
         .from("deals")
         .select("*")
         .order("created_at", { ascending: false });
-        
+      
       if (supabaseError) {
-        console.error("Error fetching deals:", supabaseError);
+        console.error("Supabase error when fetching deals:", supabaseError);
         throw new Error(supabaseError.message);
       }
       
       console.log(`Successfully fetched ${data?.length || 0} deals`);
+      console.log("Sample deal data:", data?.[0]);
       setDeals(data || []);
       
       if (showToast) {
@@ -53,9 +53,25 @@ export const useDeals = () => {
     }
   }, [toast]);
 
-  // Fetch deals on component mount
   useEffect(() => {
+    console.log("useDeals hook mounted, fetching deals...");
     fetchDeals();
+    // Set up Supabase realtime subscription for deals table
+    const channel = supabase
+      .channel('table-db-changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'deals' }, 
+        (payload) => {
+          console.log('Realtime update received:', payload);
+          fetchDeals();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      console.log("useDeals hook unmounting, cleaning up...");
+      supabase.removeChannel(channel);
+    };
   }, [fetchDeals]);
 
   return { 
