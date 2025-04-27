@@ -21,15 +21,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { FileText, Search, Plus, Filter, FileUp } from "lucide-react";
+import { FileText, Search, Plus, Filter, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { SimpleFileUpload } from "@/components/SimpleFileUpload";
 
@@ -57,6 +57,8 @@ export default function Deals() {
   useEffect(() => {
     if (user) {
       fetchDeals();
+    } else {
+      setIsLoading(false); // Set loading to false if no user
     }
   }, [user]);
 
@@ -65,13 +67,19 @@ export default function Deals() {
       if (!user) return;
       
       setIsLoading(true);
+      console.log("Fetching deals for user:", user.id);
+
       const { data, error } = await supabase
         .from("deals")
         .select("*")
         .order("created_at", { ascending: false });
         
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error fetching deals:", error);
+        throw error;
+      }
       
+      console.log("Deals fetched:", data);
       setDeals(data || []);
     } catch (error) {
       console.error("Error fetching deals:", error);
@@ -100,11 +108,19 @@ export default function Deals() {
         created_by: user?.id,
         pitch_deck_url: deckFile?.url || null,
         pitch_deck_name: deckFile?.name || null,
+        status: "active"
       };
       
-      const { error } = await supabase.from("deals").insert(dealData);
+      console.log("Adding new deal:", dealData);
       
-      if (error) throw error;
+      const { error, data } = await supabase.from("deals").insert(dealData).select();
+      
+      if (error) {
+        console.error("Error inserting deal:", error);
+        throw error;
+      }
+      
+      console.log("Deal created successfully:", data);
       
       toast({
         title: "Success",
@@ -142,6 +158,10 @@ export default function Deals() {
     });
   };
 
+  const handleRefresh = () => {
+    fetchDeals();
+  };
+
   const filteredDeals = deals.filter(deal =>
     deal.deal_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -150,127 +170,133 @@ export default function Deals() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Deals</h1>
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> Add Deal
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <form onSubmit={handleAddDeal}>
-              <DialogHeader>
-                <DialogTitle>Add New Deal</DialogTitle>
-                <DialogDescription>
-                  Enter the details of the new investment deal.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <label htmlFor="dealName" className="text-right font-medium">
-                    Deal Name
-                  </label>
-                  <Input
-                    id="dealName"
-                    name="dealName"
-                    className="col-span-3"
-                    required
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <label htmlFor="allocationAmount" className="text-right font-medium">
-                    Allocation Amount ($)
-                  </label>
-                  <Input
-                    id="allocationAmount"
-                    name="allocationAmount"
-                    type="number"
-                    className="col-span-3"
-                    required
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <label htmlFor="valuation" className="text-right font-medium">
-                    Valuation ($)
-                  </label>
-                  <Input
-                    id="valuation"
-                    name="valuation"
-                    type="number"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <label htmlFor="stage" className="text-right font-medium">
-                    Stage
-                  </label>
-                  <Select name="stage" defaultValue="seed" required>
-                    <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="Select a stage" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="seed">Seed</SelectItem>
-                      <SelectItem value="series_a">Series A</SelectItem>
-                      <SelectItem value="series_b">Series B</SelectItem>
-                      <SelectItem value="series_c">Series C</SelectItem>
-                      <SelectItem value="series_d">Series D</SelectItem>
-                      <SelectItem value="growth">Growth</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <label htmlFor="investmentThesis" className="text-right font-medium">
-                    Investment Thesis
-                  </label>
-                  <Textarea
-                    id="investmentThesis"
-                    name="investmentThesis"
-                    className="col-span-3"
-                    placeholder="Why is this a good investment opportunity?"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-start gap-4">
-                  <label className="text-right font-medium mt-2">
-                    Pitch Deck
-                  </label>
-                  <div className="col-span-3">
-                    {deckFile ? (
-                      <div className="flex items-center space-x-2 p-2 border rounded">
-                        <FileText className="h-5 w-5 text-blue-500" />
-                        <span className="text-sm font-medium truncate">{deckFile.name}</span>
-                        <Button 
-                          type="button" 
-                          size="sm" 
-                          variant="outline" 
-                          onClick={() => setDeckFile(null)}
-                        >
-                          Change
-                        </Button>
-                      </div>
-                    ) : (
-                      <SimpleFileUpload 
-                        onSuccess={handleFileUploadSuccess}
-                        onError={handleFileUploadError}
-                        allowedFileTypes={[".pdf", ".ppt", ".pptx"]}
-                      />
-                    )}
-                    <p className="text-xs text-gray-500 mt-1">
-                      Upload a PDF or PowerPoint pitch deck (max. 10MB)
-                    </p>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={handleRefresh} disabled={isLoading}>
+            <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" /> Add Deal
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px]">
+              <form onSubmit={handleAddDeal}>
+                <DialogHeader>
+                  <DialogTitle>Add New Deal</DialogTitle>
+                  <DialogDescription>
+                    Enter the details of the new investment deal.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <label htmlFor="dealName" className="text-right font-medium">
+                      Deal Name
+                    </label>
+                    <Input
+                      id="dealName"
+                      name="dealName"
+                      className="col-span-3"
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <label htmlFor="allocationAmount" className="text-right font-medium">
+                      Allocation Amount ($)
+                    </label>
+                    <Input
+                      id="allocationAmount"
+                      name="allocationAmount"
+                      type="number"
+                      className="col-span-3"
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <label htmlFor="valuation" className="text-right font-medium">
+                      Valuation ($)
+                    </label>
+                    <Input
+                      id="valuation"
+                      name="valuation"
+                      type="number"
+                      className="col-span-3"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <label htmlFor="stage" className="text-right font-medium">
+                      Stage
+                    </label>
+                    <Select name="stage" defaultValue="seed" required>
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Select a stage" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="seed">Seed</SelectItem>
+                        <SelectItem value="series_a">Series A</SelectItem>
+                        <SelectItem value="series_b">Series B</SelectItem>
+                        <SelectItem value="series_c">Series C</SelectItem>
+                        <SelectItem value="series_d">Series D</SelectItem>
+                        <SelectItem value="growth">Growth</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <label htmlFor="investmentThesis" className="text-right font-medium">
+                      Investment Thesis
+                    </label>
+                    <Textarea
+                      id="investmentThesis"
+                      name="investmentThesis"
+                      className="col-span-3"
+                      placeholder="Why is this a good investment opportunity?"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-start gap-4">
+                    <label className="text-right font-medium mt-2">
+                      Pitch Deck
+                    </label>
+                    <div className="col-span-3">
+                      {deckFile ? (
+                        <div className="flex items-center space-x-2 p-2 border rounded">
+                          <FileText className="h-5 w-5 text-blue-500" />
+                          <span className="text-sm font-medium truncate">{deckFile.name}</span>
+                          <Button 
+                            type="button" 
+                            size="sm" 
+                            variant="outline" 
+                            onClick={() => setDeckFile(null)}
+                          >
+                            Change
+                          </Button>
+                        </div>
+                      ) : (
+                        <SimpleFileUpload 
+                          onSuccess={handleFileUploadSuccess}
+                          onError={handleFileUploadError}
+                          allowedFileTypes={[".pdf", ".ppt", ".pptx"]}
+                        />
+                      )}
+                      <p className="text-xs text-gray-500 mt-1">
+                        Upload a PDF or PowerPoint pitch deck (max. 10MB)
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Creating..." : "Create Deal"}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={isLoading}>
+                    {isLoading ? "Creating..." : "Create Deal"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <div className="flex gap-4 mb-6">
