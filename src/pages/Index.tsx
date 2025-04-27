@@ -13,14 +13,6 @@ import { ArrowRight } from "lucide-react";
 export default function Index() {
   return (
     <div>
-      <div className="fixed top-6 right-6 z-50">
-        <Link 
-          to="/venturepartners/auth" 
-          className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md hover:bg-gray-100 transition-colors text-sm font-medium"
-        >
-          Venture Partner Portal <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
       <Hero />
       <InvestmentPhilosophy />
       <InvestmentFocus />
@@ -28,7 +20,16 @@ export default function Index() {
       <Partners />
       <PodcastSection />
       <CTASection />
+      <div className="flex justify-center py-8 bg-gray-50">
+        <Link 
+          to="/venturepartners/auth" 
+          className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md hover:bg-gray-100 transition-colors text-sm font-medium"
+        >
+          Venture Partner Portal <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
       <Footer />
     </div>
   );
 }
+
