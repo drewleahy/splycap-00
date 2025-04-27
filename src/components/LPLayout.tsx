@@ -1,17 +1,14 @@
 
+import { Outlet } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 
-interface LPLayoutProps {
-  children: React.ReactNode;
-}
-
-export const LPLayout = ({ children }: LPLayoutProps) => {
+export const LPLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow pt-20">
-        {children}
+        <Outlet />
       </main>
       <Footer />
     </div>

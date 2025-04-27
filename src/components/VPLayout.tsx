@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
 import { 
   LayoutDashboard, 
   FileText, 
@@ -22,11 +22,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-interface VPLayoutProps {
-  children: React.ReactNode;
-}
-
-export const VPLayout = ({ children }: VPLayoutProps) => {
+export const VPLayout = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -213,7 +209,7 @@ export const VPLayout = ({ children }: VPLayoutProps) => {
         <main className="flex-1 relative overflow-y-auto focus:outline-none">
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              {children}
+              <Outlet />
             </div>
           </div>
         </main>
