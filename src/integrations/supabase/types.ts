@@ -133,6 +133,8 @@ export type Database = {
           id: string
           investment_thesis: string | null
           notes: string | null
+          pitch_deck_name: string | null
+          pitch_deck_url: string | null
           stage: string
           status: string
           tags: string[] | null
@@ -152,6 +154,8 @@ export type Database = {
           id?: string
           investment_thesis?: string | null
           notes?: string | null
+          pitch_deck_name?: string | null
+          pitch_deck_url?: string | null
           stage: string
           status?: string
           tags?: string[] | null
@@ -171,6 +175,8 @@ export type Database = {
           id?: string
           investment_thesis?: string | null
           notes?: string | null
+          pitch_deck_name?: string | null
+          pitch_deck_url?: string | null
           stage?: string
           status?: string
           tags?: string[] | null

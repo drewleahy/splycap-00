@@ -13,25 +13,38 @@ import {
 } from "@/components/ui/table";
 import { Loader2, Check, X } from "lucide-react";
 
+interface PendingPartner {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  created_at: string;
+  email: string;
+}
+
 export const PendingPartnersManager = () => {
   const { toast } = useToast();
   
   const { data: pendingPartners, isLoading, refetch } = useQuery({
     queryKey: ["pending-partners"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: profiles, error } = await supabase
         .from("profiles")
-        .select("*, auth.users(email)")
-        .eq("status", "pending")
-        .order("created_at");
+        .select(`
+          id,
+          first_name,
+          last_name,
+          created_at,
+          auth_user:auth.users!auth_fkey(email)
+        `)
+        .eq("status", "pending");
       
       if (error) throw error;
-      
-      // Map the data to include the email from the joined users table
-      return data.map(partner => ({
-        ...partner,
-        email: partner.auth?.users?.email || "No email available"
-      }));
+
+      // Transform the data to include email from the joined auth.users table
+      return profiles.map(profile => ({
+        ...profile,
+        email: profile.auth_user?.email || "No email available"
+      })) as PendingPartner[];
     },
   });
 
