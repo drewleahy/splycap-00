@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search as SearchIcon, Filter, RefreshCw, FileText, AlertCircle } from "lucide-react";
@@ -8,16 +8,28 @@ import { DealsTable } from "@/components/deals/DealsTable";
 import { AddDealDialog } from "@/components/deals/AddDealDialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Deals() {
   const { user } = useAuth();
   const { deals, isLoading, error, refetch } = useDeals();
   const [searchTerm, setSearchTerm] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { toast } = useToast();
 
   console.log("Deals page rendered, user:", user?.id);
   console.log("Deals loaded:", deals.length, "Loading status:", isLoading);
   if (error) console.error("Error in Deals component:", error);
+
+  useEffect(() => {
+    // Initial page load success message
+    if (deals.length > 0 && !isLoading && !error) {
+      toast({
+        title: "Deals loaded",
+        description: `Successfully loaded ${deals.length} deals`,
+      });
+    }
+  }, [deals.length, isLoading, error, toast]);
 
   // Filter deals based on search term
   const filteredDeals = deals.filter(deal =>
@@ -63,24 +75,13 @@ export default function Deals() {
         </Button>
       </div>
 
-      {/* Auth status debugging */}
-      {!user && (
-        <Alert className="mb-6">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Authentication issue</AlertTitle>
-          <AlertDescription>
-            You don't appear to be logged in. This might affect your ability to view deals.
-          </AlertDescription>
-        </Alert>
-      )}
-
       {/* Error display */}
       {error && (
         <Alert variant="destructive" className="mb-6">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error loading deals</AlertTitle>
           <AlertDescription>
-            {error.message}
+            There was a problem loading your deals. Please try refreshing again or contact support if the problem persists.
           </AlertDescription>
         </Alert>
       )}

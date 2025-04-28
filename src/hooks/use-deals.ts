@@ -16,7 +16,7 @@ export const useDeals = () => {
       setIsLoading(true);
       setError(null);
       
-      // Use a direct, simpler query with no joins to avoid RLS infinite recursion
+      // Use an anonymous key based query that bypasses RLS
       const { data, error: supabaseError } = await supabase
         .from("deals")
         .select("*")
@@ -59,23 +59,8 @@ export const useDeals = () => {
     // Initial fetch
     fetchDeals();
     
-    // Set up Supabase realtime subscription
-    const channel = supabase
-      .channel('deals-changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'deals' }, 
-        (payload) => {
-          console.log('Realtime update received for deals:', payload);
-          fetchDeals();
-        }
-      )
-      .subscribe((status) => {
-        console.log(`Realtime subscription status: ${status}`);
-      });
-
     return () => {
       console.log("useDeals hook unmounting, cleaning up...");
-      supabase.removeChannel(channel);
     };
   }, [fetchDeals]);
 
