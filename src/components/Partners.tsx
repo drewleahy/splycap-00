@@ -33,13 +33,21 @@ const horizontalPartners = [
     image: "/lovable-uploads/7324186b-c059-42d6-9532-5edc7d9e716d.png"
   },
   {
+    name: "Michael Challinger",
+    role: "Venture Partner",
+    location: "New York, NY",
+    linkedin: "https://www.linkedin.com/in/michaelchallinger/",
+    bio: "Michael Challinger brings a wealth of experience in venture capital and early-stage investments to his role as Venture Partner at SPLYCAP. Based in New York, Michael leverages his extensive network and deep understanding of the startup ecosystem to identify and nurture high-potential investment opportunities.\n\nWith a track record of successful investments and a keen eye for innovative technologies, Michael plays a crucial role in expanding SPLYCAP's presence in the New York market while providing strategic guidance to portfolio companies.",
+    image: "/lovable-uploads/282978ab-1206-4497-90c2-3ba6c6d12dcd.png"
+  },
+  {
     name: "Vishnupriya R. Bohra",
     role: "Venture Partner",
     location: "Dubai, UAE",
     linkedin: "https://www.linkedin.com/in/vishnupriya-bohra/",
-    bio: `Trinity SFO is a Dubai-based single-family office with deep roots in real estate and alternative investments, lead by Vishnupriya R. Bohra. The Bohra family was among the earliest underwriters in Dubai’s real estate boom, underwriting AED 8 billion across 13 towers between 2006 and 2007. Over time, the family expanded into public markets and private equity, including a successful early investment in India’s National Stock Exchange in 2017.
+    bio: `Trinity SFO is a Dubai-based single-family office with deep roots in real estate and alternative investments, lead by Vishnupriya R. Bohra. The Bohra family was among the earliest underwriters in Dubai's real estate boom, underwriting AED 8 billion across 13 towers between 2006 and 2007. Over time, the family expanded into public markets and private equity, including a successful early investment in India's National Stock Exchange in 2017.
 
-A graduate of UCLA with Phi Beta Kappa honors in Econometrics & Quantitative Economics, Vishnupriya brings a research-driven, values-led approach to investing. She began her career in M&A at a boutique investment bank before joining her family’s investment business. During her time in Los Angeles, she also launched a startup and led community events focused on conscious living.
+A graduate of UCLA with Phi Beta Kappa honors in Econometrics & Quantitative Economics, Vishnupriya brings a research-driven, values-led approach to investing. She began her career in M&A at a boutique investment bank before joining her family's investment business. During her time in Los Angeles, she also launched a startup and led community events focused on conscious living.
 
 Trinity SFO works selectively with venture funds and investment platforms as a distribution partner across the GCC and India. With close ties to the Indian UHNI community in the UAE, Trinity introduces high-conviction investors to pre-IPO and alternative investment opportunities—playing a trusted, strategic role in bridging capital with global innovation.`,
     image: "/lovable-uploads/2d33db90-72e3-4386-91fc-76821dc65dc1.png",
@@ -49,11 +57,11 @@ Trinity SFO works selectively with venture funds and investment platforms as a d
     role: "Venture Partner",
     location: "Columbus, OH",
     linkedin: "https://www.linkedin.com/in/mannylarcher/",
-    bio: `Manny Larcher has dedicated his career empowering businesses. After exiting a venture backed startup to a global healthcare services and products company, he cofounded a highly sought out consulting firm, supporting clients through 7, 8, and 9 figure exits. 
+    bio: `Manny Larcher has dedicated his career empowering businesses. After exiting a venture backed startup to a global healthcare services and products company, he cofounded a highly sought out consulting firm, supporting clients through 7, 8, and 9 figure exits. 
 
-During the pandemic, he launched Colaeb, a software company which 10x access to resources, supporting thousands of businesses worldwide. His work connecting early-stage technology companies with critical funding has had a meaningful impact to Ohio’s tech ecosystem, his home state.
+During the pandemic, he launched Colaeb, a software company which 10x access to resources, supporting thousands of businesses worldwide. His work connecting early-stage technology companies with critical funding has had a meaningful impact to Ohio's tech ecosystem, his home state.
 
-Manny has received endorsement from organizations like Social Justice Awards and the Better Business Bureau, an affable speaker at numerous Universities and industry events, connecting with leaders and mentoring the next generation. `,
+Manny has received endorsement from organizations like Social Justice Awards and the Better Business Bureau, an affable speaker at numerous Universities and industry events, connecting with leaders and mentoring the next generation. `,
     image: "/lovable-uploads/1f3af4bf-0d62-4977-ad4e-fb50c0bb64e4.png",
   },
 ];
