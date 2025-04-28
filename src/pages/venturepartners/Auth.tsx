@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -16,16 +18,27 @@ export default function Auth() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [pendingApproval, setPendingApproval] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
       navigate("/venturepartners/dashboard");
+    }
+    
+    // Check URL for error parameters that might come from magic link failures
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+    const errorDescription = params.get('error_description');
+    
+    if (error) {
+      setAuthError(`Authentication error: ${errorDescription || error}`);
     }
   }, [user, navigate]);
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setAuthError(null);
     
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
@@ -37,7 +50,7 @@ export default function Auth() {
         .from("profiles")
         .select("status")
         .eq("id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (profile?.status === "pending") {
         setPendingApproval(true);
@@ -49,6 +62,7 @@ export default function Auth() {
       navigate("/venturepartners/dashboard");
     } catch (error: any) {
       console.error("Sign in failed:", error);
+      setAuthError(error.message);
       toast({
         title: "Sign in failed",
         description: error.message,
@@ -62,6 +76,7 @@ export default function Auth() {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setAuthError(null);
     
     const formData = new FormData(e.currentTarget);
     const firstName = formData.get("firstName") as string;
@@ -72,9 +87,44 @@ export default function Auth() {
     try {
       await signUp(email, password, firstName, lastName);
       setPendingApproval(true);
+      toast({
+        title: "Sign up successful",
+        description: "Your account has been created and is pending approval.",
+      });
     } catch (error: any) {
+      setAuthError(error.message);
       toast({
         title: "Sign up failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    const email = prompt("Please enter your email address to reset your password");
+    if (!email) return;
+    
+    setIsLoading(true);
+    setAuthError(null);
+    
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/venturepartners/auth",
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Password reset email sent",
+        description: "Please check your email for password reset instructions.",
+      });
+    } catch (error: any) {
+      setAuthError(error.message);
+      toast({
+        title: "Password reset failed",
         description: error.message,
         variant: "destructive",
       });
@@ -87,6 +137,7 @@ export default function Auth() {
   const signOut = async () => {
     await supabase.auth.signOut();
     setPendingApproval(false);
+    setAuthError(null);
   };
 
   if (pendingApproval) {
@@ -116,6 +167,13 @@ export default function Auth() {
           <h1 className="text-3xl font-bold">SPLY CAPITAL</h1>
           <p className="text-gray-600 mt-2">Venture Partner Portal</p>
         </div>
+        
+        {authError && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{authError}</AlertDescription>
+          </Alert>
+        )}
         
         <Tabs defaultValue="signin" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
@@ -150,9 +208,12 @@ export default function Auth() {
                       <label htmlFor="password" className="text-sm font-medium">
                         Password
                       </label>
-                      <a href="#" className="text-sm text-blue-600 hover:underline">
+                      <button 
+                        type="button" 
+                        onClick={handleResetPassword}
+                        className="text-sm text-blue-600 hover:underline">
                         Forgot password?
-                      </a>
+                      </button>
                     </div>
                     <Input
                       id="password"
