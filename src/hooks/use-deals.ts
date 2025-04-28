@@ -16,6 +16,8 @@ export const useDeals = () => {
       setIsLoading(true);
       setError(null);
       
+      // Try to fetch deals with a simple query with no joins
+      // This bypasses the profiles RLS issue
       const { data, error: supabaseError } = await supabase
         .from("deals")
         .select("*")
@@ -71,4 +73,3 @@ export const useDeals = () => {
     refetch: (showToast = true) => fetchDeals(showToast)
   };
 };
-

@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search as SearchIcon, Filter, RefreshCw, FileText, AlertCircle } from "lucide-react";
+import { Search } from "@/components/ui/search";
+import { Filter, RefreshCw, FileText, AlertCircle } from "lucide-react";
 import { useDeals } from "@/hooks/use-deals";
 import { DealsTable } from "@/components/deals/DealsTable";
 import { AddDealDialog } from "@/components/deals/AddDealDialog";
@@ -61,15 +61,12 @@ export default function Deals() {
       </div>
 
       <div className="flex gap-4 mb-6">
-        <div className="relative flex-1">
-          <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input
-            placeholder="Search deals..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
+        <Search 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search deals..."
+          className="flex-1"
+        />
         <Button variant="outline">
           <Filter className="mr-2 h-4 w-4" /> Filter
         </Button>
@@ -82,6 +79,16 @@ export default function Deals() {
           <AlertTitle>Error loading deals</AlertTitle>
           <AlertDescription>
             There was a problem loading your deals. Please try refreshing again or contact support if the problem persists.
+            <div className="mt-2">
+              <Button 
+                size="sm" 
+                onClick={handleRefresh} 
+                disabled={isLoading || isRefreshing}
+              >
+                <RefreshCw className={`mr-2 h-4 w-4 ${(isLoading || isRefreshing) ? 'animate-spin' : ''}`} />
+                Try Again
+              </Button>
+            </div>
           </AlertDescription>
         </Alert>
       )}
