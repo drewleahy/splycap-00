@@ -16,20 +16,10 @@ export const useDeals = () => {
       setIsLoading(true);
       setError(null);
       
-      // Use a direct, simplified query with no joins to avoid RLS recursion issues
+      // Now that we've fixed the RLS policies, we can use a standard query
       const { data, error: supabaseError } = await supabase
         .from("deals")
-        .select(`
-          id, 
-          deal_name, 
-          allocation_amount, 
-          valuation, 
-          stage, 
-          created_at, 
-          status,
-          pitch_deck_url,
-          pitch_deck_name
-        `)
+        .select("*")
         .order("created_at", { ascending: false });
       
       if (supabaseError) {
