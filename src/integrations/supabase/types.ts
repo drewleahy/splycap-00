@@ -9,6 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      commission_settings: {
+        Row: {
+          commission_type: Database["public"]["Enums"]["commission_type"]
+          created_at: string
+          expenses_percentage: number | null
+          id: string
+          partner_id: string
+          percentage: number
+          secondary_partner_id: string | null
+          secondary_percentage: number | null
+          updated_at: string
+        }
+        Insert: {
+          commission_type: Database["public"]["Enums"]["commission_type"]
+          created_at?: string
+          expenses_percentage?: number | null
+          id?: string
+          partner_id: string
+          percentage: number
+          secondary_partner_id?: string | null
+          secondary_percentage?: number | null
+          updated_at?: string
+        }
+        Update: {
+          commission_type?: Database["public"]["Enums"]["commission_type"]
+          created_at?: string
+          expenses_percentage?: number | null
+          id?: string
+          partner_id?: string
+          percentage?: number
+          secondary_partner_id?: string | null
+          secondary_percentage?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_settings_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_settings_secondary_partner_id_fkey"
+            columns: ["secondary_partner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       commissions: {
         Row: {
           amount: number
@@ -284,6 +335,67 @@ export type Database = {
         }
         Relationships: []
       }
+      lp_commission_settings: {
+        Row: {
+          commission_type: Database["public"]["Enums"]["commission_type"]
+          created_at: string
+          expenses_percentage: number | null
+          id: string
+          lp_id: string
+          partner_id: string
+          percentage: number
+          secondary_partner_id: string | null
+          secondary_percentage: number | null
+          updated_at: string
+        }
+        Insert: {
+          commission_type: Database["public"]["Enums"]["commission_type"]
+          created_at?: string
+          expenses_percentage?: number | null
+          id?: string
+          lp_id: string
+          partner_id: string
+          percentage: number
+          secondary_partner_id?: string | null
+          secondary_percentage?: number | null
+          updated_at?: string
+        }
+        Update: {
+          commission_type?: Database["public"]["Enums"]["commission_type"]
+          created_at?: string
+          expenses_percentage?: number | null
+          id?: string
+          lp_id?: string
+          partner_id?: string
+          percentage?: number
+          secondary_partner_id?: string | null
+          secondary_percentage?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lp_commission_settings_lp_id_fkey"
+            columns: ["lp_id"]
+            isOneToOne: false
+            referencedRelation: "limited_partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lp_commission_settings_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lp_commission_settings_secondary_partner_id_fkey"
+            columns: ["secondary_partner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lp_contacts: {
         Row: {
           created_at: string
@@ -424,7 +536,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      commission_type: "management_fee" | "carry"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -539,6 +651,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      commission_type: ["management_fee", "carry"],
+    },
   },
 } as const

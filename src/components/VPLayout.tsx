@@ -56,6 +56,12 @@ export const VPLayout = () => {
       icon: DollarSign,
     },
     {
+      name: "Commission Settings",
+      href: "/venturepartners/commission-settings",
+      icon: Settings,
+      adminOnly: true,
+    },
+    {
       name: "Settings",
       href: "/venturepartners/settings",
       icon: Settings,

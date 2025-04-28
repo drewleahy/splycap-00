@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/hooks/use-auth";
@@ -27,6 +26,7 @@ import Deals from "@/pages/venturepartners/Deals";
 import LPs from "@/pages/venturepartners/LPs";
 import Commissions from "@/pages/venturepartners/Commissions";
 import Settings from "@/pages/venturepartners/Settings";
+import CommissionSettings from "@/pages/venturepartners/CommissionSettings";
 
 // Components
 import { LPLayout } from "@/components/LPLayout";
@@ -67,6 +67,7 @@ function App() {
               <Route path="/venturepartners/deals" element={<Deals />} />
               <Route path="/venturepartners/lps" element={<LPs />} />
               <Route path="/venturepartners/commissions" element={<Commissions />} />
+              <Route path="/venturepartners/commission-settings" element={<CommissionSettings />} />
               <Route path="/venturepartners/settings" element={<Settings />} />
             </Route>
           </Route>
