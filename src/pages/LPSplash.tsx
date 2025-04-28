@@ -22,29 +22,29 @@ const LPSplash = () => {
     {
       title: "SPLY CAPITAL",
       items: [
-        { name: "Deck", path: "/LP-Splash/Deck" },
-        { name: "Thesis", path: "/LP-Splash/Thesis" }
+        { name: "Deck", path: "/lp/deck" },
+        { name: "Thesis", path: "/lp/thesis" }
       ]
     },
     {
       title: "PORTFOLIO",
       items: [
-        { name: "Schedule of Investments", path: "/LP-Splash/Schedule" },
-        { name: "Brief Company Memos", path: "/LP-Splash/Memos" }
+        { name: "Schedule of Investments", path: "/lp/schedule" },
+        { name: "Brief Company Memos", path: "/lp/memos" }
       ]
     },
     {
       title: "INVESTMENT PROCESS",
       items: [
-        { name: "Investment Criteria", path: "/LP-Splash/Criteria" },
-        { name: "Valuation Protocol", path: "/LP-Splash/Protocol" },
-        { name: "Investment Screening Process", path: "/LP-Splash/Screening" }
+        { name: "Investment Criteria", path: "/lp/criteria" },
+        { name: "Valuation Protocol", path: "/lp/protocol" },
+        { name: "Investment Screening Process", path: "/lp/screening" }
       ]
     },
     {
       title: "TEAM AND ADVISORS",
       items: [
-        { name: "Team Bios", path: "/LP-Splash/Bio" }
+        { name: "Team Bios", path: "/lp/bio" }
       ]
     }
   ];
@@ -52,8 +52,8 @@ const LPSplash = () => {
   const operationsSection = {
     title: "OPERATIONS",
     items: [
-      { name: "Investment Workflow & Reporting", path: "/LP-Splash/Workflow" },
-      { name: "Direct IRA Investment Information", path: "/LP-Splash/IRA" }
+      { name: "Investment Workflow & Reporting", path: "/lp/workflow" },
+      { name: "Direct IRA Investment Information", path: "/lp/ira" }
     ]
   };
 

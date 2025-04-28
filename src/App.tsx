@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/hooks/use-auth";
@@ -43,7 +44,7 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           
           {/* LP Routes */}
-          <Route path="/lp" element={<LPSplash />} />
+          <Route path="/lp-splash" element={<LPSplash />} />
           <Route path="/lp" element={<LPLayout />}>
             <Route path="bio" element={<Bio />} />
             <Route path="criteria" element={<Criteria />} />
