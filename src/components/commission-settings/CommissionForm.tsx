@@ -21,6 +21,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type CommissionFormProps = {
   partnerId: string;
@@ -31,6 +33,7 @@ type CommissionFormProps = {
 
 export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: CommissionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const { toast } = useToast();
   
   const form = useForm({
@@ -44,7 +47,7 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
   });
 
   // Fetch all venture partners for secondary partner selection
-  const { data: partners } = useQuery({
+  const { data: partners, isLoading: loadingPartners, error: partnersError } = useQuery({
     queryKey: ["venture-partners"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -53,20 +56,26 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
         .eq("role", "venture_partner");
       
       if (error) throw error;
-      return data;
+      return data || [];
     },
   });
 
   const onSubmit = async (values: any) => {
     setIsSubmitting(true);
+    setFormError(null);
+    
     try {
       const table = lpId ? "lp_commission_settings" : "commission_settings";
+      
+      // Prepare the payload
       const payload = {
+        ...initialData ? { id: initialData.id } : {}, // Include ID for updates
         partner_id: partnerId,
         ...values,
         ...(lpId && { lp_id: lpId }),
       };
 
+      // Perform upsert operation
       const { error } = await supabase
         .from(table)
         .upsert(payload);
@@ -79,7 +88,11 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
       });
 
       if (onSuccess) onSuccess();
+      form.reset(values); // Reset form with new values
+      
     } catch (error: any) {
+      console.error("Error saving commission settings:", error);
+      setFormError(error.message);
       toast({
         title: "Error",
         description: error.message,
@@ -90,9 +103,27 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
     }
   };
 
+  if (partnersError) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Error loading partners: {partnersError.message}
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {formError && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{formError}</AlertDescription>
+          </Alert>
+        )}
+        
         <FormField
           control={form.control}
           name="commission_type"
@@ -102,6 +133,7 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
+                disabled={isSubmitting}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -125,7 +157,12 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
             <FormItem>
               <FormLabel>Commission Percentage</FormLabel>
               <FormControl>
-                <Input type="number" step="0.01" {...field} />
+                <Input 
+                  type="number" 
+                  step="0.01" 
+                  {...field} 
+                  disabled={isSubmitting} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -139,7 +176,12 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
             <FormItem>
               <FormLabel>Expenses Percentage</FormLabel>
               <FormControl>
-                <Input type="number" step="0.01" {...field} />
+                <Input 
+                  type="number" 
+                  step="0.01" 
+                  {...field} 
+                  disabled={isSubmitting} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -155,6 +197,7 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
               <Select
                 onValueChange={field.onChange}
                 value={field.value}
+                disabled={isSubmitting || loadingPartners}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -186,7 +229,7 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
                   type="number"
                   step="0.01"
                   {...field}
-                  disabled={!form.watch("secondary_partner_id")}
+                  disabled={isSubmitting || !form.watch("secondary_partner_id")}
                 />
               </FormControl>
               <FormMessage />
@@ -194,8 +237,8 @@ export function CommissionForm({ partnerId, lpId, onSuccess, initialData }: Comm
           )}
         />
 
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save Commission Settings"}
+        <Button type="submit" disabled={isSubmitting} className="w-full">
+          {isSubmitting ? "Saving..." : initialData ? "Update Commission Settings" : "Save Commission Settings"}
         </Button>
       </form>
     </Form>
