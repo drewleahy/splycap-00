@@ -16,7 +16,7 @@ export const useDeals = () => {
       setIsLoading(true);
       setError(null);
       
-      // Use a simpler query that is less likely to trigger RLS issues
+      // Use a direct, simpler query with no joins to avoid RLS infinite recursion
       const { data, error: supabaseError } = await supabase
         .from("deals")
         .select("*")
@@ -59,15 +59,13 @@ export const useDeals = () => {
     // Initial fetch
     fetchDeals();
     
-    // Set up Supabase realtime subscription with a more robust approach
+    // Set up Supabase realtime subscription
     const channel = supabase
-      .channel('table-db-changes')
+      .channel('deals-changes')
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'deals' }, 
         (payload) => {
-          console.log('Realtime update received:', payload);
-          // Instead of triggering a full refetch which might hit RLS issues again,
-          // we could implement optimistic updates here in the future
+          console.log('Realtime update received for deals:', payload);
           fetchDeals();
         }
       )
