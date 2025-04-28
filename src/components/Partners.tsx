@@ -1,9 +1,7 @@
-
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// Define partners explicitly without Omar
 const partners = [
   {
     name: "Tyler Williams",
@@ -36,8 +34,8 @@ const horizontalPartners = [
     name: "Michael Challinger",
     role: "Venture Partner",
     location: "New York, NY",
-    linkedin: "https://www.linkedin.com/in/michaelchallinger/",
-    bio: "Michael Challinger brings a wealth of experience in venture capital and early-stage investments to his role as Venture Partner at SPLYCAP. Based in New York, Michael leverages his extensive network and deep understanding of the startup ecosystem to identify and nurture high-potential investment opportunities.\n\nWith a track record of successful investments and a keen eye for innovative technologies, Michael plays a crucial role in expanding SPLYCAP's presence in the New York market while providing strategic guidance to portfolio companies.",
+    linkedin: "https://www.linkedin.com/in/mchallinger",
+    bio: "Michael Challinger is a seasoned C-suite executive in consumer e-retail and brands across multiple verticals. His career spans two decades of leadership roles driving high growth outcomes, beginning with Build.com's journey from seven figures in eComm revenue to north of $1B (now under public parent Ferguson - FERG).\n\nMichael most recently served as CEO of Houzer, a legacy kitchenware brand where he drove digital transformation toward direct-to-consumer and omnichannel capabilities. In addition to his last two roles leading companies, Michael has increasingly pursued advisor and investor opportunities.\n\nAs a Venture Partner at SPLYCAP, Michael brings deep subject matter expertise and an operator-centric approach to catalyze companies transforming the future of commerce. He hopes to bring his extensive network to bear both in allocating to SPLY's investments and facilitating their continued growth.",
     image: "/lovable-uploads/282978ab-1206-4497-90c2-3ba6c6d12dcd.png"
   },
   {
@@ -74,7 +72,6 @@ export const Partners = () => {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-900">Our Partners</h2>
         
-        {/* Main partners */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {partners.map((partner, index) => (
             <motion.div
@@ -107,7 +104,6 @@ export const Partners = () => {
           ))}
         </div>
         
-        {/* Venture partners - horizontal card style */}
         <div className="max-w-4xl mx-auto flex flex-col gap-10">
           {horizontalPartners.map((partner, i) => (
             <motion.div
@@ -173,4 +169,3 @@ export const Partners = () => {
     </section>
   );
 };
-
