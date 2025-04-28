@@ -16,11 +16,20 @@ export const useDeals = () => {
       setIsLoading(true);
       setError(null);
       
-      // Try to fetch deals with a simple query with no joins
-      // This bypasses the profiles RLS issue
+      // Use a direct, simplified query with no joins to avoid RLS recursion issues
       const { data, error: supabaseError } = await supabase
         .from("deals")
-        .select("*")
+        .select(`
+          id, 
+          deal_name, 
+          allocation_amount, 
+          valuation, 
+          stage, 
+          created_at, 
+          status,
+          pitch_deck_url,
+          pitch_deck_name
+        `)
         .order("created_at", { ascending: false });
       
       if (supabaseError) {
