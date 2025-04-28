@@ -12,25 +12,17 @@ export const useDeals = () => {
 
   const fetchDeals = useCallback(async (showToast = false) => {
     try {
-      console.log("Starting to fetch deals from Supabase...");
       setIsLoading(true);
       setError(null);
       
-      // Now that we've fixed the RLS policies, we can use a standard query
-      const { data, error: supabaseError } = await supabase
-        .from("deals")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.from('deals').select('*');
       
-      if (supabaseError) {
-        console.error("Supabase error when fetching deals:", supabaseError);
-        throw new Error(supabaseError.message);
+      if (error) {
+        console.error('Error loading deals:', error.message);
+        throw new Error(error.message);
       }
-      
-      console.log(`Successfully fetched ${data?.length || 0} deals`);
-      if (data?.[0]) console.log("Sample deal data:", data[0]);
-      
-      setDeals(data || []);
+
+      setDeals(data ?? []);
       
       if (showToast) {
         toast({
@@ -56,13 +48,7 @@ export const useDeals = () => {
   }, [toast]);
 
   useEffect(() => {
-    console.log("useDeals hook mounted, fetching deals...");
-    // Initial fetch
     fetchDeals();
-    
-    return () => {
-      console.log("useDeals hook unmounting, cleaning up...");
-    };
   }, [fetchDeals]);
 
   return { 
