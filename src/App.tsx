@@ -43,8 +43,10 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path="/admin" element={<Admin />} />
           
-          {/* LP Routes */}
+          {/* LP Routes - Add both case variants */}
           <Route path="/lp-splash" element={<LPSplash />} />
+          <Route path="/LP-splash" element={<LPSplash />} />
+          <Route path="/LP-Splash" element={<LPSplash />} />
           <Route path="/lp" element={<LPLayout />}>
             <Route path="bio" element={<Bio />} />
             <Route path="criteria" element={<Criteria />} />
