@@ -11,39 +11,52 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function Auth() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signIn, signUp, user, resetPassword } = useAuth();
+  const { signIn, signUp, user, resetPassword, sendPasswordResetEmail } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [pendingApproval, setPendingApproval] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  
+  // Password reset states
   const [isResetMode, setIsResetMode] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordResetDialogOpen, setPasswordResetDialogOpen] = useState(false);
+  const [passwordResetEmail, setPasswordResetEmail] = useState("");
 
   useEffect(() => {
-    // Check if we're in password reset mode
-    const params = new URLSearchParams(window.location.search);
-    const type = params.get('type');
-    const token = params.get('token');
+    console.log("Auth component mounted", { location });
+    
+    // Check URL for recovery token
+    const searchParams = new URLSearchParams(window.location.search);
+    const type = searchParams.get('type');
+    const token = searchParams.get('token');
     
     if (type === 'recovery' && token) {
+      console.log("Found recovery token in URL, enabling reset mode");
       setIsResetMode(true);
-    } else if (user && !isResetMode) {
-      navigate("/venturepartners/dashboard");
+    } else {
+      console.log("No recovery token found in URL");
+      if (user) {
+        console.log("User is logged in, redirecting to dashboard");
+        navigate("/venturepartners/dashboard");
+      }
     }
     
-    // Check URL for error parameters that might come from magic link failures
-    const error = params.get('error');
-    const errorDescription = params.get('error_description');
+    // Check URL for error parameters
+    const error = searchParams.get('error');
+    const errorDescription = searchParams.get('error_description');
     
     if (error) {
+      console.error("Auth error from URL:", error, errorDescription);
       setAuthError(`Authentication error: ${errorDescription || error}`);
     }
-  }, [user, navigate]);
+  }, [user, navigate, location]);
 
   const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,6 +70,7 @@ export default function Auth() {
     }
 
     try {
+      console.log("Submitting password reset");
       await resetPassword(newPassword);
       toast({
         title: "Password reset successful",
@@ -67,6 +81,20 @@ export default function Auth() {
     } catch (error: any) {
       console.error("Password reset failed:", error);
       setAuthError(error.message || "An error occurred during password reset.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSendPasswordResetEmail = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      await sendPasswordResetEmail(passwordResetEmail);
+      setPasswordResetDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to send password reset email:", error);
     } finally {
       setIsLoading(false);
     }
@@ -140,34 +168,8 @@ export default function Auth() {
     }
   };
 
-  const handleResetPassword = async () => {
-    const email = prompt("Please enter your email address to reset your password");
-    if (!email) return;
-    
-    setIsLoading(true);
-    setAuthError(null);
-    
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + "/venturepartners/auth",
-      });
-      
-      if (error) throw error;
-      
-      toast({
-        title: "Password reset email sent",
-        description: "Please check your email for password reset instructions.",
-      });
-    } catch (error: any) {
-      setAuthError(error.message);
-      toast({
-        title: "Password reset failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleOpenResetPasswordDialog = () => {
+    setPasswordResetDialogOpen(true);
   };
 
   // Add signOut function
@@ -233,6 +235,7 @@ export default function Auth() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
+                    minLength={6}
                   />
                 </div>
                 <div className="space-y-2">
@@ -246,6 +249,7 @@ export default function Auth() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
+                    minLength={6}
                   />
                 </div>
               </CardContent>
@@ -311,7 +315,7 @@ export default function Auth() {
                       </label>
                       <button 
                         type="button" 
-                        onClick={handleResetPassword}
+                        onClick={handleOpenResetPasswordDialog}
                         className="text-sm text-blue-600 hover:underline">
                         Forgot password?
                       </button>
@@ -397,6 +401,7 @@ export default function Auth() {
                       name="signupPassword"
                       type="password"
                       required
+                      minLength={6}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -422,6 +427,43 @@ export default function Auth() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Password Reset Dialog */}
+      <Dialog open={passwordResetDialogOpen} onOpenChange={setPasswordResetDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Reset Password</DialogTitle>
+            <DialogDescription>
+              Enter your email address and we'll send you a password reset link.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSendPasswordResetEmail}>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <label htmlFor="resetEmail" className="text-sm font-medium">
+                  Email
+                </label>
+                <Input
+                  id="resetEmail"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={passwordResetEmail}
+                  onChange={(e) => setPasswordResetEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setPasswordResetDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Sending..." : "Send Reset Link"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

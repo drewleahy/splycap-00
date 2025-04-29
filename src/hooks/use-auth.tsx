@@ -12,6 +12,7 @@ type AuthContextType = {
   signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (password: string) => Promise<void>;
+  sendPasswordResetEmail: (email: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,6 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
+        console.log("Auth state change event:", event);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         setIsLoading(false);
@@ -33,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      console.log("Initial session check:", currentSession ? "Session exists" : "No session");
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
       setIsLoading(false);
@@ -112,21 +115,59 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const resetPassword = async (password: string) => {
     try {
+      console.log("Resetting password...");
       const { error } = await supabase.auth.updateUser({ 
         password 
       });
       
       if (error) {
+        console.error("Password reset error:", error);
         throw error;
       }
       
       toast({
         title: "Password updated",
-        description: "Your password has been successfully changed.",
+        description: "Your password has been successfully changed. You can now sign in with your new password.",
       });
+
+      // After successful password reset, we should sign the user out to force a fresh login
+      await supabase.auth.signOut();
+
+      return Promise.resolve();
     } catch (error: any) {
+      console.error("Password reset failed:", error);
       toast({
         title: "Password update failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
+  const sendPasswordResetEmail = async (email: string) => {
+    try {
+      // Use the full URL to the auth page with the reset parameter
+      const redirectTo = `${window.location.origin}/venturepartners/auth`;
+      console.log("Sending password reset email to:", email, "with redirect to:", redirectTo);
+      
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo,
+      });
+      
+      if (error) {
+        console.error("Reset email error:", error);
+        throw error;
+      }
+      
+      toast({
+        title: "Password reset email sent",
+        description: "Please check your email for password reset instructions.",
+      });
+    } catch (error: any) {
+      console.error("Reset email failed:", error);
+      toast({
+        title: "Password reset failed",
         description: error.message,
         variant: "destructive",
       });
@@ -144,6 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signUp,
         signOut,
         resetPassword,
+        sendPasswordResetEmail,
       }}
     >
       {children}
