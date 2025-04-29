@@ -211,7 +211,7 @@ export const VenturePartnerManager = () => {
                     <TableBody>
                       {recentDeals.map((deal) => (
                         <TableRow key={deal.id}>
-                          <TableCell className="font-medium">{deal.name}</TableCell>
+                          <TableCell className="font-medium">{deal.deal_name}</TableCell>
                           <TableCell>{deal.status}</TableCell>
                           <TableCell>{new Date(deal.created_at).toLocaleDateString()}</TableCell>
                         </TableRow>
