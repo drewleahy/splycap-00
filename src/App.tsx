@@ -60,7 +60,7 @@ function App() {
             <Route path="workflow" element={<Workflow />} />
           </Route>
           
-          {/* Venture Partner Routes */}
+          {/* Venture Partner Routes - Auth needs to be accessible with or without query parameters */}
           <Route path="/venturepartners/auth" element={<Auth />} />
           
           {/* Protected Venture Partner Routes */}

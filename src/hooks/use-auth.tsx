@@ -13,6 +13,7 @@ type AuthContextType = {
   signOut: () => Promise<void>;
   resetPassword: (password: string) => Promise<void>;
   sendPasswordResetEmail: (email: string) => Promise<void>;
+  isPasswordReset: () => boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -113,12 +114,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Improved reset password functionality
   const resetPassword = async (password: string) => {
     try {
-      console.log("Resetting password...");
-      const { error } = await supabase.auth.updateUser({ 
-        password 
-      });
+      const { error } = await supabase.auth.updateUser({ password });
       
       if (error) {
         console.error("Password reset error:", error);
@@ -127,12 +126,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       toast({
         title: "Password updated",
-        description: "Your password has been successfully changed. You can now sign in with your new password.",
+        description: "Your password has been successfully reset. You can now sign in with your new password.",
       });
 
       // After successful password reset, we should sign the user out to force a fresh login
       await supabase.auth.signOut();
-
+      
       return Promise.resolve();
     } catch (error: any) {
       console.error("Password reset failed:", error);
@@ -145,14 +144,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Improved password reset email functionality
   const sendPasswordResetEmail = async (email: string) => {
     try {
-      // Use the full URL to the auth page with the reset parameter
-      const redirectTo = `${window.location.origin}/venturepartners/auth`;
-      console.log("Sending password reset email to:", email, "with redirect to:", redirectTo);
+      const currentUrl = window.location.origin;
+      const resetUrl = `${currentUrl}/venturepartners/auth`;
+      console.log("Sending password reset email to:", email, "with redirect to:", resetUrl);
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo,
+        redirectTo: resetUrl,
       });
       
       if (error) {
@@ -175,6 +175,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Check if we're in password reset mode by examining the URL
+  const isPasswordReset = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get('type') === 'recovery';
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -186,6 +192,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signOut,
         resetPassword,
         sendPasswordResetEmail,
+        isPasswordReset,
       }}
     >
       {children}

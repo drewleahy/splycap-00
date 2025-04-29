@@ -9,46 +9,58 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, CheckCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { 
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage 
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+// Password reset schema with validation
+const resetPasswordSchema = z.object({
+  password: z.string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(72, "Password cannot be longer than 72 characters"),
+  confirmPassword: z.string()
+}).refine(data => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"]
+});
+
+type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
 export default function Auth() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signIn, signUp, user, resetPassword, sendPasswordResetEmail } = useAuth();
+  const { signIn, signUp, user, resetPassword, sendPasswordResetEmail, isPasswordReset } = useAuth();
   const { toast } = useToast();
+  
   const [isLoading, setIsLoading] = useState(false);
   const [pendingApproval, setPendingApproval] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
-  
-  // Password reset states
-  const [isResetMode, setIsResetMode] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [authSuccess, setAuthSuccess] = useState<string | null>(null);
   const [passwordResetDialogOpen, setPasswordResetDialogOpen] = useState(false);
   const [passwordResetEmail, setPasswordResetEmail] = useState("");
+  
+  // Initialize form for password reset
+  const resetPasswordForm = useForm<ResetPasswordValues>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: ""
+    }
+  });
 
   useEffect(() => {
-    console.log("Auth component mounted", { location });
-    
-    // Check URL for recovery token
     const searchParams = new URLSearchParams(window.location.search);
-    const type = searchParams.get('type');
-    const token = searchParams.get('token');
-    
-    if (type === 'recovery' && token) {
-      console.log("Found recovery token in URL, enabling reset mode");
-      setIsResetMode(true);
-    } else {
-      console.log("No recovery token found in URL");
-      if (user) {
-        console.log("User is logged in, redirecting to dashboard");
-        navigate("/venturepartners/dashboard");
-      }
-    }
-    
-    // Check URL for error parameters
     const error = searchParams.get('error');
     const errorDescription = searchParams.get('error_description');
     
@@ -56,28 +68,37 @@ export default function Auth() {
       console.error("Auth error from URL:", error, errorDescription);
       setAuthError(`Authentication error: ${errorDescription || error}`);
     }
-  }, [user, navigate, location]);
 
-  const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    // Check if we're in password reset mode
+    const isInResetMode = isPasswordReset();
+    console.log("Is in password reset mode:", isInResetMode);
+    
+    // If user is logged in and not in reset password mode, redirect to dashboard
+    if (user && !isInResetMode) {
+      console.log("User is logged in, redirecting to dashboard");
+      navigate("/venturepartners/dashboard");
+    }
+    
+    // Debug current URL and parameters
+    console.log("Current URL:", window.location.href);
+    console.log("Search params:", Object.fromEntries(searchParams.entries()));
+    
+  }, [user, navigate, location, isPasswordReset]);
+
+  const handlePasswordReset = async (values: ResetPasswordValues) => {
     setIsLoading(true);
     setAuthError(null);
-
-    if (newPassword !== confirmPassword) {
-      setAuthError("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
-
+    
     try {
       console.log("Submitting password reset");
-      await resetPassword(newPassword);
-      toast({
-        title: "Password reset successful",
-        description: "You can now sign in with your new password.",
-      });
-      setIsResetMode(false);
-      navigate("/venturepartners/auth");
+      await resetPassword(values.password);
+      setAuthSuccess("Your password has been reset successfully. Please sign in with your new password.");
+      
+      // Delay redirect to allow user to see success message
+      setTimeout(() => {
+        window.location.href = "/venturepartners/auth";
+      }, 3000);
+      
     } catch (error: any) {
       console.error("Password reset failed:", error);
       setAuthError(error.message || "An error occurred during password reset.");
@@ -89,12 +110,15 @@ export default function Auth() {
   const handleSendPasswordResetEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setAuthError(null);
     
     try {
       await sendPasswordResetEmail(passwordResetEmail);
       setPasswordResetDialogOpen(false);
-    } catch (error) {
+      setAuthSuccess("Password reset email sent. Please check your inbox.");
+    } catch (error: any) {
       console.error("Failed to send password reset email:", error);
+      setAuthError(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -128,11 +152,6 @@ export default function Auth() {
     } catch (error: any) {
       console.error("Sign in failed:", error);
       setAuthError(error.message);
-      toast({
-        title: "Sign in failed",
-        description: error.message,
-        variant: "destructive",
-      });
     } finally {
       setIsLoading(false);
     }
@@ -158,11 +177,6 @@ export default function Auth() {
       });
     } catch (error: any) {
       setAuthError(error.message);
-      toast({
-        title: "Sign up failed",
-        description: error.message,
-        variant: "destructive",
-      });
     } finally {
       setIsLoading(false);
     }
@@ -172,34 +186,16 @@ export default function Auth() {
     setPasswordResetDialogOpen(true);
   };
 
-  // Add signOut function
-  const signOut = async () => {
+  // Handle sign out
+  const handleSignOut = async () => {
     await supabase.auth.signOut();
     setPendingApproval(false);
     setAuthError(null);
+    window.location.href = "/venturepartners/auth";
   };
 
-  if (pendingApproval) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-center mb-4">Application Pending</h2>
-          <p className="text-gray-600 text-center mb-4">
-            Your application is currently under review. You will be notified once it has been approved.
-          </p>
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={signOut}
-          >
-            Back to Sign In
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  if (isResetMode) {
+  // If we're in password reset mode (from the token in URL)
+  if (isPasswordReset()) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="w-full max-w-md px-4">
@@ -215,6 +211,13 @@ export default function Auth() {
             </Alert>
           )}
           
+          {authSuccess && (
+            <Alert className="mb-6 bg-green-50 border-green-200 text-green-800">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              <AlertDescription>{authSuccess}</AlertDescription>
+            </Alert>
+          )}
+          
           <Card>
             <CardHeader>
               <CardTitle>Set New Password</CardTitle>
@@ -222,44 +225,83 @@ export default function Auth() {
                 Please enter and confirm your new password.
               </CardDescription>
             </CardHeader>
-            <form onSubmit={handlePasswordReset}>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="newPassword" className="text-sm font-medium">
-                    New Password
-                  </label>
-                  <Input
-                    id="newPassword"
-                    name="newPassword"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    required
-                    minLength={6}
+            
+            <Form {...resetPasswordForm}>
+              <form onSubmit={resetPasswordForm.handleSubmit(handlePasswordReset)}>
+                <CardContent className="space-y-4">
+                  <FormField
+                    control={resetPasswordForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>New Password</FormLabel>
+                        <FormControl>
+                          <Input 
+                            {...field} 
+                            type="password" 
+                            className="w-full" 
+                            placeholder="Enter your new password" 
+                            autoComplete="new-password"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="confirmPassword" className="text-sm font-medium">
-                    Confirm Password
-                  </label>
-                  <Input
-                    id="confirmPassword"
+                  
+                  <FormField
+                    control={resetPasswordForm.control}
                     name="confirmPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    minLength={6}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input 
+                            {...field} 
+                            type="password" 
+                            className="w-full" 
+                            placeholder="Confirm your new password" 
+                            autoComplete="new-password"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Resetting Password..." : "Reset Password"}
-                </Button>
-              </CardFooter>
-            </form>
+                </CardContent>
+                
+                <CardFooter>
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Resetting Password..." : "Reset Password"}
+                  </Button>
+                </CardFooter>
+              </form>
+            </Form>
           </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (pendingApproval) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold text-center mb-4">Application Pending</h2>
+          <p className="text-gray-600 text-center mb-4">
+            Your application is currently under review. You will be notified once it has been approved.
+          </p>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={handleSignOut}
+          >
+            Back to Sign In
+          </Button>
         </div>
       </div>
     );
@@ -277,6 +319,13 @@ export default function Auth() {
           <Alert variant="destructive" className="mb-6">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{authError}</AlertDescription>
+          </Alert>
+        )}
+        
+        {authSuccess && (
+          <Alert className="mb-6 bg-green-50 border-green-200 text-green-800">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+            <AlertDescription>{authSuccess}</AlertDescription>
           </Alert>
         )}
         
@@ -306,6 +355,7 @@ export default function Auth() {
                       type="email" 
                       placeholder="name@example.com"
                       required
+                      autoComplete="email"
                     />
                   </div>
                   <div className="space-y-2">
@@ -325,6 +375,7 @@ export default function Auth() {
                       name="password"
                       type="password"
                       required
+                      autoComplete="current-password"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -390,6 +441,7 @@ export default function Auth() {
                       type="email"
                       placeholder="name@example.com"
                       required
+                      autoComplete="email"
                     />
                   </div>
                   <div className="space-y-2">
@@ -402,6 +454,7 @@ export default function Auth() {
                       type="password"
                       required
                       minLength={6}
+                      autoComplete="new-password"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -450,6 +503,7 @@ export default function Auth() {
                   value={passwordResetEmail}
                   onChange={(e) => setPasswordResetEmail(e.target.value)}
                   required
+                  autoComplete="email"
                 />
               </div>
             </div>
