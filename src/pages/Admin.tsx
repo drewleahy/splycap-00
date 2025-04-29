@@ -1,10 +1,11 @@
+
 import { WealthPerspectiveEditor } from "@/components/admin/WealthPerspectiveEditor";
 import { PartnersEditor } from "@/components/admin/PartnersEditor";
 import { CTAEditor } from "@/components/admin/CTAEditor";
 import { FooterEditor } from "@/components/admin/FooterEditor";
 import { LPContentEditor } from "@/components/admin/LPContentEditor";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Upload, Clipboard, CheckCircle2, FileText } from "lucide-react";
+import { RefreshCw, Upload, Clipboard, CheckCircle2, FileText, Users } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,6 +15,7 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdminFileSelector } from "@/components/AdminFileSelector";
 import { PendingPartnersManager } from "@/components/admin/PendingPartnersManager";
+import { VenturePartnerManager } from "@/components/admin/VenturePartnerManager";
 
 const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   const [hasError, setHasError] = useState(false);
@@ -136,6 +138,7 @@ const Admin = () => {
           <TabsTrigger value="website">Website Content</TabsTrigger>
           <TabsTrigger value="lp">LP Data Room</TabsTrigger>
           <TabsTrigger value="partners">Partner Applications</TabsTrigger>
+          <TabsTrigger value="venturepartners">Venture Partners</TabsTrigger>
           <TabsTrigger value="tools">Admin Tools</TabsTrigger>
         </TabsList>
         
@@ -167,6 +170,12 @@ const Admin = () => {
         <TabsContent value="partners">
           <ErrorBoundary>
             <PendingPartnersManager />
+          </ErrorBoundary>
+        </TabsContent>
+
+        <TabsContent value="venturepartners">
+          <ErrorBoundary>
+            <VenturePartnerManager />
           </ErrorBoundary>
         </TabsContent>
         
