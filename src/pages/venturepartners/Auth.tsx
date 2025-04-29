@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -14,19 +14,29 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Auth() {
   const navigate = useNavigate();
-  const { signIn, signUp, user } = useAuth();
+  const location = useLocation();
+  const { signIn, signUp, user, resetPassword } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [pendingApproval, setPendingApproval] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isResetMode, setIsResetMode] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
-    if (user) {
+    // Check if we're in password reset mode
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('type');
+    const token = params.get('token');
+    
+    if (type === 'recovery' && token) {
+      setIsResetMode(true);
+    } else if (user && !isResetMode) {
       navigate("/venturepartners/dashboard");
     }
     
     // Check URL for error parameters that might come from magic link failures
-    const params = new URLSearchParams(window.location.search);
     const error = params.get('error');
     const errorDescription = params.get('error_description');
     
@@ -34,6 +44,33 @@ export default function Auth() {
       setAuthError(`Authentication error: ${errorDescription || error}`);
     }
   }, [user, navigate]);
+
+  const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setAuthError(null);
+
+    if (newPassword !== confirmPassword) {
+      setAuthError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await resetPassword(newPassword);
+      toast({
+        title: "Password reset successful",
+        description: "You can now sign in with your new password.",
+      });
+      setIsResetMode(false);
+      navigate("/venturepartners/auth");
+    } catch (error: any) {
+      console.error("Password reset failed:", error);
+      setAuthError(error.message || "An error occurred during password reset.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -155,6 +192,70 @@ export default function Auth() {
           >
             Back to Sign In
           </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (isResetMode) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="w-full max-w-md px-4">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold">SPLY CAPITAL</h1>
+            <p className="text-gray-600 mt-2">Reset Your Password</p>
+          </div>
+          
+          {authError && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{authError}</AlertDescription>
+            </Alert>
+          )}
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Set New Password</CardTitle>
+              <CardDescription>
+                Please enter and confirm your new password.
+              </CardDescription>
+            </CardHeader>
+            <form onSubmit={handlePasswordReset}>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label htmlFor="newPassword" className="text-sm font-medium">
+                    New Password
+                  </label>
+                  <Input
+                    id="newPassword"
+                    name="newPassword"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="confirmPassword" className="text-sm font-medium">
+                    Confirm Password
+                  </label>
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Resetting Password..." : "Reset Password"}
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
         </div>
       </div>
     );
