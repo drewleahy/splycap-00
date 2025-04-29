@@ -10,7 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminFileUpload } from "@/components/AdminFileUpload";
-import { useState, useRef, Suspense } from "react";
+import { useState, useRef, Suspense, useEffect } from "react";
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdminFileSelector } from "@/components/AdminFileSelector";
@@ -73,6 +73,15 @@ const Admin = () => {
   const [uploadedFiles, setUploadedFiles] = useState<Array<{url: string, name: string}>>([]);
   const [isCopied, setIsCopied] = useState<{[key: string]: boolean}>({});
   const [selectedAdminFiles, setSelectedAdminFiles] = useState<Array<{id: string, name: string, publicUrl: string}>>([]);
+
+  // Set the admin-authenticated flag when the Admin page is loaded
+  useEffect(() => {
+    localStorage.setItem("admin-authenticated", "true");
+    return () => {
+      // We don't clear the flag when leaving the admin page
+      // as we want the authentication to persist
+    };
+  }, []);
 
   const handleRefreshAll = async () => {
     await Promise.all([

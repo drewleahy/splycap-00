@@ -1,5 +1,5 @@
 
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -9,6 +9,15 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
+
+  // Check if the user is coming from the admin page
+  const comingFromAdmin = localStorage.getItem("admin-authenticated") === "true";
+  
+  // If coming from admin, allow access without authentication check
+  if (comingFromAdmin) {
+    return <Outlet />;
+  }
 
   // If authentication is still loading, show a loading state
   if (isLoading) {
