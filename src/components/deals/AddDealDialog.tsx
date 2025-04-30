@@ -41,24 +41,33 @@ export const AddDealDialog = ({ onDealAdded }: AddDealDialogProps) => {
     setIsLoading(true);
     
     try {
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+      
       const formData = new FormData(e.currentTarget);
+      
+      // Log for debugging
+      console.log("Creating new deal with user ID:", user.id);
+      
       const dealData = {
         deal_name: formData.get("dealName") as string,
         allocation_amount: parseFloat(formData.get("allocationAmount") as string),
         valuation: formData.get("valuation") ? parseFloat(formData.get("valuation") as string) : null,
         stage: formData.get("stage") as string,
         investment_thesis: formData.get("investmentThesis") as string,
-        created_by: user?.id,
+        created_by: user.id,
         pitch_deck_url: deckFile?.url || null,
         pitch_deck_name: deckFile?.name || null,
         status: "active"
       };
       
-      console.log("Adding new deal:", dealData);
+      console.log("Adding new deal with data:", dealData);
       
       const { error } = await supabase.from("deals").insert(dealData);
       
       if (error) {
+        console.error("Error from Supabase:", error);
         throw error;
       }
       

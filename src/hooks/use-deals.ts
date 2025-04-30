@@ -15,6 +15,9 @@ export const useDeals = () => {
       setIsLoading(true);
       setError(null);
       
+      // Log the start of the fetch operation to help with debugging
+      console.log("Fetching deals from Supabase...");
+      
       const { data, error } = await supabase.from('deals').select('*');
       
       if (error) {
@@ -22,7 +25,8 @@ export const useDeals = () => {
         throw new Error(error.message);
       }
 
-      setDeals(data ?? []);
+      console.log("Deals fetched successfully:", data?.length || 0, "deals found");
+      setDeals(data || []);
       
       if (showToast) {
         toast({
@@ -34,6 +38,9 @@ export const useDeals = () => {
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
       console.error("Error in fetchDeals:", errorMessage);
       setError(err instanceof Error ? err : new Error(errorMessage));
+      
+      // Always set deals to empty array on error to prevent UI crashes
+      setDeals([]);
       
       if (showToast) {
         toast({
@@ -48,7 +55,12 @@ export const useDeals = () => {
   }, [toast]);
 
   useEffect(() => {
-    fetchDeals();
+    // Add a small delay to ensure auth is initialized
+    const timer = setTimeout(() => {
+      fetchDeals();
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [fetchDeals]);
 
   return { 

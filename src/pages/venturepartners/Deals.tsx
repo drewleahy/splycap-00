@@ -39,7 +39,7 @@ export default function Deals() {
   const handleRefresh = async () => {
     console.log("Manual refresh triggered");
     setIsRefreshing(true);
-    await refetch();
+    await refetch(true);
     setIsRefreshing(false);
   };
 
