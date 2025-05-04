@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -68,12 +67,14 @@ Manny has received endorsement from organizations like Social Justice Awards and
     role: "Venture Partner",
     location: "Los Angeles, CA",
     linkedin: "https://www.linkedin.com/in/megstewart/",
-    bio: `Meg Stewart is an accomplished venture investor with extensive experience in the Los Angeles tech ecosystem. She has a proven track record of identifying and supporting high-growth startups across media, entertainment, and consumer technology sectors.
+    bio: `Meg Stewart is the Founder and President of Hour 1 Talent & Sports, where she manages a roster of elite athletes and sports personalities, building high-impact careers on and off the field.
 
-Before joining SPLYCAP as a Venture Partner, Meg held leadership positions at several prominent venture capital firms and worked directly with founders to scale their businesses from early-stage concepts to market leaders. Her strategic guidance has helped numerous portfolio companies navigate fundraising challenges, market expansion, and successful exits.
+Prior to launching Hour 1, Meg built her career at the intersection of entertainment and sports, working at top-tier firms including Creative Artists Agency (CAA), where she focused on global client ventures, and A&A Management Group, where she led strategy for marquee athletes like Travis Kelce. She began her career at iconic production houses like Bad Robot, Mandalay Entertainment, and Jerry Bruckheimer Films before transitioning into management roles across emerging media and talent, focusing on new venture development.
 
-With a background in both finance and creative industries, Meg brings a unique perspective to investment decisions, combining rigorous analysis with an intuitive understanding of consumer behavior and market trends. She is particularly passionate about supporting diverse founders and companies creating innovative solutions at the intersection of technology and creative content.`,
-    image: "/placeholder.svg",
+Meg also served as a consultant for Life Backstage, a music and sports media venture founded alongside the owner of Breakaway Festival, and was tapped to help lead the sports division at Select Management Group.
+
+A former NCAA Division I athlete, Meg earned her B.A. in Film & Media Arts from Southern Methodist University.`,
+    image: "/lovable-uploads/47ae27e6-0a6f-4137-a8d6-b56a4c796214.png",
   },
 ];
 
