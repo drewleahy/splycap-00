@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -66,7 +67,7 @@ Manny has received endorsement from organizations like Social Justice Awards and
     name: "Meg Stewart",
     role: "Venture Partner",
     location: "Los Angeles, CA",
-    linkedin: "https://www.linkedin.com/in/megstewart/",
+    linkedin: "https://www.linkedin.com/in/meg-stewart-5b116693",
     bio: `Meg Stewart is the Founder and President of Hour 1 Talent & Sports, where she manages a roster of elite athletes and sports personalities, building high-impact careers on and off the field.
 
 Prior to launching Hour 1, Meg built her career at the intersection of entertainment and sports, working at top-tier firms including Creative Artists Agency (CAA), where she focused on global client ventures, and A&A Management Group, where she led strategy for marquee athletes like Travis Kelce. She began her career at iconic production houses like Bad Robot, Mandalay Entertainment, and Jerry Bruckheimer Films before transitioning into management roles across emerging media and talent, focusing on new venture development.
