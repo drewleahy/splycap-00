@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -61,6 +62,18 @@ During the pandemic, he launched Colaeb, a software company which 10x access to 
 
 Manny has received endorsement from organizations like Social Justice Awards and the Better Business Bureau, an affable speaker at numerous Universities and industry events, connecting with leaders and mentoring the next generation. `,
     image: "/lovable-uploads/1f3af4bf-0d62-4977-ad4e-fb50c0bb64e4.png",
+  },
+  {
+    name: "Meg Stewart",
+    role: "Venture Partner",
+    location: "Los Angeles, CA",
+    linkedin: "https://www.linkedin.com/in/megstewart/",
+    bio: `Meg Stewart is an accomplished venture investor with extensive experience in the Los Angeles tech ecosystem. She has a proven track record of identifying and supporting high-growth startups across media, entertainment, and consumer technology sectors.
+
+Before joining SPLYCAP as a Venture Partner, Meg held leadership positions at several prominent venture capital firms and worked directly with founders to scale their businesses from early-stage concepts to market leaders. Her strategic guidance has helped numerous portfolio companies navigate fundraising challenges, market expansion, and successful exits.
+
+With a background in both finance and creative industries, Meg brings a unique perspective to investment decisions, combining rigorous analysis with an intuitive understanding of consumer behavior and market trends. She is particularly passionate about supporting diverse founders and companies creating innovative solutions at the intersection of technology and creative content.`,
+    image: "/placeholder.svg",
   },
 ];
 
