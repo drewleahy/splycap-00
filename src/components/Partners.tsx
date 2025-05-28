@@ -63,20 +63,6 @@ During the pandemic, he launched Colaeb, a software company which 10x access to 
 Manny has received endorsement from organizations like Social Justice Awards and the Better Business Bureau, an affable speaker at numerous Universities and industry events, connecting with leaders and mentoring the next generation. `,
     image: "/lovable-uploads/1f3af4bf-0d62-4977-ad4e-fb50c0bb64e4.png",
   },
-  {
-    name: "Meg Stewart",
-    role: "Venture Partner",
-    location: "Los Angeles, CA",
-    linkedin: "https://www.linkedin.com/in/meg-stewart-5b116693",
-    bio: `Meg Stewart is the Founder and President of Hour 1 Talent & Sports, where she manages a roster of elite athletes and sports personalities, building high-impact careers on and off the field.
-
-Prior to launching Hour 1, Meg built her career at the intersection of entertainment and sports, working at top-tier firms including Creative Artists Agency (CAA), where she focused on global client ventures, and A&A Management Group, where she led strategy for marquee athletes like Travis Kelce. She began her career at iconic production houses like Bad Robot, Mandalay Entertainment, and Jerry Bruckheimer Films before transitioning into management roles across emerging media and talent, focusing on new venture development.
-
-Meg also served as a consultant for Life Backstage, a music and sports media venture founded alongside the owner of Breakaway Festival, and was tapped to help lead the sports division at Select Management Group.
-
-A former NCAA Division I athlete, Meg earned her B.A. in Film & Media Arts from Southern Methodist University.`,
-    image: "/lovable-uploads/47ae27e6-0a6f-4137-a8d6-b56a4c796214.png",
-  },
 ];
 
 export const Partners = () => {

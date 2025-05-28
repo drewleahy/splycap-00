@@ -28,6 +28,7 @@ export const PartnersEditor = () => {
         .from("partners")
         .select("*")
         .not('name', 'eq', 'Omar Marquez') // Exclude Omar Marquez from query results
+        .not('name', 'eq', 'Meg Stewart') // Exclude Meg Stewart from query results
         .order("created_at");
       
       if (error) throw error;
@@ -80,8 +81,8 @@ export const PartnersEditor = () => {
 
   const handleAddPartner = async () => {
     try {
-      // Don't allow adding a partner named Omar Marquez
-      if (formData.name.toLowerCase() === 'omar marquez') {
+      // Don't allow adding partners named Omar Marquez or Meg Stewart
+      if (formData.name.toLowerCase() === 'omar marquez' || formData.name.toLowerCase() === 'meg stewart') {
         toast({
           title: "Error",
           description: "This partner name is not allowed",
