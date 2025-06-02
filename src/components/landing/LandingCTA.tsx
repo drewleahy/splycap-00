@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import jsPDF from 'jspdf';
 
 interface LandingCTAProps {
   headline: string;
@@ -26,8 +25,8 @@ export const LandingCTA = ({
   tertiaryButtonLink,
   className = ""
 }: LandingCTAProps) => {
-  const generatePDFFlyer = async () => {
-    console.log('Starting PDF generation...');
+  const downloadFlyer = async () => {
+    console.log('Starting flyer download...');
     
     // Updated image URLs for the correct flyer pages
     const image1Url = '/lovable-uploads/f8e2333a-4626-4ee6-9192-f37dffa4a939.png';
@@ -35,108 +34,77 @@ export const LandingCTA = ({
     
     console.log('Image URLs:', { image1Url, image2Url });
     
-    // First, let's test if we can access the images at all
     try {
+      // Test if images are accessible
       console.log('Testing image accessibility...');
       
-      const testImage1 = await fetch(image1Url);
-      console.log('Image 1 fetch response:', testImage1.status, testImage1.statusText);
+      const response1 = await fetch(image1Url);
+      const response2 = await fetch(image2Url);
       
-      const testImage2 = await fetch(image2Url);
-      console.log('Image 2 fetch response:', testImage2.status, testImage2.statusText);
+      console.log('Image 1 response:', response1.status, response1.statusText);
+      console.log('Image 2 response:', response2.status, response2.statusText);
       
-      if (!testImage1.ok || !testImage2.ok) {
-        throw new Error(`Images not accessible. Image 1: ${testImage1.status}, Image 2: ${testImage2.status}`);
+      if (!response1.ok) {
+        throw new Error(`Image 1 not accessible: ${response1.status} ${response1.statusText}`);
       }
       
-      console.log('Both images are accessible, proceeding with PDF generation...');
+      if (!response2.ok) {
+        throw new Error(`Image 2 not accessible: ${response2.status} ${response2.statusText}`);
+      }
       
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
+      // Create download links for both images
+      console.log('Creating download links...');
       
-      console.log('PDF dimensions:', { pageWidth, pageHeight });
+      // Download first image
+      const link1 = document.createElement('a');
+      link1.href = image1Url;
+      link1.download = 'Lyten-Investment-Flyer-Page-1.png';
+      link1.style.display = 'none';
+      document.body.appendChild(link1);
       
-      // Helper function to load image and get dimensions
-      const loadImage = (url: string): Promise<HTMLImageElement> => {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          img.onload = () => {
-            console.log(`Image loaded successfully: ${url}`, { width: img.width, height: img.height });
-            resolve(img);
-          };
-          img.onerror = (error) => {
-            console.error(`Failed to load image: ${url}`, error);
-            reject(error);
-          };
-          img.src = url;
-        });
-      };
+      console.log('Triggering download for image 1...');
+      link1.click();
+      document.body.removeChild(link1);
       
-      console.log('Loading first image...');
-      const img1 = await loadImage(image1Url);
-      const img1Ratio = img1.width / img1.height;
-      const img1Width = pageWidth - 20; // 10mm margin on each side
-      const img1Height = img1Width / img1Ratio;
-      
-      console.log('Adding first image to PDF...');
-      pdf.addImage(img1, 'PNG', 10, 10, img1Width, Math.min(img1Height, pageHeight - 20));
-      
-      console.log('Adding new page...');
-      pdf.addPage();
-      
-      console.log('Loading second image...');
-      const img2 = await loadImage(image2Url);
-      const img2Ratio = img2.width / img2.height;
-      const img2Width = pageWidth - 20;
-      const img2Height = img2Width / img2Ratio;
-      
-      console.log('Adding second image to PDF...');
-      pdf.addImage(img2, 'PNG', 10, 10, img2Width, Math.min(img2Height, pageHeight - 20));
-      
-      console.log('Saving PDF...');
-      pdf.save('Lyten-Investment-Flyer.pdf');
-      console.log('PDF saved successfully!');
+      // Download second image after a short delay
+      setTimeout(() => {
+        const link2 = document.createElement('a');
+        link2.href = image2Url;
+        link2.download = 'Lyten-Investment-Flyer-Page-2.png';
+        link2.style.display = 'none';
+        document.body.appendChild(link2);
+        
+        console.log('Triggering download for image 2...');
+        link2.click();
+        document.body.removeChild(link2);
+        
+        console.log('Both downloads triggered successfully');
+      }, 1000);
       
     } catch (error) {
-      console.error('Detailed error in PDF generation:', error);
-      console.log('Attempting simple direct download fallback...');
+      console.error('Download failed:', error);
       
-      // Simplified fallback - just trigger download of first image
+      // Ultimate fallback - open images in new tabs
+      console.log('Trying fallback: opening images in new tabs...');
+      
       try {
-        const downloadLink = document.createElement('a');
-        downloadLink.href = image1Url;
-        downloadLink.download = 'Lyten-Investment-Flyer-Page1.png';
-        downloadLink.target = '_blank';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        
-        console.log('Simple download link created and clicked');
-        
-        // Also try the second image
+        window.open(image1Url, '_blank');
         setTimeout(() => {
-          const downloadLink2 = document.createElement('a');
-          downloadLink2.href = image2Url;
-          downloadLink2.download = 'Lyten-Investment-Flyer-Page2.png';
-          downloadLink2.target = '_blank';
-          document.body.appendChild(downloadLink2);
-          downloadLink2.click();
-          document.body.removeChild(downloadLink2);
-          console.log('Second image download link created and clicked');
-        }, 1000);
-        
+          window.open(image2Url, '_blank');
+        }, 500);
+        console.log('Opened images in new tabs as fallback');
       } catch (fallbackError) {
         console.error('All download methods failed:', fallbackError);
-        alert('Sorry, there was an issue downloading the flyer. Please try again or contact support.');
+        alert('Unable to download the flyer. Please contact support or try refreshing the page.');
       }
     }
   };
 
   const handleButtonClick = (link: string) => {
+    console.log('Button clicked with link:', link);
+    
     if (link.startsWith('#download-flyer')) {
-      generatePDFFlyer();
+      downloadFlyer();
     } else if (link.startsWith('#')) {
       const element = document.querySelector(link);
       element?.scrollIntoView({ behavior: 'smooth' });
