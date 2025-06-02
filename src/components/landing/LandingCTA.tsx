@@ -29,9 +29,9 @@ export const LandingCTA = ({
   const generatePDFFlyer = async () => {
     console.log('Starting PDF generation...');
     
-    // Image URLs for the flyer pages
-    const image1Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.50.48 AM.png';
-    const image2Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.51.19 AM.png';
+    // Updated image URLs for the correct flyer pages
+    const image1Url = '/lovable-uploads/f8e2333a-4626-4ee6-9192-f37dffa4a939.png';
+    const image2Url = '/lovable-uploads/3b4ad6cd-8468-4560-b1ee-c1367789ad85.png';
     
     console.log('Image URLs:', { image1Url, image2Url });
     
