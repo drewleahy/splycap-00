@@ -1,4 +1,3 @@
-
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -33,7 +32,7 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   },
   lytenSection: {
     title: "Lyten's Lithium-Sulfur Advantage",
-    body: "Lyten is rewriting the battery playbook with its proprietary 3D Graphene-enabled Lithium-Sulfur (Li-S) platform—offering lighter, more energy-dense, and environmentally superior alternatives to lithium-ion. This is the foundational tech that could reshape EVs, aerospace, and grid-scale storage.",
+    body: "Lyten is developing Lithium-Sulfur batteries enabled by its proprietary 3D Graphene material. The technology is lighter, more energy-dense, and free of nickel, cobalt, and manganese.",
     logoSrc: "/lovable-uploads/a2a03b30-6e55-4ec1-b4d4-7450fb3c678a.png",
     logoAlt: "Lyten Logo"
   },
