@@ -18,7 +18,7 @@ export const LandingOpportunity = ({
   className = "" 
 }: LandingOpportunityProps) => {
   return (
-    <section className={`py-16 px-6 bg-gray-50 ${className}`}>
+    <section className={`py-16 px-6 bg-white ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
         <div className="mb-8">
           <h3 className="text-sm md:text-base font-semibold mb-4 text-gray-600 uppercase tracking-wide">
