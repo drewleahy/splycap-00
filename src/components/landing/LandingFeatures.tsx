@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { LucideIcon } from 'lucide-react';
@@ -26,41 +25,41 @@ export const LandingFeatures = ({
   className = "" 
 }: LandingFeaturesProps) => {
   return (
-    <section className={`py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white ${className}`}>
+    <section className={`py-20 px-6 bg-white ${className}`}>
       <div className="max-w-6xl mx-auto">
-        <div className="max-w-4xl mx-auto text-left mb-8 sm:mb-12 lg:mb-16">
+        <div className="max-w-4xl mx-auto text-left mb-16">
           {headerLabel && (
-            <h3 className="text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 text-gray-600 uppercase tracking-wide">
+            <h3 className="text-sm md:text-base font-semibold mb-4 text-gray-600 uppercase tracking-wide">
               {headerLabel}
             </h3>
           )}
-          <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-6 sm:mb-8 text-gray-900 leading-tight">
+          <h2 className="text-lg md:text-xl lg:text-2xl font-bold mb-8 text-gray-900">
             {title}
           </h2>
           {description && (
-            <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
+            <p className="text-base md:text-lg text-gray-700 leading-relaxed">
               {description}
             </p>
           )}
         </div>
         
-        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {features.map((feature, index) => (
             <Card 
               key={index} 
               className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <CardContent className="relative p-3 sm:p-4 text-center">
+              <CardContent className="relative p-4 text-center">
                 {feature.icon && (
                   <div className="mb-2 flex justify-center">
-                    <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-gray-900" />
+                    <feature.icon className="w-8 h-8 text-gray-900" />
                   </div>
                 )}
-                <h3 className="text-xs sm:text-sm font-semibold mb-2 text-gray-900 leading-tight">
+                <h3 className="text-sm font-semibold mb-2 text-gray-900">
                   {feature.title}
                 </h3>
-                <p className="text-xs leading-relaxed text-gray-600">
+                <p className="text-xs text-gray-600 leading-relaxed">
                   {feature.description}
                 </p>
               </CardContent>

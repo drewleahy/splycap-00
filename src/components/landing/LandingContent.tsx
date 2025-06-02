@@ -19,33 +19,33 @@ export const LandingContent = ({
   className = "" 
 }: LandingContentProps) => {
   return (
-    <section className={`py-12 sm:py-16 px-4 sm:px-6 bg-white ${className}`}>
+    <section className={`py-16 px-6 bg-white ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-8">
           {headerLabel && (
-            <h3 className="text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 text-gray-600 uppercase tracking-wide">
+            <h3 className="text-sm md:text-base font-semibold mb-4 text-gray-600 uppercase tracking-wide">
               {headerLabel}
             </h3>
           )}
-          <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-6 sm:mb-8 text-gray-900 leading-tight">
+          <h2 className="text-lg md:text-xl lg:text-2xl font-bold mb-8 text-gray-900">
             {title}
           </h2>
         </div>
         
-        <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-8 sm:mb-12">
+        <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-12">
           {body}
         </p>
         
         {keyPoints && keyPoints.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {keyPoints.map((point, index) => (
               <Card 
                 key={index} 
                 className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <CardContent className="relative p-4 sm:p-6 lg:p-8 text-center">
-                  <p className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold text-gray-900 leading-tight">
+                <CardContent className="relative p-8 text-center">
+                  <p className="text-lg md:text-xl font-bold text-gray-900 leading-tight">
                     {point}
                   </p>
                 </CardContent>
