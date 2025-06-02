@@ -57,6 +57,13 @@ const LPSplash = () => {
     ]
   };
 
+  const dealOpportunitiesSection = {
+    title: "DEAL OPPORTUNITIES",
+    items: [
+      { name: "Lyten Investment Opportunity", path: "/lyten-exclusive-2025" }
+    ]
+  };
+
   return (
     <div className="relative min-h-screen">
       {/* Background Image */}
@@ -90,10 +97,13 @@ const LPSplash = () => {
             ))}
           </div>
 
-          {/* Operations section centered */}
-          <div className="flex justify-center">
+          {/* Bottom sections centered */}
+          <div className="flex flex-col md:flex-row gap-8 justify-center">
             <div className="max-w-md w-full">
               <Section title={operationsSection.title} items={operationsSection.items} />
+            </div>
+            <div className="max-w-md w-full">
+              <Section title={dealOpportunitiesSection.title} items={dealOpportunitiesSection.items} />
             </div>
           </div>
         </div>
