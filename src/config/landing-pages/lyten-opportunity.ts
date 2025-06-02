@@ -1,4 +1,3 @@
-
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -59,32 +58,10 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   whyInvesting: {
     title: "Clear Differentiation and Strategic Alignment",
     body: "Lyten combines proprietary technology, validated demand, and alignment with global priorities for energy security and climate impact.",
-    items: [
-      {
-        title: "Proven Commercial Demand",
-        description: "$4.5B in signed commercial contracts across energy, infrastructure, and defense",
-        icon: TrendingUp
-      },
-      {
-        title: "Defensible IP Portfolio",
-        description: "500+ patents securing Li-S and 3D Graphene innovations",
-        icon: Shield
-      },
-      {
-        title: "Category-Leading Performance",
-        description: "Superior performance to incumbent Li-ion leaders (Tesla, CATL, Panasonic)",
-        icon: Battery
-      },
-      {
-        title: "Strategic Government Support",
-        description: "EXIM Bank $650M commitment supporting emerging market deployment",
-        icon: Award
-      },
-      {
-        title: "Institutional-Grade Partnerships",
-        description: "Blue-chip partners and leadership from Stellantis, Honeywell, NASA, Tesla, GM",
-        icon: Globe
-      }
+    keyStats: [
+      "500+ patents globally",
+      "95% lithium extraction efficiency", 
+      "Performance metrics exceed Tesla Megapack, CATL, Panasonic"
     ]
   },
   strategicBacking: {

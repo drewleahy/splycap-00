@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { LucideIcon } from 'lucide-react';
@@ -13,7 +12,8 @@ interface Feature {
 interface LandingFeaturesProps {
   title: string;
   description?: string;
-  features: Feature[];
+  features?: Feature[];
+  keyStats?: string[];
   headerLabel?: string;
   className?: string;
 }
@@ -21,7 +21,8 @@ interface LandingFeaturesProps {
 export const LandingFeatures = ({ 
   title, 
   description,
-  features, 
+  features = [],
+  keyStats = [],
   headerLabel,
   className = "" 
 }: LandingFeaturesProps) => {
@@ -38,36 +39,51 @@ export const LandingFeatures = ({
             {title}
           </h2>
           {description && (
-            <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+            <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-8">
               {description}
             </p>
           )}
+          
+          {keyStats.length > 0 && (
+            <div className="space-y-4">
+              {keyStats.map((stat, index) => (
+                <div key={index} className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-gray-900 rounded-full flex-shrink-0" />
+                  <p className="text-base md:text-lg font-semibold text-gray-900">
+                    {stat}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {features.map((feature, index) => (
-            <Card 
-              key={index} 
-              className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <CardContent className="relative p-4 text-center">
-                {feature.icon && (
-                  <div className="mb-2 flex justify-center">
-                    <feature.icon className="w-8 h-8 text-gray-900" />
-                  </div>
-                )}
-                <h3 className="text-sm font-semibold mb-2 text-gray-900">
-                  {feature.title}
-                </h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
-              </CardContent>
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-900 via-black to-gray-900" />
-            </Card>
-          ))}
-        </div>
+        {features.length > 0 && (
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {features.map((feature, index) => (
+              <Card 
+                key={index} 
+                className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <CardContent className="relative p-4 text-center">
+                  {feature.icon && (
+                    <div className="mb-2 flex justify-center">
+                      <feature.icon className="w-8 h-8 text-gray-900" />
+                    </div>
+                  )}
+                  <h3 className="text-sm font-semibold mb-2 text-gray-900">
+                    {feature.title}
+                  </h3>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </CardContent>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-900 via-black to-gray-900" />
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

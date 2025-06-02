@@ -53,6 +53,7 @@ export interface LandingPageConfig {
     title: string;
     body: string;
     keyPoints?: string[];
+    keyStats?: string[];
     items?: Array<{
       title: string;
       description: string;
