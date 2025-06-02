@@ -35,7 +35,7 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   },
   lytenSection: {
     title: "Lyten's Lithium-Sulfur Advantage",
-    body: "Lyten is developing Lithium-Sulfur batteries enabled by its proprietary 3D Graphene material. The technology is lighter, more energy-dense, and free of nickel, cobalt, and manganese.",
+    body: "Lyten is developing next-generation Lithium-Sulfur batteries enabled by a proprietary 3D Graphene platform. The technology delivers 40% higher energy density than traditional lithium-ion and eliminates reliance on nickel, cobalt, and manganese — enabling safer, more efficient batteries using abundant sulfur materials.",
     logoSrc: "/lovable-uploads/a2a03b30-6e55-4ec1-b4d4-7450fb3c678a.png",
     logoAlt: "Lyten Logo",
     headerLabel: "Company Overview",
