@@ -1,3 +1,4 @@
+
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -77,36 +78,31 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     ]
   },
   features: {
-    title: "Why Lyten Represents a Transformational Investment",
+    title: "Why We're Investing",
     items: [
       {
-        title: "Revolutionary Technology",
-        description: "Lyten's proprietary 3D Graphene platform enables Lithium-Sulfur batteries with 40% better energy density than traditional lithium-ion.",
-        icon: Battery
-      },
-      {
-        title: "Massive Market Potential",
-        description: "Targeting the $120B+ global battery market with applications in EVs, aerospace, defense, and energy storage.",
+        title: "Proven Commercial Demand",
+        description: "$4.5B in signed commercial contracts across energy, infrastructure, and defense",
         icon: TrendingUp
       },
       {
-        title: "Proven Leadership Team",
-        description: "Led by industry veterans with decades of experience scaling breakthrough technologies in energy and materials.",
-        icon: Award
-      },
-      {
-        title: "Strategic Partnerships",
-        description: "Partnerships with major automotive OEMs, aerospace companies, and government agencies validating commercial viability.",
+        title: "Defensible IP Portfolio",
+        description: "500+ patents securing Li-S and 3D Graphene innovations",
         icon: Shield
       },
       {
-        title: "Manufacturing Ready",
-        description: "Moving beyond R&D with pilot production facilities and clear path to commercial scale manufacturing.",
-        icon: Zap
+        title: "Category-Leading Performance",
+        description: "Superior performance to incumbent Li-ion leaders (Tesla, CATL, Panasonic)",
+        icon: Battery
       },
       {
-        title: "Sustainability Impact",
-        description: "Enabling the clean energy transition with safer, more efficient batteries using abundant sulfur materials.",
+        title: "Strategic Government Support",
+        description: "EXIM Bank $650M commitment supporting emerging market deployment",
+        icon: Award
+      },
+      {
+        title: "Institutional-Grade Partnerships",
+        description: "Blue-chip partners and leadership from Stellantis, Honeywell, NASA, Tesla, GM",
         icon: Globe
       }
     ]
