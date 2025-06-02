@@ -61,10 +61,8 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
           title={config.opportunitySection.title}
           body={config.opportunitySection.body}
           keyPoints={config.opportunitySection.keyPoints}
-          headerLabel="Why We're Investing"
         />
       )}
-      
       
       {config.content && (
         <LandingContent

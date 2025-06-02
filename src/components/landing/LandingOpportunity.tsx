@@ -6,7 +6,6 @@ interface LandingOpportunityProps {
   title: string;
   body: string;
   keyPoints: string[];
-  headerLabel?: string;
   className?: string;
 }
 
@@ -14,7 +13,6 @@ export const LandingOpportunity = ({
   title, 
   body, 
   keyPoints, 
-  headerLabel = "The Opportunity",
   className = "" 
 }: LandingOpportunityProps) => {
   return (
@@ -22,7 +20,7 @@ export const LandingOpportunity = ({
       <div className="max-w-4xl mx-auto text-left">
         <div className="mb-8">
           <h3 className="text-sm md:text-base font-semibold mb-4 text-gray-600 uppercase tracking-wide">
-            {headerLabel}
+            The Opportunity
           </h3>
           <h2 className="text-lg md:text-xl lg:text-2xl font-bold mb-8 text-gray-900">
             {title}

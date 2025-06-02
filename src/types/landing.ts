@@ -1,4 +1,3 @@
-
 import { LucideIcon } from 'lucide-react';
 
 export interface LandingPageConfig {
@@ -23,7 +22,6 @@ export interface LandingPageConfig {
     title: string;
     body: string;
     keyPoints: string[];
-    headerLabel?: string;
   };
   content?: {
     title: string;
