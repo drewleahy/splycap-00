@@ -26,7 +26,16 @@ export const LandingCTA = ({
   className = ""
 }: LandingCTAProps) => {
   const handleButtonClick = (link: string) => {
-    if (link.startsWith('#')) {
+    if (link.startsWith('#download-flyer')) {
+      // Handle flyer download
+      const flyerUrl = '/lovable-uploads/e35f1acd-f36f-4a73-a203-ffb0a76fd7bd.png';
+      const downloadLink = document.createElement('a');
+      downloadLink.href = flyerUrl;
+      downloadLink.download = 'Lyten-Investment-Flyer.png';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    } else if (link.startsWith('#')) {
       const element = document.querySelector(link);
       element?.scrollIntoView({ behavior: 'smooth' });
     } else {
