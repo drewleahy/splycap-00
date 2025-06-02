@@ -52,8 +52,8 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     headerLabel: "Commercial Traction"
   },
   whyInvesting: {
-    title: "Why We're Investing",
-    body: "Lyten combines proprietary IP, strong commercial traction, and strategic alignment with global energy and defense priorities. This investment reflects our conviction in their ability to scale a differentiated battery technology with real-world demand.",
+    title: "Clear Differentiation and Strategic Alignment",
+    body: "Lyten combines proprietary IP, validated demand, and strategic alignment with global energy and climate priorities.",
     keyPoints: [
       "$4.5B in signed commercial contracts across energy, infrastructure, and defense",
       "500+ patents securing Li-S and 3D Graphene innovations",
