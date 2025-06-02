@@ -70,6 +70,14 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         />
       )}
       
+      {config.aboutSection && (
+        <LandingContent
+          title={config.aboutSection.title}
+          body={config.aboutSection.body}
+          headerLabel={config.aboutSection.headerLabel}
+        />
+      )}
+      
       {config.lytenSection && (
         <LandingContentWithLogo
           title={config.lytenSection.title}
