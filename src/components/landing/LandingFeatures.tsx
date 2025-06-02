@@ -44,23 +44,23 @@ export const LandingFeatures = ({
           )}
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <Card 
               key={index} 
               className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <CardContent className="relative p-8 text-center">
+              <CardContent className="relative p-6 text-center">
                 {feature.icon && (
-                  <div className="mb-4 flex justify-center">
-                    <feature.icon className="w-12 h-12 text-gray-900" />
+                  <div className="mb-3 flex justify-center">
+                    <feature.icon className="w-10 h-10 text-gray-900" />
                   </div>
                 )}
-                <h3 className="text-xl font-semibold mb-3 text-gray-900">
+                <h3 className="text-lg font-semibold mb-2 text-gray-900">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-sm text-gray-600 leading-relaxed">
                   {feature.description}
                 </p>
               </CardContent>
