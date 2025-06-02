@@ -58,7 +58,7 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   },
   whyInvesting: {
     title: "Clear Differentiation and Strategic Alignment",
-    body: "Lyten combines proprietary IP, validated demand, and strategic alignment with global energy and climate priorities.",
+    body: "Lyten combines proprietary technology, validated demand, and alignment with global priorities for energy security and climate impact.",
     items: [
       {
         title: "Proven Commercial Demand",
