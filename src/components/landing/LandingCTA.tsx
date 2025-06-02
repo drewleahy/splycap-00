@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import jsPDF from 'jspdf';
 
 interface LandingCTAProps {
   headline: string;
@@ -26,67 +27,57 @@ export const LandingCTA = ({
   className = ""
 }: LandingCTAProps) => {
   const downloadFlyer = async () => {
-    console.log('Starting flyer download...');
+    console.log('Starting PDF flyer creation...');
     
-    // Updated image URLs for the correct flyer pages
     const image1Url = '/lovable-uploads/f8e2333a-4626-4ee6-9192-f37dffa4a939.png';
     const image2Url = '/lovable-uploads/3b4ad6cd-8468-4560-b1ee-c1367789ad85.png';
     
-    console.log('Image URLs:', { image1Url, image2Url });
-    
     try {
-      // Test if images are accessible
-      console.log('Testing image accessibility...');
+      console.log('Creating PDF with both images...');
       
-      const response1 = await fetch(image1Url);
-      const response2 = await fetch(image2Url);
+      // Create a new PDF document
+      const pdf = new jsPDF('p', 'mm', 'a4');
       
-      console.log('Image 1 response:', response1.status, response1.statusText);
-      console.log('Image 2 response:', response2.status, response2.statusText);
+      // Function to convert image to base64
+      const getImageBase64 = async (url: string): Promise<string> => {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch image: ${response.status}`);
+        }
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      };
       
-      if (!response1.ok) {
-        throw new Error(`Image 1 not accessible: ${response1.status} ${response1.statusText}`);
-      }
+      // Get both images as base64
+      console.log('Converting images to base64...');
+      const image1Base64 = await getImageBase64(image1Url);
+      const image2Base64 = await getImageBase64(image2Url);
       
-      if (!response2.ok) {
-        throw new Error(`Image 2 not accessible: ${response2.status} ${response2.statusText}`);
-      }
+      // Add first image to PDF (first page)
+      console.log('Adding first image to PDF...');
+      pdf.addImage(image1Base64, 'PNG', 10, 10, 190, 277); // A4 proportions with margins
       
-      // Create download links for both images
-      console.log('Creating download links...');
+      // Add new page for second image
+      pdf.addPage();
+      console.log('Adding second image to PDF...');
+      pdf.addImage(image2Base64, 'PNG', 10, 10, 190, 277); // A4 proportions with margins
       
-      // Download first image
-      const link1 = document.createElement('a');
-      link1.href = image1Url;
-      link1.download = 'Lyten-Investment-Flyer-Page-1.png';
-      link1.style.display = 'none';
-      document.body.appendChild(link1);
+      // Save the PDF
+      console.log('Saving PDF...');
+      pdf.save('Lyten-Investment-Flyer.pdf');
       
-      console.log('Triggering download for image 1...');
-      link1.click();
-      document.body.removeChild(link1);
-      
-      // Download second image after a short delay
-      setTimeout(() => {
-        const link2 = document.createElement('a');
-        link2.href = image2Url;
-        link2.download = 'Lyten-Investment-Flyer-Page-2.png';
-        link2.style.display = 'none';
-        document.body.appendChild(link2);
-        
-        console.log('Triggering download for image 2...');
-        link2.click();
-        document.body.removeChild(link2);
-        
-        console.log('Both downloads triggered successfully');
-      }, 1000);
+      console.log('PDF download completed successfully');
       
     } catch (error) {
-      console.error('Download failed:', error);
+      console.error('PDF creation failed:', error);
       
-      // Ultimate fallback - open images in new tabs
+      // Fallback: open images in new tabs if PDF creation fails
       console.log('Trying fallback: opening images in new tabs...');
-      
       try {
         window.open(image1Url, '_blank');
         setTimeout(() => {
