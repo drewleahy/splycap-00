@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface LandingContentWithLogoProps {
   title: string;
@@ -18,10 +19,10 @@ export const LandingContentWithLogo = ({
   logoAlt, 
   headerLabel,
   keyStats,
-  className = ""
+  className = "" 
 }: LandingContentWithLogoProps) => {
   return (
-    <section className={`py-16 px-6 bg-white ${className}`}>
+    <section className={`py-16 px-6 bg-gray-50 ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
         <div className="mb-8">
           {headerLabel && (
@@ -29,44 +30,36 @@ export const LandingContentWithLogo = ({
               {headerLabel}
             </h3>
           )}
-          <h2 className="text-lg md:text-xl lg:text-2xl font-bold mb-8 text-gray-900">
-            {title}
-          </h2>
-        </div>
-        
-        <div className="flex flex-col lg:flex-row items-start gap-8 mb-8">
-          <div className="lg:w-1/3 flex justify-center lg:justify-start">
+          <div className="flex items-center mb-8">
             <img 
               src={logoSrc} 
-              alt={logoAlt}
-              className="max-w-full h-auto max-h-32 object-contain"
+              alt={logoAlt} 
+              className="h-8 md:h-10 mr-4"
             />
-          </div>
-          
-          <div className="lg:w-2/3">
-            <div className="text-base md:text-lg text-gray-700 leading-relaxed">
-              {body.split('\n\n').map((paragraph, index) => (
-                <p key={index} className={index > 0 ? 'mt-6' : ''}>
-                  {paragraph}
-                </p>
-              ))}
-            </div>
+            <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
+              {title}
+            </h2>
           </div>
         </div>
-
-        {keyStats && (
-          <div className="grid md:grid-cols-3 gap-6 mt-8">
+        <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-12">
+          {body}
+        </p>
+        
+        {keyStats && keyStats.length > 0 && (
+          <div className="grid md:grid-cols-3 gap-6">
             {keyStats.map((stat, index) => (
-              <div 
+              <Card 
                 key={index} 
-                className="bg-gradient-to-br from-black via-gray-900 to-black text-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
-                <div className="text-center">
-                  <div className="text-lg md:text-xl font-bold">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-transparent to-blue-800/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <CardContent className="relative p-8 text-center">
+                  <p className="text-lg md:text-xl font-bold text-gray-900 leading-tight">
                     {stat}
-                  </div>
-                </div>
-              </div>
+                  </p>
+                </CardContent>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900" />
+              </Card>
             ))}
           </div>
         )}
