@@ -27,58 +27,95 @@ export const LandingCTA = ({
   className = ""
 }: LandingCTAProps) => {
   const generatePDFFlyer = async () => {
+    console.log('Starting PDF generation...');
+    
     try {
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       
+      console.log('PDF dimensions:', { pageWidth, pageHeight });
+      
       // Image URLs for the flyer pages
       const image1Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.50.48 AM.png';
       const image2Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.51.19 AM.png';
+      
+      console.log('Image URLs:', { image1Url, image2Url });
       
       // Helper function to load image and get dimensions
       const loadImage = (url: string): Promise<HTMLImageElement> => {
         return new Promise((resolve, reject) => {
           const img = new Image();
           img.crossOrigin = 'anonymous';
-          img.onload = () => resolve(img);
-          img.onerror = reject;
+          img.onload = () => {
+            console.log(`Image loaded successfully: ${url}`, { width: img.width, height: img.height });
+            resolve(img);
+          };
+          img.onerror = (error) => {
+            console.error(`Failed to load image: ${url}`, error);
+            reject(error);
+          };
           img.src = url;
         });
       };
       
-      // Load and add first image
+      console.log('Loading first image...');
       const img1 = await loadImage(image1Url);
       const img1Ratio = img1.width / img1.height;
       const img1Width = pageWidth - 20; // 10mm margin on each side
       const img1Height = img1Width / img1Ratio;
       
+      console.log('Adding first image to PDF...');
       pdf.addImage(img1, 'PNG', 10, 10, img1Width, Math.min(img1Height, pageHeight - 20));
       
-      // Add new page for second image
+      console.log('Adding new page...');
       pdf.addPage();
       
-      // Load and add second image
+      console.log('Loading second image...');
       const img2 = await loadImage(image2Url);
       const img2Ratio = img2.width / img2.height;
       const img2Width = pageWidth - 20;
       const img2Height = img2Width / img2Ratio;
       
+      console.log('Adding second image to PDF...');
       pdf.addImage(img2, 'PNG', 10, 10, img2Width, Math.min(img2Height, pageHeight - 20));
       
-      // Save the PDF
+      console.log('Saving PDF...');
       pdf.save('Lyten-Investment-Flyer.pdf');
+      console.log('PDF saved successfully!');
       
     } catch (error) {
       console.error('Error generating PDF:', error);
-      // Fallback to downloading the first image if PDF generation fails
-      const fallbackUrl = '/lovable-uploads/Screenshot 2025-01-23 at 10.50.48 AM.png';
-      const downloadLink = document.createElement('a');
-      downloadLink.href = fallbackUrl;
-      downloadLink.download = 'Lyten-Investment-Flyer.png';
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
+      console.log('Falling back to direct image download...');
+      
+      // Enhanced fallback - try to download the first image directly
+      try {
+        const fallbackUrl = '/lovable-uploads/Screenshot 2025-01-23 at 10.50.48 AM.png';
+        
+        // First try to fetch the image to make sure it exists
+        const response = await fetch(fallbackUrl);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch image: ${response.status}`);
+        }
+        
+        const blob = await response.blob();
+        const downloadUrl = URL.createObjectURL(blob);
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = downloadUrl;
+        downloadLink.download = 'Lyten-Investment-Flyer-Page1.png';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Clean up the object URL
+        URL.revokeObjectURL(downloadUrl);
+        
+        console.log('Fallback download completed successfully');
+      } catch (fallbackError) {
+        console.error('Fallback download also failed:', fallbackError);
+        alert('Sorry, there was an issue downloading the flyer. Please try again or contact support.');
+      }
     }
   };
 
