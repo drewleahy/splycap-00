@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
@@ -62,6 +61,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
           title={config.opportunitySection.title}
           body={config.opportunitySection.body}
           keyPoints={config.opportunitySection.keyPoints}
+          headerLabel="The Opportunity"
         />
       )}
       
@@ -100,6 +100,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
           title={config.whyInvesting.title}
           body={config.whyInvesting.body}
           keyPoints={config.whyInvesting.keyPoints}
+          headerLabel="Why We're Investing"
           className="bg-white"
         />
       )}
