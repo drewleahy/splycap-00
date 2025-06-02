@@ -1,23 +1,25 @@
 
 import React from 'react';
+import { CheckCircle } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface LandingContentProps {
   title: string;
   body: string;
   headerLabel?: string;
-  className?: string;
   keyPoints?: string[];
+  className?: string;
 }
 
 export const LandingContent = ({ 
   title, 
   body, 
-  headerLabel, 
-  className = "",
-  keyPoints
+  headerLabel,
+  keyPoints,
+  className = "" 
 }: LandingContentProps) => {
   return (
-    <section className={`py-16 px-6 ${className}`}>
+    <section className={`py-16 px-6 bg-white ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
         <div className="mb-8">
           {headerLabel && (
@@ -30,27 +32,25 @@ export const LandingContent = ({
           </h2>
         </div>
         
-        <div className="text-base md:text-lg text-gray-700 leading-relaxed mb-8">
-          {body.split('\n\n').map((paragraph, index) => (
-            <p key={index} className={index > 0 ? 'mt-6' : ''}>
-              {paragraph}
-            </p>
-          ))}
-        </div>
-
-        {keyPoints && (
-          <div className="grid md:grid-cols-3 gap-6 mt-8">
+        <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-12">
+          {body}
+        </p>
+        
+        {keyPoints && keyPoints.length > 0 && (
+          <div className="grid md:grid-cols-3 gap-6">
             {keyPoints.map((point, index) => (
-              <div 
+              <Card 
                 key={index} 
-                className="bg-white border border-gray-200 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
-                <div className="text-center">
-                  <div className="text-lg md:text-xl font-bold text-gray-900">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <CardContent className="relative p-8 text-center">
+                  <p className="text-lg md:text-xl font-bold text-gray-900 leading-tight">
                     {point}
-                  </div>
-                </div>
-              </div>
+                  </p>
+                </CardContent>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-900 via-black to-gray-900" />
+              </Card>
             ))}
           </div>
         )}
