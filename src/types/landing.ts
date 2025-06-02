@@ -37,6 +37,7 @@ export interface LandingPageConfig {
     body: string;
     logoSrc: string;
     logoAlt: string;
+    headerLabel?: string;
     keyStats?: string[];
   };
   features?: {
