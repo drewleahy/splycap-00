@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
@@ -76,6 +75,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
           body={config.lytenSection.body}
           logoSrc={config.lytenSection.logoSrc}
           logoAlt={config.lytenSection.logoAlt}
+          keyStats={config.lytenSection.keyStats}
         />
       )}
       

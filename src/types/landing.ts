@@ -31,6 +31,7 @@ export interface LandingPageConfig {
     body: string;
     logoSrc: string;
     logoAlt: string;
+    keyStats?: string[];
   };
   features?: {
     title: string;
