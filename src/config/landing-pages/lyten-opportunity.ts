@@ -1,3 +1,4 @@
+
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -15,6 +16,16 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     subheadline: "Join SPLY Capital's investment in Lyten — a Lithium-Sulfur innovator redefining energy storage with 3D Graphene tech and $4.5B in contracts.",
     ctaText: "Schedule a Call",
     ctaLink: "https://calendly.com/splycapital/lyten-opportunity"
+  },
+  opportunitySection: {
+    title: "Access to an Oversubscribed Round at a Strategic Entry Point",
+    body: "SPLY Capital has secured a $10–20M allocation in Lyten's oversubscribed Series B extension at a $1.55B valuation. Goldman Sachs is leading the Series C in July, with a projected 3.5–4x valuation step-up. Lyten is targeting an IPO in 2026–2027.",
+    keyPoints: [
+      "$1.55B current valuation",
+      "Goldman Sachs-led Series C launching July 2025",
+      "Projected 3.5–4x step-up from today's entry",
+      "IPO targeted for 2026–2027"
+    ]
   },
   content: {
     title: "Global Energy Storage: A $569B Market by 2034",

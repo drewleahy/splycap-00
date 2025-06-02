@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
 import { LandingHero } from './LandingHero';
+import { LandingOpportunity } from './LandingOpportunity';
 import { LandingContent } from './LandingContent';
 import { LandingContentWithLogo } from './LandingContentWithLogo';
 import { LandingFeatures } from './LandingFeatures';
@@ -53,6 +54,14 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         ctaLink={config.hero.ctaLink}
         backgroundImage={config.hero.image}
       />
+      
+      {config.opportunitySection && (
+        <LandingOpportunity
+          title={config.opportunitySection.title}
+          body={config.opportunitySection.body}
+          keyPoints={config.opportunitySection.keyPoints}
+        />
+      )}
       
       {config.content && (
         <LandingContent
