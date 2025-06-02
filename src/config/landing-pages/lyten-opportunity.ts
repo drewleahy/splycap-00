@@ -47,8 +47,13 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   },
   commercialTraction: {
     title: "$4.5B in Signed Contracts",
-    body: "Lyten has secured $4.5B in commercial agreements, including:\n\n$1.5B with Trinidad & Tobago\n\n$1.5B with Angola\n\n$1.5B in additional global agreements",
-    headerLabel: "Commercial Traction"
+    body: "Lyten has secured $4.5B in commercial agreements across three major deals:",
+    headerLabel: "Commercial Traction",
+    keyPoints: [
+      "$1.5B with Trinidad & Tobago",
+      "$1.5B with Angola", 
+      "$1.5B in additional global agreements"
+    ]
   },
   whyInvesting: {
     title: "Clear Differentiation and Strategic Alignment",

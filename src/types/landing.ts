@@ -1,3 +1,4 @@
+
 import { LucideIcon } from 'lucide-react';
 
 export interface LandingPageConfig {
@@ -27,6 +28,7 @@ export interface LandingPageConfig {
     title: string;
     body: string;
     headerLabel?: string;
+    keyPoints?: string[];
   };
   aboutSection?: {
     title: string;
@@ -45,6 +47,7 @@ export interface LandingPageConfig {
     title: string;
     body: string;
     headerLabel?: string;
+    keyPoints?: string[];
   };
   whyInvesting?: {
     title: string;
