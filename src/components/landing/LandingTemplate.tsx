@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
@@ -96,13 +97,25 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
       )}
       
       {config.whyInvesting && (
-        <LandingOpportunity
-          title={config.whyInvesting.title}
-          body={config.whyInvesting.body}
-          keyPoints={config.whyInvesting.keyPoints}
-          headerLabel="Why We're Investing"
-          className="bg-white"
-        />
+        <>
+          {config.whyInvesting.items ? (
+            <LandingFeatures
+              title={config.whyInvesting.title}
+              description={config.whyInvesting.body}
+              features={config.whyInvesting.items}
+              headerLabel="Why We're Investing"
+              className="bg-white"
+            />
+          ) : (
+            <LandingOpportunity
+              title={config.whyInvesting.title}
+              body={config.whyInvesting.body}
+              keyPoints={config.whyInvesting.keyPoints || []}
+              headerLabel="Why We're Investing"
+              className="bg-white"
+            />
+          )}
+        </>
       )}
       
       {config.strategicBacking && (

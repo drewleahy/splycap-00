@@ -60,12 +60,32 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   whyInvesting: {
     title: "Clear Differentiation and Strategic Alignment",
     body: "Lyten combines proprietary IP, validated demand, and strategic alignment with global energy and climate priorities.",
-    keyPoints: [
-      "$4.5B in signed commercial contracts across energy, infrastructure, and defense",
-      "500+ patents securing Li-S and 3D Graphene innovations",
-      "Superior performance to incumbent Li-ion leaders (Tesla, CATL, Panasonic)",
-      "EXIM Bank $650M commitment supporting emerging market deployment",
-      "Blue-chip partners and leadership from Stellantis, Honeywell, NASA, Tesla, GM"
+    items: [
+      {
+        title: "Proven Commercial Demand",
+        description: "$4.5B in signed commercial contracts across energy, infrastructure, and defense",
+        icon: TrendingUp
+      },
+      {
+        title: "Defensible IP Portfolio",
+        description: "500+ patents securing Li-S and 3D Graphene innovations",
+        icon: Shield
+      },
+      {
+        title: "Category-Leading Performance",
+        description: "Superior performance to incumbent Li-ion leaders (Tesla, CATL, Panasonic)",
+        icon: Battery
+      },
+      {
+        title: "Strategic Government Support",
+        description: "EXIM Bank $650M commitment supporting emerging market deployment",
+        icon: Award
+      },
+      {
+        title: "Institutional-Grade Partnerships",
+        description: "Blue-chip partners and leadership from Stellantis, Honeywell, NASA, Tesla, GM",
+        icon: Globe
+      }
     ]
   },
   strategicBacking: {

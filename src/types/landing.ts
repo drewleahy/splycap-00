@@ -52,7 +52,12 @@ export interface LandingPageConfig {
   whyInvesting?: {
     title: string;
     body: string;
-    keyPoints: string[];
+    keyPoints?: string[];
+    items?: Array<{
+      title: string;
+      description: string;
+      icon?: LucideIcon;
+    }>;
   };
   strategicBacking?: {
     title: string;
