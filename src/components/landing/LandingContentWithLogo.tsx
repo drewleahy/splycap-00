@@ -52,16 +52,13 @@ export const LandingContentWithLogo = ({
                 key={index} 
                 className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-transparent to-blue-800/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <CardContent className="relative p-8 text-center">
-                  <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                    <div className="w-6 h-6 bg-white rounded-full opacity-90" />
-                  </div>
                   <p className="text-lg md:text-xl font-bold text-gray-900 leading-tight">
                     {stat}
                   </p>
                 </CardContent>
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-600" />
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900" />
               </Card>
             ))}
           </div>
