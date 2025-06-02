@@ -1,3 +1,4 @@
+
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -46,8 +47,8 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     ]
   },
   commercialTraction: {
-    title: "Validated with $4.5B in Contracts",
-    body: "Lyten has secured over $4.5B in commercial agreements, including:\n\n$1.5B with Trinidad & Tobago\n\n$1.5B with Angola\n\n$1.5B across additional customers",
+    title: "$4.5B in Signed Contracts",
+    body: "Lyten has secured $4.5B in commercial agreements, including:\n\n$1.5B with Trinidad & Tobago\n\n$1.5B with Angola\n\n$1.5B in additional global agreements",
     headerLabel: "Commercial Traction"
   },
   whyInvesting: {
