@@ -19,7 +19,7 @@ export const LandingOpportunity = ({
     <section className={`py-16 px-6 bg-gray-50 ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
         <div className="mb-8">
-          <h3 className="text-lg md:text-xl font-semibold mb-4 text-sply-purple uppercase tracking-wide">
+          <h3 className="text-lg md:text-xl font-semibold mb-4 text-gray-600 uppercase tracking-wide">
             The Opportunity
           </h3>
           <h2 className="text-xl md:text-3xl lg:text-4xl font-bold mb-8 text-gray-900">
