@@ -22,7 +22,7 @@ export const LandingOpportunity = ({
           <h3 className="text-lg md:text-xl font-semibold mb-4 text-gray-600 uppercase tracking-wide">
             The Opportunity
           </h3>
-          <h2 className="text-2xl md:text-4xl font-bold mb-8 text-gray-900">
+          <h2 className="text-xl md:text-3xl lg:text-4xl font-bold mb-8 text-gray-900">
             {title}
           </h2>
         </div>
