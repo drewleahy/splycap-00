@@ -19,17 +19,17 @@ export const LandingContentWithLogo = ({
   return (
     <section className={`py-16 px-6 bg-gray-50 ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
-        <div className="mb-8 flex justify-center">
+        <div className="flex items-center mb-8">
           <img 
             src={logoSrc} 
-            alt={logoAlt}
-            className="h-16 md:h-20 object-contain"
+            alt={logoAlt} 
+            className="h-8 md:h-10 mr-4"
           />
+          <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
+            {title}
+          </h2>
         </div>
-        <h2 className="text-xl md:text-3xl lg:text-4xl font-bold mb-8 text-gray-900 text-left">
-          {title}
-        </h2>
-        <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+        <p className="text-base md:text-lg text-gray-700 leading-relaxed">
           {body}
         </p>
       </div>
