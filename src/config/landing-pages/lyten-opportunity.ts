@@ -13,7 +13,7 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   },
   hero: {
     headline: "Exclusive Access: Lyten Investment Opportunity",
-    subheadline: "Join SPLY Capital's strategic investment in Lyten — a breakthrough Lithium-Sulfur innovator disrupting global energy storage with a proprietary 3D Graphene platform and $4.5B in commercial contracts.",
+    subheadline: "Join SPLY Capital's investment in Lyten — a Lithium-Sulfur innovator redefining energy storage with 3D Graphene tech and $4.5B in contracts.",
     ctaText: "Schedule a Call",
     ctaLink: "https://calendly.com/splycapital/lyten-opportunity"
   },
