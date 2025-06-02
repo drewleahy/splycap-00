@@ -14,7 +14,6 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   hero: {
     headline: "Exclusive Access: Lyten Investment Opportunity",
     subheadline: "Join SPLY Capital's strategic investment in the company revolutionizing battery technology with breakthrough Lithium-Sulfur innovations.",
-    image: "/lovable-uploads/b775e78f-bfa7-4461-bacc-8661144da34b.png",
     ctaText: "Learn More About This Opportunity",
     ctaLink: "#details"
   },
