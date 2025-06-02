@@ -26,19 +26,22 @@ export const LandingContent = ({
   // Check if this is the Commercial Traction section
   const isCommercialTraction = headerLabel === "Commercial Traction";
   
-  React.useEffect(() => {
-    console.log('LandingContent render:', {
-      headerLabel,
-      isCommercialTraction,
-      isMobile,
-      highlightedIndex,
-      keyPointsLength: keyPoints?.length
-    });
-  }, [headerLabel, isCommercialTraction, isMobile, highlightedIndex, keyPoints?.length]);
-  
   return (
     <section className={`py-12 sm:py-16 px-4 sm:px-6 bg-white ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
+        {/* Visual Debug Overlay - Only show on Commercial Traction section */}
+        {isCommercialTraction && (
+          <div className="fixed top-4 left-4 z-50 bg-black text-white p-4 rounded text-sm max-w-xs">
+            <div>Mobile: {isMobile ? 'YES' : 'NO'}</div>
+            <div>Screen Width: {typeof window !== 'undefined' ? window.innerWidth : 'unknown'}px</div>
+            <div>Highlighted Index: {highlightedIndex !== null ? highlightedIndex : 'none'}</div>
+            <div>Should Highlight: {isMobile && isCommercialTraction ? 'YES' : 'NO'}</div>
+            {keyPoints && (
+              <div>Key Points: {keyPoints.length} items</div>
+            )}
+          </div>
+        )}
+
         <div className="mb-6 sm:mb-8">
           {headerLabel && (
             <h3 className="text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 text-gray-600 uppercase tracking-wide">
@@ -60,12 +63,6 @@ export const LandingContent = ({
               const shouldHighlight = isMobile && isCommercialTraction;
               const isHighlighted = shouldHighlight && highlightedIndex === index;
               
-              console.log(`Rendering card ${index}:`, {
-                shouldHighlight,
-                isHighlighted,
-                point: point.substring(0, 20) + '...'
-              });
-              
               return (
                 <Card 
                   key={index}
@@ -80,6 +77,12 @@ export const LandingContent = ({
                     isHighlighted ? 'opacity-20' : ''
                   }`} />
                   <CardContent className="relative p-4 sm:p-8 text-center">
+                    {/* Visual indicator for debugging */}
+                    {shouldHighlight && (
+                      <div className="absolute top-1 right-1 text-xs bg-red-500 text-white px-1 rounded">
+                        {index}
+                      </div>
+                    )}
                     <p className={`text-base sm:text-lg md:text-xl font-bold text-gray-900 leading-tight ${
                       isHighlighted ? 'text-yellow-900' : ''
                     }`}>
