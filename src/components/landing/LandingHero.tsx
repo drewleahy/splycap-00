@@ -7,6 +7,8 @@ interface LandingHeroProps {
   subheadline: string;
   ctaText: string;
   ctaLink: string;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: string;
   backgroundImage?: string;
   className?: string;
 }
@@ -16,6 +18,8 @@ export const LandingHero = ({
   subheadline,
   ctaText,
   ctaLink,
+  secondaryCtaText,
+  secondaryCtaLink,
   backgroundImage,
   className = ""
 }: LandingHeroProps) => {
@@ -25,6 +29,17 @@ export const LandingHero = ({
       element?.scrollIntoView({ behavior: 'smooth' });
     } else {
       window.open(ctaLink, '_blank');
+    }
+  };
+
+  const handleSecondaryCtaClick = () => {
+    if (secondaryCtaLink) {
+      if (secondaryCtaLink.startsWith('#')) {
+        const element = document.querySelector(secondaryCtaLink);
+        element?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.open(secondaryCtaLink, '_blank');
+      }
     }
   };
 
@@ -55,13 +70,26 @@ export const LandingHero = ({
             {subheadline}
           </p>
           
-          <Button 
-            onClick={handleCtaClick}
-            size="lg"
-            className="bg-white text-black hover:bg-gray-100 px-8 py-3 text-lg"
-          >
-            {ctaText}
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button 
+              onClick={handleCtaClick}
+              size="lg"
+              className="bg-white text-black hover:bg-gray-100 px-8 py-3 text-lg"
+            >
+              {ctaText}
+            </Button>
+            
+            {secondaryCtaText && secondaryCtaLink && (
+              <Button 
+                onClick={handleSecondaryCtaClick}
+                size="lg"
+                variant="outline"
+                className="border-white text-white hover:bg-white hover:text-black px-8 py-3 text-lg"
+              >
+                {secondaryCtaText}
+              </Button>
+            )}
+          </div>
         </div>
       </section>
     </>

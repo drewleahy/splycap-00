@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
@@ -52,6 +51,8 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         subheadline={config.hero.subheadline}
         ctaText={config.hero.ctaText}
         ctaLink={config.hero.ctaLink}
+        secondaryCtaText={config.hero.secondaryCtaText}
+        secondaryCtaLink={config.hero.secondaryCtaLink}
         backgroundImage={config.hero.image}
       />
       

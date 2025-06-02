@@ -1,4 +1,3 @@
-
 import { LucideIcon } from 'lucide-react';
 
 export interface LandingPageConfig {
@@ -16,6 +15,8 @@ export interface LandingPageConfig {
     image?: string;
     ctaText: string;
     ctaLink: string;
+    secondaryCtaText?: string;
+    secondaryCtaLink?: string;
   };
   opportunitySection?: {
     title: string;
