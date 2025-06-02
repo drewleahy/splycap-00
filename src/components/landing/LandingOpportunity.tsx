@@ -35,7 +35,7 @@ export const LandingOpportunity = ({
           {keyPoints.map((point, index) => (
             <div key={index} className="flex items-center space-x-3">
               <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-              <span className="text-lg text-gray-700">{point}</span>
+              <span className="text-lg md:text-xl text-gray-700">{point}</span>
             </div>
           ))}
         </div>
