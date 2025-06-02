@@ -31,6 +31,7 @@ import CommissionSettings from "@/pages/venturepartners/CommissionSettings";
 
 // Landing Pages
 import ExclusiveInvestment2024 from "@/pages/landing/ExclusiveInvestment2024";
+import LytenOpportunity from "@/pages/landing/LytenOpportunity";
 
 // Components
 import { LPLayout } from "@/components/LPLayout";
@@ -48,6 +49,7 @@ function App() {
           
           {/* Hidden Landing Pages */}
           <Route path="/exclusive-investment-2024" element={<ExclusiveInvestment2024 />} />
+          <Route path="/lyten-exclusive-2024" element={<LytenOpportunity />} />
           
           {/* LP Routes - Add both case variants */}
           <Route path="/lp-splash" element={<LPSplash />} />
