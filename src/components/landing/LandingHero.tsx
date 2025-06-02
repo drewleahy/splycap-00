@@ -50,10 +50,10 @@ export const LandingHero = ({
           />
         )}
         
-        <h1 className={`text-xl md:text-3xl font-bold mb-4 ${backgroundImage ? 'text-white' : 'text-white'}`}>
+        <h1 className={`text-2xl md:text-4xl lg:text-5xl font-bold mb-4 ${backgroundImage ? 'text-white' : 'text-white'}`}>
           {headline}
         </h1>
-        <p className={`text-base md:text-lg mb-8 max-w-2xl mx-auto ${backgroundImage ? 'text-gray-200' : 'text-gray-300'}`}>
+        <p className={`text-lg md:text-xl mb-8 max-w-3xl mx-auto ${backgroundImage ? 'text-gray-200' : 'text-gray-300'}`}>
           {subheadline}
         </p>
         
