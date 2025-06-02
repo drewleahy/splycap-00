@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
@@ -104,10 +105,9 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
       )}
       
       {config.strategicBacking && (
-        <LandingContent
+        <LandingOpportunity
           title={config.strategicBacking.title}
           body={config.strategicBacking.body}
-          headerLabel={config.strategicBacking.headerLabel}
           keyPoints={config.strategicBacking.keyPoints}
           className="bg-gray-50"
         />

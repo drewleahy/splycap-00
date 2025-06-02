@@ -69,7 +69,6 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   strategicBacking: {
     title: "Validated by Industry and Government",
     body: "Lyten is supported by both public and private institutions:",
-    headerLabel: "Strategic Backing",
     keyPoints: [
       "$650M commitment from U.S. EXIM Bank",
       "Partners include Stellantis, Honeywell, NASA",
