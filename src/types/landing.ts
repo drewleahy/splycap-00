@@ -74,6 +74,8 @@ export interface LandingPageConfig {
     primaryButtonLink: string;
     secondaryButtonText?: string;
     secondaryButtonLink?: string;
+    tertiaryButtonText?: string;
+    tertiaryButtonLink?: string;
   };
   footer: {
     copyright: string;

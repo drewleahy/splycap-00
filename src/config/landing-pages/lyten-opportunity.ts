@@ -1,4 +1,3 @@
-
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -114,12 +113,14 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     ]
   },
   cta: {
-    headline: "Ready to Join This Exclusive Opportunity?",
-    description: "This investment opportunity is available exclusively to qualified investors through SPLY Capital. Limited allocation available.",
-    primaryButtonText: "Request Investment Details",
-    primaryButtonLink: "mailto:investments@splycapital.com?subject=Lyten Investment Inquiry&body=I am interested in learning more about the Lyten investment opportunity through SPLY Capital.",
-    secondaryButtonText: "Schedule Discussion",
-    secondaryButtonLink: "https://calendly.com/splycapital/lyten-opportunity"
+    headline: "Next Steps",
+    description: "This round is closing quickly. We've secured a limited allocation for the SPLY Capital network.",
+    primaryButtonText: "Download Flyer",
+    primaryButtonLink: "#download-flyer",
+    secondaryButtonText: "Request Diligence Access",
+    secondaryButtonLink: "mailto:investments@splycapital.com?subject=Lyten Diligence Access Request&body=I am interested in accessing due diligence materials for the Lyten investment opportunity.",
+    tertiaryButtonText: "Book a Call",
+    tertiaryButtonLink: "https://calendly.com/splycapital/lyten-opportunity"
   },
   footer: {
     copyright: "© 2024 SPLY Capital. All rights reserved.",

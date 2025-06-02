@@ -128,6 +128,8 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
           primaryButtonLink={config.cta.primaryButtonLink}
           secondaryButtonText={config.cta.secondaryButtonText}
           secondaryButtonLink={config.cta.secondaryButtonLink}
+          tertiaryButtonText={config.cta.tertiaryButtonText}
+          tertiaryButtonLink={config.cta.tertiaryButtonLink}
         />
       </div>
       
