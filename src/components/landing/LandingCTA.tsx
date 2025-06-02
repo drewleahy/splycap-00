@@ -44,23 +44,23 @@ export const LandingCTA = ({
   };
 
   return (
-    <section className={`py-20 px-6 bg-black ${className}`}>
+    <section className={`py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-black ${className}`}>
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 text-white leading-tight">
           {headline}
         </h2>
-        <h3 className="text-xl md:text-2xl font-semibold mb-4 text-gray-200">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3 sm:mb-4 text-gray-200">
           Review Materials and Connect
         </h3>
-        <p className="text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
+        <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-gray-200 max-w-2xl mx-auto leading-relaxed">
           {description}
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
           <Button 
             onClick={() => handleButtonClick(primaryButtonLink)}
             size="lg"
-            className="bg-white text-black hover:bg-gray-100 hover:text-black px-8 py-3 text-lg font-semibold"
+            className="bg-white text-black hover:bg-gray-100 hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
           >
             {primaryButtonText}
           </Button>
@@ -70,7 +70,7 @@ export const LandingCTA = ({
               onClick={() => handleButtonClick(secondaryButtonLink!)}
               variant="outline"
               size="lg"
-              className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-black px-8 py-3 text-lg font-semibold"
+              className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
             >
               {secondaryButtonText}
             </Button>
@@ -81,7 +81,7 @@ export const LandingCTA = ({
               onClick={() => handleButtonClick(tertiaryButtonLink!)}
               variant="outline"
               size="lg"
-              className="border-2 border-gray-300 text-gray-300 bg-transparent hover:bg-gray-300 hover:text-black px-8 py-3 text-lg font-semibold"
+              className="border-2 border-gray-300 text-gray-300 bg-transparent hover:bg-gray-300 hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
             >
               {tertiaryButtonText}
             </Button>
