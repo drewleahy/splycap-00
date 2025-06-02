@@ -26,7 +26,7 @@ export const LandingContentWithLogo = ({
             className="h-16 md:h-20 object-contain"
           />
         </div>
-        <h2 className="text-xl md:text-3xl lg:text-4xl font-bold mb-8 text-gray-900 text-center">
+        <h2 className="text-xl md:text-3xl lg:text-4xl font-bold mb-8 text-gray-900 text-left">
           {title}
         </h2>
         <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
