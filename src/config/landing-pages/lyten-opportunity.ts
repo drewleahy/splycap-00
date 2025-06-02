@@ -1,3 +1,4 @@
+
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -19,6 +20,12 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   content: {
     title: "Global Energy Storage: A $569B Market by 2034",
     body: "The global energy storage systems market is poised for massive growth—projected to double from $289B today to over $569B by 2034 (Precedence Research). Battery Energy Storage Systems (BESS) alone will surge to $186.9B by 2030, driven by innovation from Tesla, LG Chem, Siemens—and now Lyten."
+  },
+  lytenSection: {
+    title: "The Lithium-Sulfur Revolution Has Arrived",
+    body: "Lyten is rewriting the battery playbook with its proprietary 3D Graphene-enabled Lithium-Sulfur (Li-S) platform—offering lighter, more energy-dense, and environmentally superior alternatives to lithium-ion. This is the foundational tech that could reshape EVs, aerospace, and grid-scale storage.",
+    logoSrc: "/lovable-uploads/a2a03b30-6e55-4ec1-b4d4-7450fb3c678a.png",
+    logoAlt: "Lyten Logo"
   },
   features: {
     title: "Why Lyten Represents a Transformational Investment",

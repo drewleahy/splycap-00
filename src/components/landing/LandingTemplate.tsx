@@ -4,6 +4,7 @@ import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
 import { LandingHero } from './LandingHero';
 import { LandingContent } from './LandingContent';
+import { LandingContentWithLogo } from './LandingContentWithLogo';
 import { LandingFeatures } from './LandingFeatures';
 import { LandingCTA } from './LandingCTA';
 import { LandingFooter } from './LandingFooter';
@@ -57,6 +58,15 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         <LandingContent
           title={config.content.title}
           body={config.content.body}
+        />
+      )}
+      
+      {config.lytenSection && (
+        <LandingContentWithLogo
+          title={config.lytenSection.title}
+          body={config.lytenSection.body}
+          logoSrc={config.lytenSection.logoSrc}
+          logoAlt={config.lytenSection.logoAlt}
         />
       )}
       

@@ -21,6 +21,12 @@ export interface LandingPageConfig {
     title: string;
     body: string;
   };
+  lytenSection?: {
+    title: string;
+    body: string;
+    logoSrc: string;
+    logoAlt: string;
+  };
   features?: {
     title: string;
     items: Array<{
