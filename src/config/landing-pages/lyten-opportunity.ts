@@ -1,4 +1,5 @@
 
+
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -135,3 +136,4 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     ]
   }
 };
+
