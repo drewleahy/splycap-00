@@ -84,7 +84,7 @@ export const LandingHero = ({
                 onClick={handleSecondaryCtaClick}
                 size="lg"
                 variant="outline"
-                className="border-white text-white hover:bg-white hover:text-black px-8 py-3 text-lg"
+                className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-black px-8 py-3 text-lg font-medium"
               >
                 {secondaryCtaText}
               </Button>
