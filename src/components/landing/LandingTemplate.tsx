@@ -55,9 +55,6 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         secondaryCtaText={config.hero.secondaryCtaText}
         secondaryCtaLink={config.hero.secondaryCtaLink}
         backgroundImage={config.hero.image}
-        showLogos={config.id === 'lyten-opportunity'}
-        partnerLogoSrc={config.lytenSection?.logoSrc}
-        partnerLogoAlt={config.lytenSection?.logoAlt}
       />
       
       {config.opportunitySection && (

@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Navbar } from '@/components/Navbar';
 
 interface LandingHeroProps {
   headline: string;
@@ -11,9 +10,7 @@ interface LandingHeroProps {
   secondaryCtaText?: string;
   secondaryCtaLink?: string;
   backgroundImage?: string;
-  showLogos?: boolean;
-  partnerLogoSrc?: string;
-  partnerLogoAlt?: string;
+  className?: string;
 }
 
 export const LandingHero = ({
@@ -24,72 +21,77 @@ export const LandingHero = ({
   secondaryCtaText,
   secondaryCtaLink,
   backgroundImage,
-  showLogos = false,
-  partnerLogoSrc,
-  partnerLogoAlt
+  className = ""
 }: LandingHeroProps) => {
-  const backgroundStyle = backgroundImage 
-    ? { backgroundImage: `url(${backgroundImage})` }
-    : { background: 'linear-gradient(135deg, #1a1f2c 0%, #2d3748 100%)' };
+  const handleCtaClick = () => {
+    if (ctaLink.startsWith('#')) {
+      const element = document.querySelector(ctaLink);
+      element?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.open(ctaLink, '_blank');
+    }
+  };
+
+  const handleSecondaryCtaClick = () => {
+    if (secondaryCtaLink) {
+      if (secondaryCtaLink.startsWith('#')) {
+        const element = document.querySelector(secondaryCtaLink);
+        element?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.open(secondaryCtaLink, '_blank');
+      }
+    }
+  };
 
   return (
-    <section 
-      className="min-h-screen flex items-center justify-center relative bg-cover bg-center bg-no-repeat"
-      style={backgroundStyle}
-    >
-      <div className="absolute inset-0 bg-black/50" />
-      <Navbar />
+    <>
+      {/* Confidential Banner */}
+      <div className="bg-black text-white text-center py-2 text-xs sm:text-sm font-medium">
+        CONFIDENTIAL
+      </div>
       
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        {showLogos && (
-          <div className="flex items-center justify-center mb-8 sm:mb-12">
-            <div className="flex items-center space-x-4 sm:space-x-8">
-              <img 
-                src="/lovable-uploads/Logo.png" 
-                alt="SPLY Capital Logo" 
-                className="h-8 sm:h-12 md:h-16"
-              />
-              <span className="text-white text-2xl sm:text-3xl md:text-4xl font-bold">×</span>
-              {partnerLogoSrc && (
-                <img 
-                  src={partnerLogoSrc} 
-                  alt={partnerLogoAlt || "Partner Logo"} 
-                  className="h-8 sm:h-12 md:h-16"
-                />
-              )}
-            </div>
+      <section className={`relative pt-12 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-6 bg-white ${className}`}>
+        {backgroundImage && (
+          <div className="absolute inset-0 z-0">
+            <img 
+              src={backgroundImage} 
+              alt="Background" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           </div>
         )}
         
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 sm:mb-8 leading-tight text-shadow-lg">
-          {headline}
-        </h1>
-        
-        <p className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-8 sm:mb-12 leading-relaxed max-w-3xl mx-auto text-shadow-lg">
-          {subheadline}
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
-          <Button
-            size="lg"
-            className="bg-white text-gray-900 hover:bg-gray-100 font-semibold px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg w-full sm:w-auto"
-            onClick={() => window.open(ctaLink, '_blank')}
-          >
-            {ctaText}
-          </Button>
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-black leading-tight">
+            {headline}
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto text-gray-700 leading-relaxed px-2 sm:px-0">
+            {subheadline}
+          </p>
           
-          {secondaryCtaText && secondaryCtaLink && (
-            <Button
-              variant="outline"
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center items-center px-4 sm:px-0">
+            <Button 
+              onClick={handleCtaClick}
               size="lg"
-              className="border-white text-white hover:bg-white hover:text-gray-900 font-semibold px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
-              onClick={() => window.open(secondaryCtaLink, '_blank')}
+              className="bg-black text-white hover:bg-gray-800 px-6 sm:px-8 py-3 text-base sm:text-lg w-full sm:w-auto"
             >
-              {secondaryCtaText}
+              {ctaText}
             </Button>
-          )}
+            
+            {secondaryCtaText && secondaryCtaLink && (
+              <Button 
+                onClick={handleSecondaryCtaClick}
+                size="lg"
+                variant="outline"
+                className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto"
+              >
+                {secondaryCtaText}
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
