@@ -1,3 +1,4 @@
+
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -64,6 +65,17 @@ export const lytenOpportunityConfig: LandingPageConfig = {
       "Superior performance to incumbent Li-ion leaders (Tesla, CATL, Panasonic)",
       "EXIM Bank $650M commitment supporting emerging market deployment",
       "Blue-chip partners and leadership from Stellantis, Honeywell, NASA, Tesla, GM"
+    ]
+  },
+  strategicBacking: {
+    title: "Validated by Industry and Government",
+    body: "Lyten is supported by both public and private institutions:",
+    headerLabel: "Strategic Backing",
+    keyPoints: [
+      "$650M commitment from U.S. EXIM Bank",
+      "Partners include Stellantis, Honeywell, NASA",
+      "Leadership team includes veterans from Tesla, GM, Panasonic",
+      "Applications in defense and aerospace"
     ]
   },
   features: {
