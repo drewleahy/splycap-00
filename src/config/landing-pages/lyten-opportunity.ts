@@ -1,4 +1,3 @@
-
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -14,8 +13,8 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   hero: {
     headline: "Exclusive Access: Lyten Investment Opportunity",
     subheadline: "Join SPLY Capital's strategic investment in Lyten — a breakthrough Lithium-Sulfur innovator disrupting global energy storage with a proprietary 3D Graphene platform and $4.5B in commercial contracts.",
-    ctaText: "Learn More About This Opportunity",
-    ctaLink: "#details"
+    ctaText: "Schedule a Call",
+    ctaLink: "https://calendly.com/splycapital/lyten-opportunity"
   },
   features: {
     title: "Why Lyten Represents a Transformational Investment",

@@ -53,9 +53,17 @@ export const LandingHero = ({
         <h1 className={`text-2xl md:text-4xl font-bold mb-4 ${backgroundImage ? 'text-white' : 'text-white'}`}>
           {headline}
         </h1>
-        <p className={`text-lg md:text-xl mb-6 max-w-3xl mx-auto ${backgroundImage ? 'text-gray-200' : 'text-gray-300'}`}>
+        <p className={`text-lg md:text-xl mb-8 max-w-3xl mx-auto ${backgroundImage ? 'text-gray-200' : 'text-gray-300'}`}>
           {subheadline}
         </p>
+        
+        <Button 
+          onClick={handleCtaClick}
+          size="lg"
+          className="bg-sply-purple text-white hover:bg-sply-purple/90 px-8 py-3 text-lg"
+        >
+          {ctaText}
+        </Button>
       </div>
     </section>
   );
