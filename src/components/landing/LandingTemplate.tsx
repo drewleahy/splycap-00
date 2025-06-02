@@ -105,13 +105,6 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         />
       )}
       
-      {config.features && (
-        <LandingFeatures
-          title={config.features.title}
-          features={config.features.items}
-        />
-      )}
-      
       <div id="details">
         <LandingCTA
           headline={config.cta.headline}
