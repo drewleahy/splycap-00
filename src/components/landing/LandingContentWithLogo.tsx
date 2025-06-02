@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 
 interface LandingContentWithLogoProps {
   title: string;
@@ -46,21 +45,17 @@ export const LandingContentWithLogo = ({
         </p>
         
         {keyStats && keyStats.length > 0 && (
-          <div className="grid md:grid-cols-3 gap-6">
-            {keyStats.map((stat, index) => (
-              <Card 
-                key={index} 
-                className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <CardContent className="relative p-8 text-center">
-                  <p className="text-lg md:text-xl font-bold text-gray-900 leading-tight">
+          <div className="border-l-4 border-gray-900 pl-6">
+            <ul className="space-y-3">
+              {keyStats.map((stat, index) => (
+                <li key={index} className="flex items-center">
+                  <div className="w-2 h-2 bg-gray-900 rounded-full mr-4 flex-shrink-0"></div>
+                  <span className="text-base md:text-lg font-semibold text-gray-900">
                     {stat}
-                  </p>
-                </CardContent>
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-900 via-black to-gray-900" />
-              </Card>
-            ))}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
