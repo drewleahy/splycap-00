@@ -1,3 +1,4 @@
+
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -42,6 +43,11 @@ export const lytenOpportunityConfig: LandingPageConfig = {
       "95% lithium extraction efficiency",
       "Performance metrics exceed Tesla Megapack, CATL, Panasonic"
     ]
+  },
+  commercialTraction: {
+    title: "Validated with $4.5B in Contracts",
+    body: "Lyten has secured over $4.5B in commercial agreements, including:\n\n$1.5B with Trinidad & Tobago\n\n$1.5B with Angola\n\n$1.5B across additional customers",
+    headerLabel: "Commercial Traction"
   },
   features: {
     title: "Why Lyten Represents a Transformational Investment",

@@ -82,6 +82,15 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         />
       )}
       
+      {config.commercialTraction && (
+        <LandingContent
+          title={config.commercialTraction.title}
+          body={config.commercialTraction.body}
+          headerLabel={config.commercialTraction.headerLabel}
+          className="bg-gray-50"
+        />
+      )}
+      
       {config.features && (
         <LandingFeatures
           title={config.features.title}

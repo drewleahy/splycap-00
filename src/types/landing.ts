@@ -40,6 +40,11 @@ export interface LandingPageConfig {
     headerLabel?: string;
     keyStats?: string[];
   };
+  commercialTraction?: {
+    title: string;
+    body: string;
+    headerLabel?: string;
+  };
   features?: {
     title: string;
     items: Array<{
