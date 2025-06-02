@@ -46,23 +46,16 @@ export const LandingHero = ({
           <img
             src="/lovable-uploads/f7a927cd-a039-40ff-82ba-7da595d28922.png"
             alt="SPLY CAPITAL"
-            className="h-12 md:h-20 mx-auto mb-8"
+            className="h-8 md:h-12 mx-auto mb-6"
           />
         )}
         
-        <h1 className={`text-4xl md:text-6xl font-bold mb-6 ${backgroundImage ? 'text-white' : 'text-white'}`}>
+        <h1 className={`text-2xl md:text-4xl font-bold mb-4 ${backgroundImage ? 'text-white' : 'text-white'}`}>
           {headline}
         </h1>
-        <p className={`text-xl md:text-2xl mb-8 max-w-3xl mx-auto ${backgroundImage ? 'text-gray-200' : 'text-gray-300'}`}>
+        <p className={`text-lg md:text-xl mb-6 max-w-3xl mx-auto ${backgroundImage ? 'text-gray-200' : 'text-gray-300'}`}>
           {subheadline}
         </p>
-        <Button 
-          onClick={handleCtaClick}
-          size="lg"
-          className="bg-white hover:bg-gray-100 text-black px-8 py-3 text-lg"
-        >
-          {ctaText}
-        </Button>
       </div>
     </section>
   );
