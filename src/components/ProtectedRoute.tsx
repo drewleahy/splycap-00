@@ -16,17 +16,8 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     userId: user?.id,
     isLoading,
     path: location.pathname,
-    adminAuthenticated: localStorage.getItem("admin-authenticated") === "true"
+    userAuthenticated: !!user
   });
-
-  // Check if the user is coming from the admin page
-  const comingFromAdmin = localStorage.getItem("admin-authenticated") === "true";
-  
-  // If coming from admin, allow access without authentication check
-  if (comingFromAdmin) {
-    console.log("ProtectedRoute: Access granted via admin authentication");
-    return <Outlet />;
-  }
 
   // If authentication is still loading, show a loading state
   if (isLoading) {
@@ -45,11 +36,21 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   // If user is not authenticated, redirect to login
   if (!user) {
     console.log("ProtectedRoute: Not authenticated, redirecting to auth page");
-    return <Navigate to="/venturepartners/auth" replace />;
+    return <Navigate to="/venturepartners/auth" state={{ from: location }} replace />;
   }
 
-  // If there are allowed roles and user doesn't have one of them, redirect to dashboard
-  // This would require a database query to get the user's role, but we'll implement that later
+  // TODO: Implement proper role-based access control
+  // This would require checking the user's role from the database
+  // For now, we allow all authenticated users
+  if (allowedRoles && allowedRoles.length > 0) {
+    console.log("ProtectedRoute: Role checking not yet implemented, allowing access");
+    // In the future, this should check user roles from the database
+    // const userRole = await getUserRole(user.id);
+    // if (!allowedRoles.includes(userRole)) {
+    //   return <Navigate to="/unauthorized" replace />;
+    // }
+  }
+
   console.log("ProtectedRoute: Authentication successful, granting access");
   
   return <Outlet />;

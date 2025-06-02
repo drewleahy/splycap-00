@@ -45,7 +45,11 @@ function App() {
         <Routes>
           {/* Main Routes */}
           <Route path="/" element={<Index />} />
-          <Route path="/admin" element={<Admin />} />
+          
+          {/* Protected Admin Route */}
+          <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
           
           {/* Hidden Landing Pages */}
           <Route path="/exclusive-investment-2024" element={<ExclusiveInvestment2024 />} />

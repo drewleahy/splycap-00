@@ -16,6 +16,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AdminFileSelector } from "@/components/AdminFileSelector";
 import { PendingPartnersManager } from "@/components/admin/PendingPartnersManager";
 import { VenturePartnerManager } from "@/components/admin/VenturePartnerManager";
+import { useAuth } from "@/hooks/use-auth";
+import { Navigate } from "react-router-dom";
 
 const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   const [hasError, setHasError] = useState(false);
@@ -70,18 +72,35 @@ class ErrorCatcher extends React.Component<{
 const Admin = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { user, isLoading } = useAuth();
   const [uploadedFiles, setUploadedFiles] = useState<Array<{url: string, name: string}>>([]);
   const [isCopied, setIsCopied] = useState<{[key: string]: boolean}>({});
   const [selectedAdminFiles, setSelectedAdminFiles] = useState<Array<{id: string, name: string, publicUrl: string}>>([]);
 
-  // Set the admin-authenticated flag when the Admin page is loaded
-  useEffect(() => {
-    localStorage.setItem("admin-authenticated", "true");
-    return () => {
-      // We don't clear the flag when leaving the admin page
-      // as we want the authentication to persist
-    };
-  }, []);
+  // Show loading while auth is being checked
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p>Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect non-authenticated users to login
+  if (!user) {
+    return <Navigate to="/venturepartners/auth" replace />;
+  }
+
+  // TODO: Add proper admin role check here
+  // For now, we allow all authenticated users to access admin
+  // In production, this should check if user has admin role
+  // const userRole = await getUserRole(user.id);
+  // if (userRole !== 'admin') {
+  //   return <Navigate to="/unauthorized" replace />;
+  // }
 
   const handleRefreshAll = async () => {
     await Promise.all([
@@ -136,10 +155,15 @@ const Admin = () => {
     <div className="container mx-auto py-8 px-4 space-y-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Content Management</h1>
-        <Button onClick={handleRefreshAll} className="flex items-center gap-2">
-          <RefreshCw className="w-4 h-4" />
-          Refresh All
-        </Button>
+        <div className="flex items-center gap-4">
+          <div className="text-sm text-gray-600">
+            Logged in as: {user.email}
+          </div>
+          <Button onClick={handleRefreshAll} className="flex items-center gap-2">
+            <RefreshCw className="w-4 h-4" />
+            Refresh All
+          </Button>
+        </div>
       </div>
       
       <Tabs defaultValue="website" className="space-y-6">
