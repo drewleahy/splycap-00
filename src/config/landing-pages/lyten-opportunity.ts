@@ -30,7 +30,7 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   },
   content: {
     title: "Global Energy Storage: A $569B Market by 2034",
-    body: "The global energy storage systems market is poised for massive growth—projected to double from $289B today to over $569B by 2034 (Precedence Research). Battery Energy Storage Systems (BESS) alone will surge to $186.9B by 2030, driven by innovation from Tesla, LG Chem, Siemens—and now Lyten.",
+    body: "The global energy storage systems market is valued at $288.97B as of 2025 and projected to reach $569.39B by 2034 (7.87% CAGR, Precedence Research). Battery Energy Storage Systems (BESS) alone are expected to triple to $186.9B by 2030 (Research & Markets). Lyten is targeting the $120B+ global battery market with applications across EVs, defense, aerospace, and grid-scale storage.",
     headerLabel: "Market Context"
   },
   lytenSection: {
