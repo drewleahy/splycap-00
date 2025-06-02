@@ -1,3 +1,4 @@
+
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -15,6 +16,10 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     subheadline: "Join SPLY Capital's strategic investment in Lyten — a breakthrough Lithium-Sulfur innovator disrupting global energy storage with a proprietary 3D Graphene platform and $4.5B in commercial contracts.",
     ctaText: "Schedule a Call",
     ctaLink: "https://calendly.com/splycapital/lyten-opportunity"
+  },
+  content: {
+    title: "A Once-in-a-Decade Shift in Energy Storage",
+    body: "The global energy storage systems market is poised for massive growth—projected to double from $289B today to over $569B by 2034 (Precedence Research). Battery Energy Storage Systems (BESS) alone will surge to $186.9B by 2030, driven by innovation from Tesla, LG Chem, Siemens—and now Lyten."
   },
   features: {
     title: "Why Lyten Represents a Transformational Investment",

@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
 import { LandingHero } from './LandingHero';
+import { LandingContent } from './LandingContent';
 import { LandingFeatures } from './LandingFeatures';
 import { LandingCTA } from './LandingCTA';
 import { LandingFooter } from './LandingFooter';
@@ -51,6 +52,13 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         ctaLink={config.hero.ctaLink}
         backgroundImage={config.hero.image}
       />
+      
+      {config.content && (
+        <LandingContent
+          title={config.content.title}
+          body={config.content.body}
+        />
+      )}
       
       {config.features && (
         <LandingFeatures

@@ -17,6 +17,10 @@ export interface LandingPageConfig {
     ctaText: string;
     ctaLink: string;
   };
+  content?: {
+    title: string;
+    body: string;
+  };
   features?: {
     title: string;
     items: Array<{
