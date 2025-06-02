@@ -29,6 +29,9 @@ import Commissions from "@/pages/venturepartners/Commissions";
 import Settings from "@/pages/venturepartners/Settings";
 import CommissionSettings from "@/pages/venturepartners/CommissionSettings";
 
+// Landing Pages
+import ExclusiveInvestment2024 from "@/pages/landing/ExclusiveInvestment2024";
+
 // Components
 import { LPLayout } from "@/components/LPLayout";
 import { VPLayout } from "@/components/VPLayout";
@@ -42,6 +45,9 @@ function App() {
           {/* Main Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/admin" element={<Admin />} />
+          
+          {/* Hidden Landing Pages */}
+          <Route path="/exclusive-investment-2024" element={<ExclusiveInvestment2024 />} />
           
           {/* LP Routes - Add both case variants */}
           <Route path="/lp-splash" element={<LPSplash />} />
