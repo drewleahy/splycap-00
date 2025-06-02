@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { LucideIcon } from 'lucide-react';
@@ -26,7 +25,7 @@ export const LandingFeatures = ({
   className = "" 
 }: LandingFeaturesProps) => {
   return (
-    <section className={`py-20 px-6 bg-gray-50 ${className}`}>
+    <section className={`py-20 px-6 bg-white ${className}`}>
       <div className="max-w-6xl mx-auto">
         <div className="max-w-4xl mx-auto text-left mb-16">
           {headerLabel && (
