@@ -137,20 +137,7 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     tertiaryButtonLink: "https://calendly.com/splycapital/lyten-opportunity"
   },
   footer: {
-    copyright: "© 2024 SPLY Capital. All rights reserved.",
-    links: [
-      {
-        text: "Investment Disclosures",
-        url: "/disclosures"
-      },
-      {
-        text: "Privacy Policy",
-        url: "/privacy"
-      },
-      {
-        text: "Contact Us",
-        url: "mailto:info@splycapital.com"
-      }
-    ]
+    copyright: "© 2025 SPLY CAPITAL. All rights reserved.",
+    links: []
   }
 };
