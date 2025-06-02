@@ -35,7 +35,7 @@ export const LandingHero = ({
         CONFIDENTIAL
       </div>
       
-      <section className={`relative py-20 px-6 ${backgroundImage ? '' : 'bg-black'} ${className}`}>
+      <section className={`relative py-12 px-6 ${backgroundImage ? '' : 'bg-black'} ${className}`}>
         {backgroundImage && (
           <div className="absolute inset-0 z-0">
             <img 
