@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface LandingContentWithLogoProps {
@@ -33,7 +32,7 @@ export const LandingContentWithLogo = ({
             <img 
               src={logoSrc} 
               alt={logoAlt} 
-              className="h-8 md:h-10 mr-4"
+              className="h-12 md:h-16 mr-4"
             />
             <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
               {title}
