@@ -35,7 +35,7 @@ export const LandingCTA = ({
   };
 
   return (
-    <section className={`py-20 px-6 bg-sply-purple ${className}`}>
+    <section className={`py-20 px-6 bg-black ${className}`}>
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
           {headline}
@@ -51,7 +51,7 @@ export const LandingCTA = ({
           <Button 
             onClick={() => handleButtonClick(primaryButtonLink)}
             size="lg"
-            className="bg-white text-sply-purple hover:bg-gray-100 px-8 py-3 text-lg"
+            className="bg-white text-black hover:bg-gray-100 hover:text-black px-8 py-3 text-lg font-semibold"
           >
             {primaryButtonText}
           </Button>
@@ -61,7 +61,7 @@ export const LandingCTA = ({
               onClick={() => handleButtonClick(secondaryButtonLink!)}
               variant="outline"
               size="lg"
-              className="border-white text-white hover:bg-white hover:text-sply-purple px-8 py-3 text-lg"
+              className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-black px-8 py-3 text-lg font-semibold"
             >
               {secondaryButtonText}
             </Button>
@@ -72,7 +72,7 @@ export const LandingCTA = ({
               onClick={() => handleButtonClick(tertiaryButtonLink!)}
               variant="outline"
               size="lg"
-              className="border-white text-white hover:bg-white hover:text-sply-purple px-8 py-3 text-lg"
+              className="border-2 border-gray-300 text-gray-300 bg-transparent hover:bg-gray-300 hover:text-black px-8 py-3 text-lg font-semibold"
             >
               {tertiaryButtonText}
             </Button>
