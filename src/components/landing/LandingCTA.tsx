@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import jsPDF from 'jspdf';
 
 interface LandingCTAProps {
   headline: string;
@@ -25,16 +26,65 @@ export const LandingCTA = ({
   tertiaryButtonLink,
   className = ""
 }: LandingCTAProps) => {
-  const handleButtonClick = (link: string) => {
-    if (link.startsWith('#download-flyer')) {
-      // Handle flyer download
-      const flyerUrl = '/lovable-uploads/e35f1acd-f36f-4a73-a203-ffb0a76fd7bd.png';
+  const generatePDFFlyer = async () => {
+    try {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      
+      // Image URLs for the flyer pages
+      const image1Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.50.48 AM.png';
+      const image2Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.51.19 AM.png';
+      
+      // Helper function to load image and get dimensions
+      const loadImage = (url: string): Promise<HTMLImageElement> => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+          img.src = url;
+        });
+      };
+      
+      // Load and add first image
+      const img1 = await loadImage(image1Url);
+      const img1Ratio = img1.width / img1.height;
+      const img1Width = pageWidth - 20; // 10mm margin on each side
+      const img1Height = img1Width / img1Ratio;
+      
+      pdf.addImage(img1, 'PNG', 10, 10, img1Width, Math.min(img1Height, pageHeight - 20));
+      
+      // Add new page for second image
+      pdf.addPage();
+      
+      // Load and add second image
+      const img2 = await loadImage(image2Url);
+      const img2Ratio = img2.width / img2.height;
+      const img2Width = pageWidth - 20;
+      const img2Height = img2Width / img2Ratio;
+      
+      pdf.addImage(img2, 'PNG', 10, 10, img2Width, Math.min(img2Height, pageHeight - 20));
+      
+      // Save the PDF
+      pdf.save('Lyten-Investment-Flyer.pdf');
+      
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      // Fallback to downloading the first image if PDF generation fails
+      const fallbackUrl = '/lovable-uploads/Screenshot 2025-01-23 at 10.50.48 AM.png';
       const downloadLink = document.createElement('a');
-      downloadLink.href = flyerUrl;
+      downloadLink.href = fallbackUrl;
       downloadLink.download = 'Lyten-Investment-Flyer.png';
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
+    }
+  };
+
+  const handleButtonClick = (link: string) => {
+    if (link.startsWith('#download-flyer')) {
+      generatePDFFlyer();
     } else if (link.startsWith('#')) {
       const element = document.querySelector(link);
       element?.scrollIntoView({ behavior: 'smooth' });
