@@ -91,6 +91,15 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         />
       )}
       
+      {config.whyInvesting && (
+        <LandingOpportunity
+          title={config.whyInvesting.title}
+          body={config.whyInvesting.body}
+          keyPoints={config.whyInvesting.keyPoints}
+          className="bg-white"
+        />
+      )}
+      
       {config.features && (
         <LandingFeatures
           title={config.features.title}

@@ -45,6 +45,11 @@ export interface LandingPageConfig {
     body: string;
     headerLabel?: string;
   };
+  whyInvesting?: {
+    title: string;
+    body: string;
+    keyPoints: string[];
+  };
   features?: {
     title: string;
     items: Array<{

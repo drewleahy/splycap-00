@@ -49,6 +49,17 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     body: "Lyten has secured over $4.5B in commercial agreements, including:\n\n$1.5B with Trinidad & Tobago\n\n$1.5B with Angola\n\n$1.5B across additional customers",
     headerLabel: "Commercial Traction"
   },
+  whyInvesting: {
+    title: "Why We're Investing",
+    body: "Lyten combines proprietary IP, strong commercial traction, and strategic alignment with global energy and defense priorities. This investment reflects our conviction in their ability to scale a differentiated battery technology with real-world demand.",
+    keyPoints: [
+      "$4.5B in signed commercial contracts across energy, infrastructure, and defense",
+      "500+ patents securing Li-S and 3D Graphene innovations",
+      "Superior performance to incumbent Li-ion leaders (Tesla, CATL, Panasonic)",
+      "EXIM Bank $650M commitment supporting emerging market deployment",
+      "Blue-chip partners and leadership from Stellantis, Honeywell, NASA, Tesla, GM"
+    ]
+  },
   features: {
     title: "Why Lyten Represents a Transformational Investment",
     items: [
