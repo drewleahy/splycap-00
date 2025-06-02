@@ -103,7 +103,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
               title={config.whyInvesting.title}
               description={config.whyInvesting.body}
               features={config.whyInvesting.items}
-              headerLabel="Why We're Investing"
+              headerLabel="The Opportunity"
               className="bg-white"
             />
           ) : (
@@ -111,7 +111,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
               title={config.whyInvesting.title}
               body={config.whyInvesting.body}
               keyPoints={config.whyInvesting.keyPoints || []}
-              headerLabel="Why We're Investing"
+              headerLabel="The Opportunity"
               className="bg-white"
             />
           )}
@@ -123,6 +123,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
           title={config.strategicBacking.title}
           body={config.strategicBacking.body}
           keyPoints={config.strategicBacking.keyPoints}
+          headerLabel="Strategic Backing"
           className="bg-gray-50"
         />
       )}
