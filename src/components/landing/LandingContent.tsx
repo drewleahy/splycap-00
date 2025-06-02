@@ -26,6 +26,16 @@ export const LandingContent = ({
   // Check if this is the Commercial Traction section
   const isCommercialTraction = headerLabel === "Commercial Traction";
   
+  React.useEffect(() => {
+    console.log('LandingContent render:', {
+      headerLabel,
+      isCommercialTraction,
+      isMobile,
+      highlightedIndex,
+      keyPointsLength: keyPoints?.length
+    });
+  }, [headerLabel, isCommercialTraction, isMobile, highlightedIndex, keyPoints?.length]);
+  
   return (
     <section className={`py-12 sm:py-16 px-4 sm:px-6 bg-white ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
@@ -47,12 +57,19 @@ export const LandingContent = ({
         {keyPoints && keyPoints.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {keyPoints.map((point, index) => {
-              const isHighlighted = isMobile && isCommercialTraction && highlightedIndex === index;
+              const shouldHighlight = isMobile && isCommercialTraction;
+              const isHighlighted = shouldHighlight && highlightedIndex === index;
+              
+              console.log(`Rendering card ${index}:`, {
+                shouldHighlight,
+                isHighlighted,
+                point: point.substring(0, 20) + '...'
+              });
               
               return (
                 <Card 
                   key={index}
-                  ref={isMobile && isCommercialTraction ? setElementRef(index) : undefined}
+                  ref={shouldHighlight ? setElementRef(index) : undefined}
                   className={`group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${
                     isHighlighted 
                       ? 'animate-pulse bg-gradient-to-br from-yellow-100 via-yellow-50 to-white shadow-2xl scale-105 border-2 border-yellow-400' 
