@@ -29,18 +29,33 @@ export const LandingCTA = ({
   const generatePDFFlyer = async () => {
     console.log('Starting PDF generation...');
     
+    // Image URLs for the flyer pages
+    const image1Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.50.48 AM.png';
+    const image2Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.51.19 AM.png';
+    
+    console.log('Image URLs:', { image1Url, image2Url });
+    
+    // First, let's test if we can access the images at all
     try {
+      console.log('Testing image accessibility...');
+      
+      const testImage1 = await fetch(image1Url);
+      console.log('Image 1 fetch response:', testImage1.status, testImage1.statusText);
+      
+      const testImage2 = await fetch(image2Url);
+      console.log('Image 2 fetch response:', testImage2.status, testImage2.statusText);
+      
+      if (!testImage1.ok || !testImage2.ok) {
+        throw new Error(`Images not accessible. Image 1: ${testImage1.status}, Image 2: ${testImage2.status}`);
+      }
+      
+      console.log('Both images are accessible, proceeding with PDF generation...');
+      
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       
       console.log('PDF dimensions:', { pageWidth, pageHeight });
-      
-      // Image URLs for the flyer pages
-      const image1Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.50.48 AM.png';
-      const image2Url = '/lovable-uploads/Screenshot 2025-01-23 at 10.51.19 AM.png';
-      
-      console.log('Image URLs:', { image1Url, image2Url });
       
       // Helper function to load image and get dimensions
       const loadImage = (url: string): Promise<HTMLImageElement> => {
@@ -85,35 +100,35 @@ export const LandingCTA = ({
       console.log('PDF saved successfully!');
       
     } catch (error) {
-      console.error('Error generating PDF:', error);
-      console.log('Falling back to direct image download...');
+      console.error('Detailed error in PDF generation:', error);
+      console.log('Attempting simple direct download fallback...');
       
-      // Enhanced fallback - try to download the first image directly
+      // Simplified fallback - just trigger download of first image
       try {
-        const fallbackUrl = '/lovable-uploads/Screenshot 2025-01-23 at 10.50.48 AM.png';
-        
-        // First try to fetch the image to make sure it exists
-        const response = await fetch(fallbackUrl);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch image: ${response.status}`);
-        }
-        
-        const blob = await response.blob();
-        const downloadUrl = URL.createObjectURL(blob);
-        
         const downloadLink = document.createElement('a');
-        downloadLink.href = downloadUrl;
+        downloadLink.href = image1Url;
         downloadLink.download = 'Lyten-Investment-Flyer-Page1.png';
+        downloadLink.target = '_blank';
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
         
-        // Clean up the object URL
-        URL.revokeObjectURL(downloadUrl);
+        console.log('Simple download link created and clicked');
         
-        console.log('Fallback download completed successfully');
+        // Also try the second image
+        setTimeout(() => {
+          const downloadLink2 = document.createElement('a');
+          downloadLink2.href = image2Url;
+          downloadLink2.download = 'Lyten-Investment-Flyer-Page2.png';
+          downloadLink2.target = '_blank';
+          document.body.appendChild(downloadLink2);
+          downloadLink2.click();
+          document.body.removeChild(downloadLink2);
+          console.log('Second image download link created and clicked');
+        }, 1000);
+        
       } catch (fallbackError) {
-        console.error('Fallback download also failed:', fallbackError);
+        console.error('All download methods failed:', fallbackError);
         alert('Sorry, there was an issue downloading the flyer. Please try again or contact support.');
       }
     }
