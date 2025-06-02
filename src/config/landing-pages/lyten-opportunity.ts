@@ -1,4 +1,3 @@
-
 import { LandingPageConfig } from '@/types/landing';
 import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 
@@ -132,8 +131,8 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     description: "This round is closing quickly. We've secured a limited allocation for the SPLY Capital network.",
     primaryButtonText: "Download Flyer",
     primaryButtonLink: "#download-flyer",
-    secondaryButtonText: "Request Diligence Access",
-    secondaryButtonLink: "mailto:investments@splycapital.com?subject=Lyten Diligence Access Request&body=I am interested in accessing due diligence materials for the Lyten investment opportunity.",
+    secondaryButtonText: "Sign NDA to View Diligence Materials",
+    secondaryButtonLink: "https://docsend.com/view/s/xq8d5sgc7btdhde8",
     tertiaryButtonText: "Book a Call",
     tertiaryButtonLink: "https://calendly.com/splycapital/lyten-opportunity"
   },
