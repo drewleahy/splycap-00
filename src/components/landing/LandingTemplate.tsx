@@ -66,6 +66,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         <LandingContent
           title={config.content.title}
           body={config.content.body}
+          headerLabel={config.content.headerLabel}
         />
       )}
       
