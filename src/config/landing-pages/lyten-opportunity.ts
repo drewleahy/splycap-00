@@ -128,7 +128,7 @@ export const lytenOpportunityConfig: LandingPageConfig = {
   },
   cta: {
     headline: "Next Steps",
-    description: "This round is closing quickly. We've secured a limited allocation for the SPLY Capital network.",
+    description: "We've secured this exclusive allocation for the SPLYCAP network at a $1.55B valuation, and the round is closing quickly.",
     primaryButtonText: "Download Flyer",
     primaryButtonLink: "#download-flyer",
     secondaryButtonText: "Sign NDA to View Diligence Materials",
