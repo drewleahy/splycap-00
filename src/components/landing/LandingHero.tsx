@@ -46,11 +46,11 @@ export const LandingHero = ({
   return (
     <>
       {/* Confidential Banner */}
-      <div className="bg-black text-white text-center py-2 text-sm font-medium">
+      <div className="bg-black text-white text-center py-2 text-xs sm:text-sm font-medium">
         CONFIDENTIAL
       </div>
       
-      <section className={`relative pt-20 pb-16 px-6 bg-white ${className}`}>
+      <section className={`relative pt-12 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-6 bg-white ${className}`}>
         {backgroundImage && (
           <div className="absolute inset-0 z-0">
             <img 
@@ -63,18 +63,18 @@ export const LandingHero = ({
         )}
         
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-4 text-black">
+          <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-black leading-tight">
             {headline}
           </h1>
-          <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto text-gray-700">
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto text-gray-700 leading-relaxed px-2 sm:px-0">
             {subheadline}
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center items-center px-4 sm:px-0">
             <Button 
               onClick={handleCtaClick}
               size="lg"
-              className="bg-black text-white hover:bg-gray-800 px-8 py-3 text-lg"
+              className="bg-black text-white hover:bg-gray-800 px-6 sm:px-8 py-3 text-base sm:text-lg w-full sm:w-auto"
             >
               {ctaText}
             </Button>
@@ -84,7 +84,7 @@ export const LandingHero = ({
                 onClick={handleSecondaryCtaClick}
                 size="lg"
                 variant="outline"
-                className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white px-8 py-3 text-lg font-medium"
+                className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto"
               >
                 {secondaryCtaText}
               </Button>
