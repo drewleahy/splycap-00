@@ -49,7 +49,7 @@ function App() {
           
           {/* Hidden Landing Pages */}
           <Route path="/exclusive-investment-2024" element={<ExclusiveInvestment2024 />} />
-          <Route path="/lyten-exclusive-2024" element={<LytenOpportunity />} />
+          <Route path="/lyten-exclusive-2025" element={<LytenOpportunity />} />
           
           {/* LP Routes - Add both case variants */}
           <Route path="/lp-splash" element={<LPSplash />} />
