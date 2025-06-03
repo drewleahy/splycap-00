@@ -12,14 +12,23 @@ export default defineConfig(({ mode }) => ({
   build: {
     target: 'esnext',
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: false,
     minify: 'esbuild',
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'ui-vendor': ['lucide-react', '@radix-ui/react-slot'],
+          'ui-vendor': ['lucide-react'],
+          'router-vendor': ['react-router-dom'],
         },
+      },
+      external: (id) => {
+        // Handle dynamic imports gracefully
+        if (id.includes('jspdf') && mode === 'production') {
+          return false;
+        }
+        return false;
       },
     },
   },
@@ -34,10 +43,10 @@ export default defineConfig(({ mode }) => ({
     },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'jspdf'],
+    include: ['react', 'react-dom', 'react-router-dom'],
+    exclude: ['jspdf'],
   },
   define: {
-    // Ensure environment variables are properly defined for build
     'process.env.NODE_ENV': JSON.stringify(mode),
   },
 }));

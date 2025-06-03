@@ -26,70 +26,52 @@ export const LandingCTA = ({
   className = ""
 }: LandingCTAProps) => {
   const downloadFlyer = async () => {
-    console.log('Starting PDF flyer creation...');
+    console.log('Starting flyer download...');
     
     const image1Url = '/lovable-uploads/f8e2333a-4626-4ee6-9192-f37dffa4a939.png';
     const image2Url = '/lovable-uploads/3b4ad6cd-8468-4560-b1ee-c1367789ad85.png';
     
     try {
-      // Dynamic import to avoid build issues
-      const { default: jsPDF } = await import('jspdf');
+      // Try to open images directly first (most reliable method)
+      window.open(image1Url, '_blank');
+      setTimeout(() => {
+        window.open(image2Url, '_blank');
+      }, 500);
       
-      console.log('Creating PDF with both images...');
+      console.log('Opened flyer images in new tabs');
       
-      // Create a new PDF document
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      
-      // Function to convert image to base64
-      const getImageBase64 = async (url: string): Promise<string> => {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch image: ${response.status}`);
-        }
-        const blob = await response.blob();
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result as string);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-      };
-      
-      // Get both images as base64
-      console.log('Converting images to base64...');
-      const image1Base64 = await getImageBase64(image1Url);
-      const image2Base64 = await getImageBase64(image2Url);
-      
-      // Add first image to PDF (first page)
-      console.log('Adding first image to PDF...');
-      pdf.addImage(image1Base64, 'PNG', 10, 10, 190, 277); // A4 proportions with margins
-      
-      // Add new page for second image
-      pdf.addPage();
-      console.log('Adding second image to PDF...');
-      pdf.addImage(image2Base64, 'PNG', 10, 10, 190, 277); // A4 proportions with margins
-      
-      // Save the PDF
-      console.log('Saving PDF...');
-      pdf.save('Lyten-Investment-Flyer.pdf');
-      
-      console.log('PDF download completed successfully');
+      // Optional: Try PDF creation as enhancement if available
+      try {
+        const { default: jsPDF } = await import('jspdf');
+        
+        const getImageBase64 = async (url: string): Promise<string> => {
+          const response = await fetch(url);
+          const blob = await response.blob();
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+        };
+        
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const image1Base64 = await getImageBase64(image1Url);
+        const image2Base64 = await getImageBase64(image2Url);
+        
+        pdf.addImage(image1Base64, 'PNG', 10, 10, 190, 277);
+        pdf.addPage();
+        pdf.addImage(image2Base64, 'PNG', 10, 10, 190, 277);
+        pdf.save('Lyten-Investment-Flyer.pdf');
+        
+        console.log('PDF download completed');
+      } catch (pdfError) {
+        console.log('PDF creation not available, images opened instead');
+      }
       
     } catch (error) {
-      console.error('PDF creation failed:', error);
-      
-      // Fallback: open images in new tabs if PDF creation fails
-      console.log('Trying fallback: opening images in new tabs...');
-      try {
-        window.open(image1Url, '_blank');
-        setTimeout(() => {
-          window.open(image2Url, '_blank');
-        }, 500);
-        console.log('Opened images in new tabs as fallback');
-      } catch (fallbackError) {
-        console.error('All download methods failed:', fallbackError);
-        alert('Unable to download the flyer. Please contact support or try refreshing the page.');
-      }
+      console.error('Download failed:', error);
+      alert('Unable to download the flyer. Please contact support.');
     }
   };
 
