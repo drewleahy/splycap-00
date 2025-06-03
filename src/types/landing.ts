@@ -18,6 +18,8 @@ export interface LandingPageConfig {
     ctaLink: string;
     secondaryCtaText?: string;
     secondaryCtaLink?: string;
+    tertiaryCtaText?: string;
+    tertiaryCtaLink?: string;
   };
   opportunitySection?: {
     title: string;

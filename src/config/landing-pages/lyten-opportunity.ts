@@ -16,7 +16,9 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     ctaText: "Schedule a Call",
     ctaLink: "https://calendly.com/haley-splycapital/deal-interest",
     secondaryCtaText: "Watch Video",
-    secondaryCtaLink: "https://vimeo.com/999262573"
+    secondaryCtaLink: "https://vimeo.com/999262573",
+    tertiaryCtaText: "Sign NDA to View Diligence Materials",
+    tertiaryCtaLink: "https://docsend.com/view/s/xq8d5sgc7btdhde8"
   },
   opportunitySection: {
     title: "Access to an Oversubscribed Round at a Strategic Entry Point",

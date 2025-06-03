@@ -42,6 +42,8 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         ctaLink={config.hero.ctaLink}
         secondaryCtaText={config.hero.secondaryCtaText}
         secondaryCtaLink={config.hero.secondaryCtaLink}
+        tertiaryCtaText={config.hero.tertiaryCtaText}
+        tertiaryCtaLink={config.hero.tertiaryCtaLink}
         backgroundImage={config.hero.image}
       />
       
