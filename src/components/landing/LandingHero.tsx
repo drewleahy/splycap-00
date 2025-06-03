@@ -105,7 +105,7 @@ export const LandingHero = ({
                 onClick={handleSecondaryCtaClick}
                 size="lg"
                 variant="outline"
-                className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto"
+                className="border-2 border-gray-600 text-gray-600 bg-transparent hover:bg-gray-600 hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto"
               >
                 {secondaryCtaText}
               </Button>
@@ -116,7 +116,7 @@ export const LandingHero = ({
                 onClick={handleTertiaryCtaClick}
                 size="lg"
                 variant="outline"
-                className="border-2 border-gray-600 text-gray-600 bg-transparent hover:bg-gray-600 hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto"
+                className="border-2 border-black text-black bg-transparent hover:bg-black hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto"
               >
                 {tertiaryCtaText}
               </Button>
