@@ -39,53 +39,47 @@ export const LandingCTA = ({
       }
     ];
 
-    let downloadCount = 0;
-    
-    for (const file of flyerFiles) {
+    // Download each file with a longer delay to avoid browser blocking
+    for (let i = 0; i < flyerFiles.length; i++) {
+      const file = flyerFiles[i];
+      
       try {
-        // Method 1: Try direct download
+        console.log(`Downloading ${file.filename}...`);
+        
+        // Fetch the file and create a blob
+        const response = await fetch(file.url);
+        const blob = await response.blob();
+        
+        // Create download link
         const link = document.createElement('a');
-        link.href = file.url;
+        const objectUrl = URL.createObjectURL(blob);
+        link.href = objectUrl;
         link.download = file.filename;
         link.style.display = 'none';
+        
+        // Add to DOM, click, and clean up
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        downloadCount++;
         
-        // Small delay between downloads
-        await new Promise(resolve => setTimeout(resolve, 300));
+        // Clean up the object URL
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+        
+        console.log(`${file.filename} download initiated`);
+        
+        // Wait longer between downloads to ensure browser processes each one
+        if (i < flyerFiles.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
         
       } catch (error) {
-        console.warn(`Direct download failed for ${file.filename}, trying fallback:`, error);
-        
-        // Method 2: Fallback - open in new tab
-        try {
-          window.open(file.url, '_blank');
-          downloadCount++;
-        } catch (fallbackError) {
-          console.error(`All download methods failed for ${file.filename}:`, fallbackError);
-        }
+        console.error(`Failed to download ${file.filename}:`, error);
+        // Fallback: open in new tab
+        window.open(file.url, '_blank');
       }
     }
     
-    // Provide user feedback
-    if (downloadCount === flyerFiles.length) {
-      console.log('All flyer files downloaded successfully');
-      // Optional: Show success message
-    } else if (downloadCount > 0) {
-      alert(`Downloaded ${downloadCount} of ${flyerFiles.length} flyer pages. If some files didn't download, please check your browser's download settings or pop-up blocker.`);
-    } else {
-      alert('Unable to download the flyer automatically. The flyer files will open in new tabs - please save them manually. If you continue to have issues, please contact us directly.');
-      // Last resort: open both files in new tabs
-      flyerFiles.forEach(file => {
-        try {
-          window.open(file.url, '_blank');
-        } catch (error) {
-          console.error('Even fallback method failed:', error);
-        }
-      });
-    }
+    console.log('All flyer downloads initiated');
   };
 
   const handleButtonClick = (link: string) => {
