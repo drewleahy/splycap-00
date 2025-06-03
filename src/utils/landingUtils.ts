@@ -1,11 +1,9 @@
 
 import { LandingPageConfig } from '@/types/landing';
-import { specialOffer2024Config } from '@/config/landing-pages/special-offer-2024';
 import { lytenOpportunityConfig } from '@/config/landing-pages/lyten-opportunity';
 
 // Registry of all landing page configurations
 const landingPageConfigs: Record<string, LandingPageConfig> = {
-  'special-offer-2024': specialOffer2024Config,
   'lyten-opportunity': lytenOpportunityConfig,
   // Add more configurations here as you create them
 };

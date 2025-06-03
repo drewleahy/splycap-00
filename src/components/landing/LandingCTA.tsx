@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import jsPDF from 'jspdf';
 
 interface LandingCTAProps {
   headline: string;
@@ -33,6 +32,9 @@ export const LandingCTA = ({
     const image2Url = '/lovable-uploads/3b4ad6cd-8468-4560-b1ee-c1367789ad85.png';
     
     try {
+      // Dynamic import to avoid build issues
+      const { default: jsPDF } = await import('jspdf');
+      
       console.log('Creating PDF with both images...');
       
       // Create a new PDF document

@@ -13,10 +13,12 @@ export default defineConfig(({ mode }) => ({
     target: 'esnext',
     outDir: 'dist',
     sourcemap: true,
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
+          'ui-vendor': ['lucide-react', '@radix-ui/react-slot'],
         },
       },
     },
@@ -32,6 +34,10 @@ export default defineConfig(({ mode }) => ({
     },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['react', 'react-dom', 'jspdf'],
+  },
+  define: {
+    // Ensure environment variables are properly defined for build
+    'process.env.NODE_ENV': JSON.stringify(mode),
   },
 }));
