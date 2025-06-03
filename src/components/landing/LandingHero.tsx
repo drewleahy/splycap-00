@@ -76,7 +76,7 @@ export const LandingHero = ({
   return (
     <>
       {/* Confidential Banner */}
-      <div className="bg-black text-white text-center py-2 text-xs sm:text-sm font-medium">
+      <div className="bg-black text-white text-center py-3 text-xs sm:text-sm font-medium">
         CONFIDENTIAL
       </div>
       
