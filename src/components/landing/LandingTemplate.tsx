@@ -16,33 +16,37 @@ interface LandingTemplateProps {
 
 export const LandingTemplate = ({ config }: LandingTemplateProps) => {
   useEffect(() => {
-    // Set document title and meta tags
-    document.title = config.seo.title;
-    
-    // Update meta description
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', config.seo.description);
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = config.seo.description;
-      document.head.appendChild(meta);
-    }
+    try {
+      // Set document title and meta tags
+      document.title = config.seo.title;
+      
+      // Update meta description
+      let metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute('content', config.seo.description);
+      } else {
+        const meta = document.createElement('meta');
+        meta.name = 'description';
+        meta.content = config.seo.description;
+        document.head.appendChild(meta);
+      }
 
-    // Update meta keywords
-    const metaKeywords = document.querySelector('meta[name="keywords"]');
-    if (metaKeywords) {
-      metaKeywords.setAttribute('content', config.seo.keywords.join(', '));
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = config.seo.keywords.join(', ');
-      document.head.appendChild(meta);
-    }
+      // Update meta keywords
+      let metaKeywords = document.querySelector('meta[name="keywords"]');
+      if (metaKeywords) {
+        metaKeywords.setAttribute('content', config.seo.keywords.join(', '));
+      } else {
+        const meta = document.createElement('meta');
+        meta.name = 'keywords';
+        meta.content = config.seo.keywords.join(', ');
+        document.head.appendChild(meta);
+      }
 
-    // Log page view for analytics
-    console.log(`Landing page view: ${config.id}`);
+      // Log page view for analytics
+      console.log(`Landing page view: ${config.id}`);
+    } catch (error) {
+      console.error('Error setting up page metadata:', error);
+    }
   }, [config]);
 
   return (
@@ -100,7 +104,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         <LandingFeatures
           title={config.whyInvesting.title}
           description={config.whyInvesting.body}
-          features={config.whyInvesting.items}
+          features={config.whyInvesting.items || []}
           headerLabel="Why We're Investing"
         />
       )}

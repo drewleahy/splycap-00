@@ -22,13 +22,9 @@ export default defineConfig(({ mode }) => ({
           'ui-vendor': ['lucide-react'],
           'router-vendor': ['react-router-dom'],
         },
-      },
-      external: (id) => {
-        // Handle dynamic imports gracefully
-        if (id.includes('jspdf') && mode === 'production') {
-          return false;
-        }
-        return false;
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       },
     },
   },
@@ -43,8 +39,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
-    exclude: ['jspdf'],
+    include: ['react', 'react-dom', 'react-router-dom', 'lucide-react'],
   },
   define: {
     'process.env.NODE_ENV': JSON.stringify(mode),

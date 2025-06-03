@@ -25,49 +25,35 @@ export const LandingCTA = ({
   tertiaryButtonLink,
   className = ""
 }: LandingCTAProps) => {
-  const downloadFlyer = async () => {
+  const downloadFlyer = () => {
     console.log('Starting flyer download...');
     
     const image1Url = '/lovable-uploads/f8e2333a-4626-4ee6-9192-f37dffa4a939.png';
     const image2Url = '/lovable-uploads/3b4ad6cd-8468-4560-b1ee-c1367789ad85.png';
     
     try {
-      // Try to open images directly first (most reliable method)
-      window.open(image1Url, '_blank');
+      // Open images in new tabs (most reliable method)
+      const tab1 = window.open(image1Url, '_blank');
       setTimeout(() => {
-        window.open(image2Url, '_blank');
+        const tab2 = window.open(image2Url, '_blank');
+        if (!tab1 || !tab2) {
+          console.warn('Pop-up blocked - trying alternative download method');
+          // Fallback: create download links
+          const link1 = document.createElement('a');
+          link1.href = image1Url;
+          link1.download = 'Lyten-Investment-Flyer-Page-1.png';
+          link1.click();
+          
+          setTimeout(() => {
+            const link2 = document.createElement('a');
+            link2.href = image2Url;
+            link2.download = 'Lyten-Investment-Flyer-Page-2.png';
+            link2.click();
+          }, 500);
+        }
       }, 500);
       
-      console.log('Opened flyer images in new tabs');
-      
-      // Optional: Try PDF creation as enhancement if available
-      try {
-        const { default: jsPDF } = await import('jspdf');
-        
-        const getImageBase64 = async (url: string): Promise<string> => {
-          const response = await fetch(url);
-          const blob = await response.blob();
-          return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-          });
-        };
-        
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const image1Base64 = await getImageBase64(image1Url);
-        const image2Base64 = await getImageBase64(image2Url);
-        
-        pdf.addImage(image1Base64, 'PNG', 10, 10, 190, 277);
-        pdf.addPage();
-        pdf.addImage(image2Base64, 'PNG', 10, 10, 190, 277);
-        pdf.save('Lyten-Investment-Flyer.pdf');
-        
-        console.log('PDF download completed');
-      } catch (pdfError) {
-        console.log('PDF creation not available, images opened instead');
-      }
+      console.log('Flyer download initiated');
       
     } catch (error) {
       console.error('Download failed:', error);
@@ -78,13 +64,19 @@ export const LandingCTA = ({
   const handleButtonClick = (link: string) => {
     console.log('Button clicked with link:', link);
     
-    if (link.startsWith('#download-flyer')) {
-      downloadFlyer();
-    } else if (link.startsWith('#')) {
-      const element = document.querySelector(link);
-      element?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.open(link, '_blank');
+    try {
+      if (link.startsWith('#download-flyer')) {
+        downloadFlyer();
+      } else if (link.startsWith('#')) {
+        const element = document.querySelector(link);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        window.open(link, '_blank');
+      }
+    } catch (error) {
+      console.error('Button click error:', error);
     }
   };
 
