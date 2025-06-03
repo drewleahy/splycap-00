@@ -14,7 +14,7 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     headline: "Exclusive Access: Lyten Investment Opportunity",
     subheadline: "Join SPLY Capital's investment in Lyten — a Lithium-Sulfur innovator redefining energy storage with 3D Graphene tech and $4.5B in contracts.",
     ctaText: "Schedule a Call",
-    ctaLink: "https://calendly.com/splycapital/lyten-opportunity",
+    ctaLink: "https://calendly.com/haley-splycapital/deal-interest",
     secondaryCtaText: "Watch Video",
     secondaryCtaLink: "https://vimeo.com/999262573"
   },
@@ -134,7 +134,7 @@ export const lytenOpportunityConfig: LandingPageConfig = {
     secondaryButtonText: "Sign NDA to View Diligence Materials",
     secondaryButtonLink: "https://docsend.com/view/s/xq8d5sgc7btdhde8",
     tertiaryButtonText: "Book a Call",
-    tertiaryButtonLink: "https://calendly.com/splycapital/lyten-opportunity"
+    tertiaryButtonLink: "https://calendly.com/haley-splycapital/deal-interest"
   },
   footer: {
     copyright: "© 2025 SPLY CAPITAL. All rights reserved.",
