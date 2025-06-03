@@ -25,58 +25,22 @@ export const LandingCTA = ({
   tertiaryButtonLink,
   className = ""
 }: LandingCTAProps) => {
-  const downloadFlyer = () => {
-    console.log('Starting flyer download...');
-    
-    const image1Url = '/lovable-uploads/f8e2333a-4626-4ee6-9192-f37dffa4a939.png';
-    const image2Url = '/lovable-uploads/3b4ad6cd-8468-4560-b1ee-c1367789ad85.png';
-    
-    try {
-      // Open images in new tabs (most reliable method)
-      const tab1 = window.open(image1Url, '_blank');
-      setTimeout(() => {
-        const tab2 = window.open(image2Url, '_blank');
-        if (!tab1 || !tab2) {
-          console.warn('Pop-up blocked - trying alternative download method');
-          // Fallback: create download links
-          const link1 = document.createElement('a');
-          link1.href = image1Url;
-          link1.download = 'Lyten-Investment-Flyer-Page-1.png';
-          link1.click();
-          
-          setTimeout(() => {
-            const link2 = document.createElement('a');
-            link2.href = image2Url;
-            link2.download = 'Lyten-Investment-Flyer-Page-2.png';
-            link2.click();
-          }, 500);
-        }
-      }, 500);
-      
-      console.log('Flyer download initiated');
-      
-    } catch (error) {
-      console.error('Download failed:', error);
-      alert('Unable to download the flyer. Please contact support.');
-    }
-  };
-
   const handleButtonClick = (link: string) => {
     console.log('Button clicked with link:', link);
     
-    try {
-      if (link.startsWith('#download-flyer')) {
-        downloadFlyer();
-      } else if (link.startsWith('#')) {
-        const element = document.querySelector(link);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else {
-        window.open(link, '_blank');
+    if (link.startsWith('#download-flyer')) {
+      // Simplified download - just alert for now to avoid build issues
+      alert('Flyer download feature will be available soon. Please contact us directly for materials.');
+      return;
+    }
+    
+    if (link.startsWith('#')) {
+      const element = document.querySelector(link);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
       }
-    } catch (error) {
-      console.error('Button click error:', error);
+    } else {
+      window.open(link, '_blank');
     }
   };
 
