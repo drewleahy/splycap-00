@@ -25,12 +25,74 @@ export const LandingCTA = ({
   tertiaryButtonLink,
   className = ""
 }: LandingCTAProps) => {
+  const downloadFlyer = async () => {
+    console.log('Starting flyer download...');
+    
+    const flyerFiles = [
+      {
+        url: '/lovable-uploads/f8e2333a-4626-4ee6-9192-f37dffa4a939.png',
+        filename: 'Lyten-Investment-Flyer-Page-1.png'
+      },
+      {
+        url: '/lovable-uploads/3b4ad6cd-8468-4560-b1ee-c1367789ad85.png',
+        filename: 'Lyten-Investment-Flyer-Page-2.png'
+      }
+    ];
+
+    let downloadCount = 0;
+    
+    for (const file of flyerFiles) {
+      try {
+        // Method 1: Try direct download
+        const link = document.createElement('a');
+        link.href = file.url;
+        link.download = file.filename;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        downloadCount++;
+        
+        // Small delay between downloads
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+      } catch (error) {
+        console.warn(`Direct download failed for ${file.filename}, trying fallback:`, error);
+        
+        // Method 2: Fallback - open in new tab
+        try {
+          window.open(file.url, '_blank');
+          downloadCount++;
+        } catch (fallbackError) {
+          console.error(`All download methods failed for ${file.filename}:`, fallbackError);
+        }
+      }
+    }
+    
+    // Provide user feedback
+    if (downloadCount === flyerFiles.length) {
+      console.log('All flyer files downloaded successfully');
+      // Optional: Show success message
+    } else if (downloadCount > 0) {
+      alert(`Downloaded ${downloadCount} of ${flyerFiles.length} flyer pages. If some files didn't download, please check your browser's download settings or pop-up blocker.`);
+    } else {
+      alert('Unable to download the flyer automatically. The flyer files will open in new tabs - please save them manually. If you continue to have issues, please contact us directly.');
+      // Last resort: open both files in new tabs
+      flyerFiles.forEach(file => {
+        try {
+          window.open(file.url, '_blank');
+        } catch (error) {
+          console.error('Even fallback method failed:', error);
+        }
+      });
+    }
+  };
+
   const handleButtonClick = (link: string) => {
     console.log('Button clicked with link:', link);
     
     if (link.startsWith('#download-flyer')) {
-      // Simplified download - just alert for now to avoid build issues
-      alert('Flyer download feature will be available soon. Please contact us directly for materials.');
+      downloadFlyer();
       return;
     }
     
