@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
@@ -119,8 +118,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
       
       <LandingVideoSection
         videoUrl="https://player.vimeo.com/video/999262573?h=0"
-        title="Learn More About This Opportunity"
-        description="Watch our detailed presentation on the Lyten investment opportunity"
+        title="Watch Lyten's Vision for the Future"
       />
       
       <LandingFooter
