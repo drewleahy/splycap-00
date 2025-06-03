@@ -16,37 +16,21 @@ interface LandingTemplateProps {
 
 export const LandingTemplate = ({ config }: LandingTemplateProps) => {
   useEffect(() => {
-    try {
-      // Set document title and meta tags
-      document.title = config.seo.title;
-      
-      // Update meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', config.seo.description);
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'description';
-        meta.content = config.seo.description;
-        document.head.appendChild(meta);
-      }
-
-      // Update meta keywords
-      let metaKeywords = document.querySelector('meta[name="keywords"]');
-      if (metaKeywords) {
-        metaKeywords.setAttribute('content', config.seo.keywords.join(', '));
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'keywords';
-        meta.content = config.seo.keywords.join(', ');
-        document.head.appendChild(meta);
-      }
-
-      // Log page view for analytics
-      console.log(`Landing page view: ${config.id}`);
-    } catch (error) {
-      console.error('Error setting up page metadata:', error);
+    // Set document title
+    document.title = config.seo.title;
+    
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', config.seo.description);
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = config.seo.description;
+      document.head.appendChild(meta);
     }
+
+    console.log(`Landing page view: ${config.id}`);
   }, [config]);
 
   return (
