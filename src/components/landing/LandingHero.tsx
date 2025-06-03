@@ -37,6 +37,12 @@ export const LandingHero = ({
       if (secondaryCtaLink.startsWith('#')) {
         const element = document.querySelector(secondaryCtaLink);
         element?.scrollIntoView({ behavior: 'smooth' });
+      } else if (secondaryCtaLink.startsWith('https://vimeo.com/')) {
+        // For Vimeo video links, scroll to the video section instead of opening in new tab
+        const videoElement = document.querySelector('#video');
+        if (videoElement) {
+          videoElement.scrollIntoView({ behavior: 'smooth' });
+        }
       } else {
         window.open(secondaryCtaLink, '_blank');
       }
