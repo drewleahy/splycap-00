@@ -89,6 +89,12 @@ export const LandingCTA = ({
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
+    } else if (link.startsWith('https://vimeo.com/')) {
+      // For Vimeo video links, scroll to the video section instead of opening in new tab
+      const videoElement = document.querySelector('#video');
+      if (videoElement) {
+        videoElement.scrollIntoView({ behavior: 'smooth' });
+      }
     } else {
       window.open(link, '_blank');
     }

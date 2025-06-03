@@ -8,6 +8,7 @@ import { LandingContent } from './LandingContent';
 import { LandingContentWithLogo } from './LandingContentWithLogo';
 import { LandingFeatures } from './LandingFeatures';
 import { LandingCTA } from './LandingCTA';
+import { LandingVideoSection } from './LandingVideoSection';
 import { LandingFooter } from './LandingFooter';
 
 interface LandingTemplateProps {
@@ -115,6 +116,12 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
           tertiaryButtonLink={config.cta.tertiaryButtonLink}
         />
       </div>
+      
+      <LandingVideoSection
+        videoUrl="https://player.vimeo.com/video/999262573?h=0"
+        title="Learn More About This Opportunity"
+        description="Watch our detailed presentation on the Lyten investment opportunity"
+      />
       
       <LandingFooter
         copyright={config.footer.copyright}
