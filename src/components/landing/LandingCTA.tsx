@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import jsPDF from 'jspdf';
 
 interface LandingCTAProps {
   headline: string;
@@ -26,60 +27,53 @@ export const LandingCTA = ({
   className = ""
 }: LandingCTAProps) => {
   const downloadFlyer = async () => {
-    console.log('Starting flyer download...');
+    console.log('Creating PDF flyer...');
     
-    const flyerFiles = [
-      {
-        url: '/lovable-uploads/f8e2333a-4626-4ee6-9192-f37dffa4a939.png',
-        filename: 'Lyten-Investment-Flyer-Page-1.png'
-      },
-      {
-        url: '/lovable-uploads/3b4ad6cd-8468-4560-b1ee-c1367789ad85.png',
-        filename: 'Lyten-Investment-Flyer-Page-2.png'
-      }
+    const flyerImages = [
+      '/lovable-uploads/f8e2333a-4626-4ee6-9192-f37dffa4a939.png',
+      '/lovable-uploads/3b4ad6cd-8468-4560-b1ee-c1367789ad85.png'
     ];
 
-    // Download each file with a longer delay to avoid browser blocking
-    for (let i = 0; i < flyerFiles.length; i++) {
-      const file = flyerFiles[i];
-      
-      try {
-        console.log(`Downloading ${file.filename}...`);
-        
-        // Fetch the file and create a blob
-        const response = await fetch(file.url);
+    try {
+      // Create new PDF document
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      for (let i = 0; i < flyerImages.length; i++) {
+        const imageUrl = flyerImages[i];
+        console.log(`Adding image ${i + 1} to PDF...`);
+
+        // Fetch the image
+        const response = await fetch(imageUrl);
         const blob = await response.blob();
         
-        // Create download link
-        const link = document.createElement('a');
-        const objectUrl = URL.createObjectURL(blob);
-        link.href = objectUrl;
-        link.download = file.filename;
-        link.style.display = 'none';
-        
-        // Add to DOM, click, and clean up
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        // Clean up the object URL
-        setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
-        
-        console.log(`${file.filename} download initiated`);
-        
-        // Wait longer between downloads to ensure browser processes each one
-        if (i < flyerFiles.length - 1) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+        // Convert blob to base64
+        const base64 = await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.readAsDataURL(blob);
+        });
+
+        // Add image to PDF (full page)
+        if (i > 0) {
+          pdf.addPage();
         }
         
-      } catch (error) {
-        console.error(`Failed to download ${file.filename}:`, error);
-        // Fallback: open in new tab
-        window.open(file.url, '_blank');
+        // Add image to fill the page
+        pdf.addImage(base64, 'PNG', 0, 0, 210, 297); // A4 size in mm
       }
+
+      // Download the PDF
+      pdf.save('Lyten-Investment-Flyer.pdf');
+      console.log('PDF download initiated');
+      
+    } catch (error) {
+      console.error('Failed to create PDF:', error);
+      alert('Unable to create PDF. Please try again or contact us directly.');
     }
-    
-    console.log('All flyer downloads initiated');
   };
 
   const handleButtonClick = (link: string) => {
