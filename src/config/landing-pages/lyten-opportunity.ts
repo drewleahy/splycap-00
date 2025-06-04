@@ -4,7 +4,7 @@ import { Battery, Zap, TrendingUp, Shield, Globe, Award } from 'lucide-react';
 export const lytenOpportunityConfig: LandingPageConfig = {
   id: "lyten-opportunity",
   title: "Lyten Investment Opportunity",
-  route: "/lyten-exclusive-2025",
+  route: "/deals/lyten-exclusive-2025",
   seo: {
     title: "Exclusive Lyten Investment Opportunity - SPLY Capital",
     description: "Join SPLY Capital's exclusive investment in Lyten, the revolutionary battery technology company backed by top-tier investors.",
