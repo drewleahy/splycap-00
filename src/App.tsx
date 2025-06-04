@@ -45,7 +45,12 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/lp" element={<LPSplash />} />
+            
+            {/* Old Lyten URL for backwards compatibility */}
             <Route path="/lyten-exclusive-2025" element={<LytenOpportunity />} />
+            
+            {/* New Lyten URL structure */}
+            <Route path="/deals/lyten-exclusive-2025" element={<LytenOpportunity />} />
             
             {/* LP Routes */}
             <Route path="/lp/bio" element={<Bio />} />
