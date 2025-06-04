@@ -1,4 +1,5 @@
 
+
 [build]
   command = "npm run build"
   publish = "dist"
@@ -6,8 +7,15 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# Redirect old Lyten URL to new URL structure
+[[redirects]]
+  from = "/lyten-exclusive-2025"
+  to = "/deals/lyten-exclusive-2025"
+  status = 301
+
 # SPA fallback - this must be last
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
