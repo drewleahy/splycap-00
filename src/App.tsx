@@ -32,7 +32,6 @@ import VPSettings from "./pages/venturepartners/Settings";
 
 // Admin
 import Admin from "./pages/Admin";
-import Analytics from "./pages/Analytics";
 
 const queryClient = new QueryClient();
 
@@ -76,7 +75,6 @@ const App = () => (
             
             {/* Admin */}
             <Route path="/admin" element={<Admin />} />
-            <Route path="/analytics" element={<Analytics />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

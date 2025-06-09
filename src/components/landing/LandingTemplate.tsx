@@ -10,19 +10,12 @@ import { LandingFeatures } from './LandingFeatures';
 import { LandingCTA } from './LandingCTA';
 import { LandingVideoSection } from './LandingVideoSection';
 import { LandingFooter } from './LandingFooter';
-import { useVisitorTracking } from '@/hooks/use-visitor-tracking';
 
 interface LandingTemplateProps {
   config: LandingPageConfig;
 }
 
 export const LandingTemplate = ({ config }: LandingTemplateProps) => {
-  // Track visitor for this landing page
-  useVisitorTracking({
-    pageUrl: window.location.href,
-    referrerUrl: document.referrer,
-  });
-
   useEffect(() => {
     // Set document title
     document.title = config.seo.title;
