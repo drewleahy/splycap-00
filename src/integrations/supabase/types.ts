@@ -171,6 +171,45 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_reports: {
+        Row: {
+          created_at: string
+          id: string
+          report_data: Json | null
+          report_date: string
+          top_deals: Json | null
+          total_page_views: number | null
+          total_visitors: number | null
+          traffic_sources: Json | null
+          unique_visitors: number | null
+          visitor_countries: Json | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          report_data?: Json | null
+          report_date?: string
+          top_deals?: Json | null
+          total_page_views?: number | null
+          total_visitors?: number | null
+          traffic_sources?: Json | null
+          unique_visitors?: number | null
+          visitor_countries?: Json | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          report_data?: Json | null
+          report_date?: string
+          top_deals?: Json | null
+          total_page_views?: number | null
+          total_visitors?: number | null
+          traffic_sources?: Json | null
+          unique_visitors?: number | null
+          visitor_countries?: Json | null
+        }
+        Relationships: []
+      }
       deals: {
         Row: {
           allocation_amount: number
@@ -521,6 +560,65 @@ export type Database = {
         }
         Relationships: []
       }
+      visitor_tracking: {
+        Row: {
+          created_at: string
+          deal_id: string | null
+          id: string
+          page_url: string
+          referrer_url: string | null
+          session_id: string | null
+          updated_at: string
+          visit_duration: number | null
+          visitor_browser: string | null
+          visitor_city: string | null
+          visitor_country: string | null
+          visitor_device: string | null
+          visitor_ip: string | null
+          visitor_os: string | null
+        }
+        Insert: {
+          created_at?: string
+          deal_id?: string | null
+          id?: string
+          page_url: string
+          referrer_url?: string | null
+          session_id?: string | null
+          updated_at?: string
+          visit_duration?: number | null
+          visitor_browser?: string | null
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_device?: string | null
+          visitor_ip?: string | null
+          visitor_os?: string | null
+        }
+        Update: {
+          created_at?: string
+          deal_id?: string | null
+          id?: string
+          page_url?: string
+          referrer_url?: string | null
+          session_id?: string | null
+          updated_at?: string
+          visit_duration?: number | null
+          visitor_browser?: string | null
+          visitor_city?: string | null
+          visitor_country?: string | null
+          visitor_device?: string | null
+          visitor_ip?: string | null
+          visitor_os?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visitor_tracking_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -529,6 +627,10 @@ export type Database = {
       can_access_profile: {
         Args: { user_id: string; profile_id: string }
         Returns: boolean
+      }
+      generate_daily_report: {
+        Args: { report_date?: string }
+        Returns: Json
       }
       get_user_role: {
         Args: Record<PropertyKey, never>
