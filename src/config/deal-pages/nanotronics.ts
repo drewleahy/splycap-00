@@ -60,16 +60,15 @@ export const nanotronicsConfig: DealPageConfig = {
   },
   
   company: {
-    title: "Nanotronics: AI-Powered Industrial Inspection Leader",
-    description: "Nanotronics is pioneering the future of industrial inspection by integrating artificial intelligence, machine learning, and advanced imaging into mission-critical production environments. As industries transition away from fragmented, manual inspection methods, Nanotronics' platform is emerging as the new standard — delivering unprecedented levels of precision, scalability, and efficiency.\n\nWith proven adoption in semiconductors, aerospace, life sciences, and quantum computing, Nanotronics is not just addressing today's manufacturing needs — it's defining the infrastructure for the factories of the future",
+    title: "Nanotronics: AI-Powered Optical Inspection for Advanced Manufacturing",
+    description: "Nanotronics is redefining industrial inspection and factory control through a proprietary platform that combines artificial intelligence, machine learning, and advanced imaging. Its nSpec™ and nControl™ systems automate quality assurance at the nanoscale—driving higher yields, lower costs, and faster innovation across semiconductors, aerospace, life sciences, and quantum computing.",
     logoSrc: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
     logoAlt: "Nanotronics Logo",
     headerLabel: "Company Overview",
     keyStats: [
-      "Fortune 500 customer base",
-      "90%+ defect detection accuracy improvement",
-      "50%+ reduction in inspection time",
-      "Global manufacturing partnerships"
+      "400+ patents issued and pending",
+      "Deployed across 250+ global customers in 34 countries",
+      "Selected by Google for quantum chip development with nSpec™ systems"
     ]
   },
   
