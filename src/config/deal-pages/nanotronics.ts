@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -28,8 +27,7 @@ export const nanotronicsConfig: DealPageConfig = {
     tertiaryCta: {
       text: "Download Flyer",
       link: "#download-flyer"
-    },
-    backgroundImage: "https://images.unsplash.com/photo-1518770660439-4636190af475"
+    }
   },
   
   opportunity: {
