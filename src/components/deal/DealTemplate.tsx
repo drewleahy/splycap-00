@@ -78,6 +78,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           body={config.traction.description}
           headerLabel={config.traction.headerLabel || "Commercial Traction"}
           keyPoints={config.traction.keyPoints}
+          additionalContent={config.traction.additionalContent}
           className="bg-gray-50"
         />
       )}
