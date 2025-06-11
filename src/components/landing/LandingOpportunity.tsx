@@ -1,11 +1,16 @@
 
 import React from 'react';
-import { CheckCircle } from 'lucide-react';
+
+interface OpportunitySection {
+  header: string;
+  body: string;
+}
 
 interface LandingOpportunityProps {
   title: string;
   body: string;
-  keyPoints: string[];
+  keyPoints?: string[];
+  sections?: OpportunitySection[];
   headerLabel?: string;
   className?: string;
 }
@@ -13,7 +18,8 @@ interface LandingOpportunityProps {
 export const LandingOpportunity = ({ 
   title, 
   body, 
-  keyPoints, 
+  keyPoints = [],
+  sections = [],
   headerLabel,
   className = "" 
 }: LandingOpportunityProps) => {
@@ -29,18 +35,37 @@ export const LandingOpportunity = ({
           </h2>
         </div>
         
-        <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-6 sm:mb-8">
+        <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-8 sm:mb-10">
           {body}
         </p>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          {keyPoints.map((point, index) => (
-            <div key={index} className="flex items-start space-x-3">
-              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0 mt-0.5" />
-              <span className="text-xs sm:text-sm md:text-base text-gray-700 leading-relaxed">{point}</span>
-            </div>
-          ))}
-        </div>
+        {/* Structured sections layout */}
+        {sections.length > 0 && (
+          <div className="space-y-8 sm:space-y-10">
+            {sections.map((section, index) => (
+              <div key={index} className="border-l-4 border-gray-200 pl-6 sm:pl-8">
+                <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">
+                  {section.header}
+                </h4>
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                  {section.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {/* Fallback to original bullet points if no sections provided */}
+        {sections.length === 0 && keyPoints.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            {keyPoints.map((point, index) => (
+              <div key={index} className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-gray-400 rounded-full flex-shrink-0 mt-2"></div>
+                <span className="text-xs sm:text-sm md:text-base text-gray-700 leading-relaxed">{point}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

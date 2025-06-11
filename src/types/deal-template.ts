@@ -1,21 +1,23 @@
 
 import { LucideIcon } from 'lucide-react';
 
+export interface OpportunitySection {
+  header: string;
+  body: string;
+}
+
 export interface DealPageConfig {
-  // Basic deal info
   id: string;
   dealName: string;
   companyName: string;
   route: string;
   
-  // SEO
   seo: {
     title: string;
     description: string;
     keywords: string[];
   };
   
-  // Hero section
   hero: {
     headline: string;
     subheadline: string;
@@ -31,34 +33,29 @@ export interface DealPageConfig {
       text: string;
       link: string;
     };
-    backgroundImage?: string;
   };
   
-  // Investment opportunity overview
   opportunity: {
     title: string;
     description: string;
-    keyMetrics: string[];
+    keyMetrics: OpportunitySection[];
   };
   
-  // Market context
   market?: {
     title: string;
     description: string;
     headerLabel?: string;
   };
   
-  // Company overview with logo
-  company: {
+  company?: {
     title: string;
     description: string;
-    logoSrc: string;
-    logoAlt: string;
+    logoSrc?: string;
+    logoAlt?: string;
     headerLabel?: string;
     keyStats?: string[];
   };
   
-  // Commercial traction
   traction?: {
     title: string;
     description: string;
@@ -66,8 +63,7 @@ export interface DealPageConfig {
     keyPoints?: string[];
   };
   
-  // Investment thesis
-  thesis: {
+  thesis?: {
     title: string;
     description: string;
     points: Array<{
@@ -77,14 +73,12 @@ export interface DealPageConfig {
     }>;
   };
   
-  // Strategic backing/validation
   backing?: {
     title: string;
     description: string;
     keyPoints: string[];
   };
   
-  // Call to action
   cta: {
     headline: string;
     description: string;
@@ -102,14 +96,12 @@ export interface DealPageConfig {
     };
   };
   
-  // Video section
   video?: {
     title: string;
-    description?: string;
+    description: string;
     videoUrl: string;
   };
   
-  // Footer
   footer: {
     copyright: string;
     links?: Array<{
