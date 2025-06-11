@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import LPSplash from "./pages/LPSplash";
 import LytenOpportunity from "./pages/landing/LytenOpportunity";
 import Nanotronics from "./pages/deal/Nanotronics";
+import NanotronicsUpload from "./pages/deal/NanotronicsUpload";
 
 // LP Pages
 import Bio from "./pages/lp/Bio";
@@ -53,6 +54,7 @@ const App = () => (
             {/* Deal Routes */}
             <Route path="/deals/lyten-exclusive-2025" element={<LytenOpportunity />} />
             <Route path="/deals/nanotronics-exclusive-2025" element={<Nanotronics />} />
+            <Route path="/deals/nanotronics-upload" element={<NanotronicsUpload />} />
             
             {/* LP Routes */}
             <Route path="/lp/bio" element={<Bio />} />
