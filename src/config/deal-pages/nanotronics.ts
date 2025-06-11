@@ -22,7 +22,7 @@ export const nanotronicsConfig: DealPageConfig = {
     },
     secondaryCta: {
       text: "Sign NDA to View Materials",
-      link: "#nda-materials"
+      link: "https://docsend.com/view/s/dke9vdijy2qu9f42"
     },
     tertiaryCta: {
       text: "Download Deck",
