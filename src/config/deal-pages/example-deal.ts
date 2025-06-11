@@ -35,10 +35,22 @@ export const exampleDealConfig: DealPageConfig = {
     title: "Access to an Oversubscribed Round at a Strategic Entry Point",
     description: "SPLY Capital has secured a significant allocation in Example Corp's oversubscribed Series B at an attractive valuation. Leading VCs are participating in the next round with projected strong returns.",
     keyMetrics: [
-      "$XXX million current valuation",
-      "Top-tier VC leading next round",
-      "Projected X.X step-up potential",
-      "Strong exit pathway identified"
+      {
+        header: "$XXX million current valuation",
+        body: "Attractive entry point with strong institutional backing and clear path to next round"
+      },
+      {
+        header: "Top-tier VC leading next round",
+        body: "Major venture capital firms committed to supporting the company's growth trajectory"
+      },
+      {
+        header: "Projected X.X step-up potential",
+        body: "Strong fundamentals and market position suggest significant value creation opportunity"
+      },
+      {
+        header: "Strong exit pathway identified",
+        body: "Clear strategic acquirers and IPO potential based on market leadership position"
+      }
     ]
   },
   

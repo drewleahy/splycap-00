@@ -51,7 +51,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
       <LandingOpportunity
         title={config.opportunity.title}
         body={config.opportunity.description}
-        keyPoints={config.opportunity.keyMetrics}
+        sections={config.opportunity.keyMetrics}
         headerLabel="The Opportunity"
       />
       

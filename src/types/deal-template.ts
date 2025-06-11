@@ -21,6 +21,7 @@ export interface DealPageConfig {
   hero: {
     headline: string;
     subheadline: string;
+    backgroundImage?: string;
     primaryCta: {
       text: string;
       link: string;
