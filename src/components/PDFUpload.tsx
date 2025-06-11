@@ -13,7 +13,7 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [uploadedFile, setUploadedFile] = useState<{url: string, name: string} | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<{url: string, name: string, type: 'blob' | 'remote'} | null>(null);
   const [uploadProgress, setUploadProgress] = useState<string>("");
 
   const validateFile = (file: File): string | null => {
@@ -85,6 +85,8 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
       });
 
       let uploadResult = null;
+      let resultType: 'blob' | 'remote' = 'blob';
+      
       const uploadMethods = [
         {
           name: "Service Worker Proxy",
@@ -113,6 +115,7 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
         try {
           uploadResult = await tryUploadMethod(file, method.name, method.url, method.options);
           if (uploadResult && uploadResult.publicUrl) {
+            resultType = 'remote';
             break; // Success, exit the loop
           }
         } catch (methodError) {
@@ -129,14 +132,19 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
             const blobUrl = URL.createObjectURL(file);
             uploadResult = {
               publicUrl: blobUrl,
-              message: "File loaded locally (blob URL - note: this will only work in this browser session)"
+              message: "File loaded locally (note: this link only works in your current browser session)"
             };
+            resultType = 'blob';
           }
         }
       }
       
       if (uploadResult && uploadResult.publicUrl) {
-        setUploadedFile({ url: uploadResult.publicUrl, name: file.name });
+        setUploadedFile({ 
+          url: uploadResult.publicUrl, 
+          name: file.name, 
+          type: resultType 
+        });
         setSuccessMessage(`${file.name} uploaded successfully!`);
         setUploadProgress("");
         
@@ -168,6 +176,30 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
     }
   };
 
+  const handleViewPDF = () => {
+    if (!uploadedFile) return;
+    
+    if (uploadedFile.type === 'blob') {
+      // For blob URLs, open directly
+      window.open(uploadedFile.url, '_blank');
+    } else {
+      // For remote URLs, try to open in new tab, fallback to download
+      try {
+        window.open(uploadedFile.url, '_blank');
+      } catch (error) {
+        console.error('Failed to open PDF:', error);
+        // Fallback: create download link
+        const link = document.createElement('a');
+        link.href = uploadedFile.url;
+        link.download = uploadedFile.name;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  };
+
   const clearStatus = useCallback(() => {
     setSuccessMessage(null);
     setError(null);
@@ -193,16 +225,21 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
             </div>
             <FileText className="w-8 h-8 text-gray-600 mb-2" />
             <p className="text-sm text-green-600 font-medium mb-2">{successMessage}</p>
+            {uploadedFile.type === 'blob' && (
+              <p className="text-xs text-orange-600 mb-2 text-center">
+                ⚠️ Local file only - link works in this browser session
+              </p>
+            )}
             <p className="text-xs text-gray-500 mb-3 max-w-md text-center break-all">
-              File URL: {uploadedFile.url}
+              File: {uploadedFile.name}
             </p>
             <div className="flex gap-2">
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => window.open(uploadedFile.url, '_blank')}
+                onClick={handleViewPDF}
               >
-                View PDF
+                {uploadedFile.type === 'blob' ? 'View PDF' : 'Open PDF'}
               </Button>
               <Button 
                 variant="outline" 
@@ -262,6 +299,9 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
         <p><strong>Debug Info:</strong></p>
         <p>Browser: {navigator.userAgent.includes('Chrome') ? 'Chrome' : navigator.userAgent.includes('Firefox') ? 'Firefox' : 'Other'}</p>
         <p>Upload endpoints available: Service Worker, PHP, Direct Supabase</p>
+        {uploadedFile && (
+          <p>File type: {uploadedFile.type} | Status: {uploadedFile.type === 'blob' ? 'Local only' : 'Remote accessible'}</p>
+        )}
       </div>
     </div>
   );

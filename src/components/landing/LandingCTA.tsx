@@ -3,6 +3,12 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import jsPDF from 'jspdf';
 
+interface CTAButton {
+  text: string;
+  link: string;
+  onClick?: () => void;
+}
+
 interface LandingCTAProps {
   headline: string;
   description: string;
@@ -76,28 +82,50 @@ export const LandingCTA = ({
     }
   };
 
-  const handleButtonClick = (link: string) => {
+  const handleButtonClick = (link: string, onClick?: () => void) => {
     console.log('Button clicked with link:', link);
     
+    // If there's a custom onClick handler, use it
+    if (onClick) {
+      onClick();
+      return;
+    }
+    
+    // Check for special download flyer action
     if (link.startsWith('#download-flyer')) {
       downloadFlyer();
       return;
     }
     
+    // Check for anchor links
     if (link.startsWith('#')) {
       const element = document.querySelector(link);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
-    } else if (link.startsWith('https://vimeo.com/')) {
-      // For Vimeo video links, scroll to the video section instead of opening in new tab
+      return;
+    }
+    
+    // Check for Vimeo video links - scroll to video section
+    if (link.startsWith('https://vimeo.com/')) {
       const videoElement = document.querySelector('#video');
       if (videoElement) {
         videoElement.scrollIntoView({ behavior: 'smooth' });
       }
-    } else {
-      window.open(link, '_blank');
+      return;
     }
+    
+    // Check for javascript void links (handled by onClick)
+    if (link === 'javascript:void(0)') {
+      // Try to call global function if available
+      if ((window as any).downloadNanotronicsDeck) {
+        (window as any).downloadNanotronicsDeck();
+      }
+      return;
+    }
+    
+    // Default: open in new tab
+    window.open(link, '_blank');
   };
 
   return (
@@ -119,7 +147,7 @@ export const LandingCTA = ({
             size="lg"
             className="bg-white text-black hover:bg-gray-100 hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
           >
-            2025 Forbes Article
+            {primaryButtonText}
           </Button>
           
           {secondaryButtonText && (
