@@ -45,34 +45,28 @@ export const LandingContentWithLogo = ({
         </p>
         
         {keyStats && keyStats.length > 0 && (
-          <>
-            <div className="border-l border-gray-300 pl-4 sm:pl-6 mb-8 sm:mb-12">
-              <ul className="space-y-2 sm:space-y-3">
-                <li className="flex items-start sm:items-center">
-                  <div className="w-1 h-1 bg-gray-900 rounded-full mr-3 sm:mr-4 flex-shrink-0 mt-2 sm:mt-0"></div>
-                  <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 leading-tight">
-                    Exclusive optical inspection partner for Google's Willow quantum chip
-                  </span>
-                </li>
-                <li className="flex items-start sm:items-center">
-                  <div className="w-1 h-1 bg-gray-900 rounded-full mr-3 sm:mr-4 flex-shrink-0 mt-2 sm:mt-0"></div>
-                  <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 leading-tight">
-                    Deployed by Illumina for high-throughput genomic sequencing
-                  </span>
-                </li>
-                <li className="flex items-start sm:items-center">
-                  <div className="w-1 h-1 bg-gray-900 rounded-full mr-3 sm:mr-4 flex-shrink-0 mt-2 sm:mt-0"></div>
-                  <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 leading-tight">
-                    Used in Broadcom, Intel, Amazon, Meta, Canon, and other leading manufacturing environments
-                  </span>
-                </li>
-              </ul>
-            </div>
-            
-            <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
-              Nanotronics' systems—nSpec™ for inspection and nControl™ for process optimization—are being scaled globally through strategic partnerships and modular CubeFab™ deployments.
-            </p>
-          </>
+          <div className="border-l border-gray-300 pl-4 sm:pl-6 mb-8 sm:mb-12">
+            <ul className="space-y-2 sm:space-y-3">
+              <li className="flex items-start sm:items-center">
+                <div className="w-1 h-1 bg-gray-900 rounded-full mr-3 sm:mr-4 flex-shrink-0 mt-2 sm:mt-0"></div>
+                <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 leading-tight">
+                  Exclusive optical inspection partner for Google's Willow quantum chip
+                </span>
+              </li>
+              <li className="flex items-start sm:items-center">
+                <div className="w-1 h-1 bg-gray-900 rounded-full mr-3 sm:mr-4 flex-shrink-0 mt-2 sm:mt-0"></div>
+                <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 leading-tight">
+                  Deployed by Illumina for high-throughput genomic sequencing
+                </span>
+              </li>
+              <li className="flex items-start sm:items-center">
+                <div className="w-1 h-1 bg-gray-900 rounded-full mr-3 sm:mr-4 flex-shrink-0 mt-2 sm:mt-0"></div>
+                <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 leading-tight">
+                  Used in Broadcom, Intel, Amazon, Meta, Canon, and other leading manufacturing environments
+                </span>
+              </li>
+            </ul>
+          </div>
         )}
       </div>
     </section>
