@@ -69,10 +69,6 @@ export const LandingContentWithLogo = ({
               </ul>
             </div>
             
-            <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-8 sm:mb-12">
-              Nanotronics' systems—nSpec™ for inspection and nControl™ for process optimization—are being scaled globally through strategic partnerships and modular CubeFab™ deployments.
-            </p>
-            
             <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
               Nanotronics' systems—nSpec™ for inspection and nControl™ for process optimization—are being scaled globally through strategic partnerships and modular CubeFab™ deployments.
             </p>
