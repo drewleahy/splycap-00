@@ -21,6 +21,28 @@ export const LandingContent = ({
   // Split the body text into paragraphs based on double line breaks
   const paragraphs = body.split('\n\n').filter(paragraph => paragraph.trim() !== '');
 
+  // Function to bold specific words
+  const formatTextWithBoldWords = (text: string) => {
+    const wordsTooBold = ['semiconductors', 'aerospace', 'life sciences', 'quantum computing'];
+    let formattedText = text;
+    
+    wordsTooBold.forEach(word => {
+      const regex = new RegExp(`\\b${word}\\b`, 'gi');
+      formattedText = formattedText.replace(regex, `**${word}**`);
+    });
+    
+    // Split by ** to create spans with bold formatting
+    const parts = formattedText.split('**');
+    
+    return parts.map((part, index) => {
+      // Every odd index should be bold
+      if (index % 2 === 1) {
+        return <strong key={index} className="font-semibold">{part}</strong>;
+      }
+      return part;
+    });
+  };
+
   return (
     <section className={`py-12 sm:py-16 px-4 sm:px-6 bg-white ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
@@ -41,7 +63,7 @@ export const LandingContent = ({
               key={index} 
               className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-6 last:mb-0"
             >
-              {paragraph}
+              {formatTextWithBoldWords(paragraph)}
             </p>
           ))}
         </div>
