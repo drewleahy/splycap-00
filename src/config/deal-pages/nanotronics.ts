@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -55,7 +54,7 @@ export const nanotronicsConfig: DealPageConfig = {
   },
   
   market: {
-    title: "Massive Industrial Inspection Market Opportunity",
+    title: "A Breakout Moment for AI-Powered Industrial Inspection",
     description: "The global industrial inspection market is valued at $20+ billion and growing rapidly. Traditional manual inspection methods are being replaced by AI-powered solutions that deliver superior accuracy, speed, and cost efficiency.",
     headerLabel: "Market Context"
   },
