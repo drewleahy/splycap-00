@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -35,10 +34,14 @@ export const nanotronicsConfig: DealPageConfig = {
     title: "Access to a Strategic Growth Round in a Category-Leading AI Manufacturing Platform",
     description: "SPLY Capital has secured a meaningful allocation in Nanotronics' oversubscribed growth round. With its proprietary AI-powered inspection systems already deployed by global leaders—including Google, Intel, and Illumina—the company is scaling rapidly across semiconductor, aerospace, and life science industries.",
     keyMetrics: [
-      "$400M+ current valuation",
-      "Leading strategic investors participating", 
-      "Strong revenue growth trajectory",
-      "Proven market traction with major manufacturers"
+      "$705M post-money valuation",
+      "Backed by leading global investors including Founders Fund, the Investment Corporation of Dubai, and Plug and Play Tech Center",
+      "Deep partnerships with industry giants",
+      "Selected by Google as the exclusive advanced inspection partner for its Willow quantum chip program",
+      "Accelerating revenue and commercialization",
+      "Rapid growth driven by deployments of nSpec™ and nControl™ systems across mission-critical production lines",
+      "Defensible IP and platform expansion",
+      "150+ patents protect its core AI, optical, and automation technology—now powering modular CubeFab™ facilities worldwide"
     ]
   },
   
