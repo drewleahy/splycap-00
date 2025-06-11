@@ -7,6 +7,7 @@ import { PDFUpload } from '@/components/PDFUpload';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
+import { deckStateManager } from '@/utils/deckStateManager';
 
 const NanotronicsUpload = () => {
   const [deckUrl, setDeckUrl] = useState<string>('');
@@ -20,24 +21,15 @@ const NanotronicsUpload = () => {
 
   const updateDeckLink = () => {
     if (deckUrl) {
-      // Update the config with the new deck URL
-      const updatedConfig = {
-        ...nanotronicsConfig,
-        hero: {
-          ...nanotronicsConfig.hero,
-          tertiaryCta: {
-            text: "Download Deck",
-            link: deckUrl
-          }
-        }
-      };
+      // Store the deck URL in our state manager
+      deckStateManager.setDeckUrl('nanotronics', deckUrl);
       
       toast({
         title: "Deck Link Updated",
-        description: `The "Download Deck" button now links to ${deckName}`,
+        description: `The "Download Deck" button now links to ${deckName}. You can view the updated deal page.`,
       });
       
-      console.log('Updated config with deck URL:', deckUrl);
+      console.log('Updated deck URL for nanotronics:', deckUrl);
     }
   };
 
@@ -60,12 +52,21 @@ const NanotronicsUpload = () => {
                   <p className="text-sm text-green-700 mb-2">
                     PDF Ready: {deckName}
                   </p>
-                  <p className="text-xs text-gray-600 mb-3">
+                  <p className="text-xs text-gray-600 mb-3 break-all">
                     URL: {deckUrl}
                   </p>
-                  <Button onClick={updateDeckLink} className="w-full">
-                    Update Deal Page Link
-                  </Button>
+                  <div className="space-y-2">
+                    <Button onClick={updateDeckLink} className="w-full">
+                      Update Deal Page Link
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => window.open('/deals/nanotronics-exclusive-2025', '_blank')}
+                      className="w-full"
+                    >
+                      View Deal Page
+                    </Button>
+                  </div>
                 </div>
               )}
             </CardContent>
