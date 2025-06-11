@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -56,7 +55,7 @@ export const nanotronicsConfig: DealPageConfig = {
   
   market: {
     title: "Positioned at the Forefront of a Manufacturing Revolution",
-    description: "Nanotronics is pioneering the future of industrial inspection by integrating artificial intelligence, machine learning, and advanced imaging into mission-critical production environments. As industries transition away from fragmented, manual inspection methods, Nanotronics' platform is emerging as the new standard — delivering unprecedented levels of precision, scalability, and efficiency.\n\nWith proven adoption in semiconductors, aerospace, life sciences, and quantum computing, Nanotronics is not just addressing today's manufacturing needs — it's defining the infrastructure for the factories of the future",
+    description: "Nanotronics is pioneering the future of industrial inspection by integrating artificial intelligence, machine learning, and advanced imaging into mission-critical production environments. As industries transition away from fragmented, manual inspection methods, Nanotronics' platform is emerging as the new standard — delivering unprecedented levels of precision, scalability, and efficiency.\n\nWith proven adoption in semiconductors, aerospace, life sciences, and quantum computing, Nanotronics is not just addressing today's manufacturing needs — it's defining the infrastructure for the factories of the future.",
     headerLabel: "Market Context"
   },
   
