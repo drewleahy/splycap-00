@@ -45,7 +45,7 @@ export const LandingContentWithLogo = ({
         </p>
         
         {keyStats && keyStats.length > 0 && (
-          <div className="border-l-4 border-gray-900 pl-4 sm:pl-6">
+          <div className="border-l border-gray-900 pl-4 sm:pl-6">
             <ul className="space-y-2 sm:space-y-3">
               {keyStats.map((stat, index) => (
                 <li key={index} className="flex items-start sm:items-center">
