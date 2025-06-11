@@ -118,7 +118,7 @@ export const nanotronicsConfig: DealPageConfig = {
   },
   
   backing: {
-    title: "Backed by Leading Investors and Strategic Partners",
+    title: "Validated by Leading Institutions Across Industry and Government",
     description: "Nanotronics is supported by top-tier investors and has formed strategic partnerships with industry leaders:",
     keyPoints: [
       "Backed by prominent venture capital firms",
