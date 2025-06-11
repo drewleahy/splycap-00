@@ -31,7 +31,7 @@ export const nanotronicsConfig: DealPageConfig = {
   },
   
   opportunity: {
-    title: "Access to an Oversubscribed Growth Round at Strategic Valuation",
+    title: "Access to a Strategic Growth Round in a Category-Leading AI Manufacturing Platform",
     description: "SPLY Capital has secured a significant allocation in Nanotronics' oversubscribed growth round. The company is scaling rapidly with Fortune 500 customers and expanding global operations.",
     keyMetrics: [
       "$400M+ current valuation",
