@@ -134,8 +134,8 @@ export const nanotronicsConfig: DealPageConfig = {
     headline: "Next Steps",
     description: "We've secured this exclusive allocation for the SPLYCAP network. The round is closing quickly as demand exceeds availability.",
     primaryButton: {
-      text: "Download Investment Materials",
-      link: "#download-materials"
+      text: "2025 Forbes Article",
+      link: "https://www.forbes.com/sites/jaimecatmull/2025/04/10/the-future-of-ai-investing-how-semiconductors-are-shaping-the-game/"
     },
     secondaryButton: {
       text: "Sign NDA to View Diligence",

@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import jsPDF from 'jspdf';
@@ -120,7 +119,7 @@ export const LandingCTA = ({
             size="lg"
             className="bg-white text-black hover:bg-gray-100 hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
           >
-            Download DecK
+            2025 Forbes Article
           </Button>
           
           {secondaryButtonText && (
@@ -149,4 +148,3 @@ export const LandingCTA = ({
     </section>
   );
 };
-
