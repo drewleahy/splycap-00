@@ -113,14 +113,6 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         />
       </div>
       
-      {config.video && (
-        <LandingVideoSection
-          videoUrl={config.video.videoUrl}
-          title={config.video.title}
-          description={config.video.description}
-        />
-      )}
-      
       <LandingFooter
         copyright={config.footer.copyright}
         links={config.footer.links}

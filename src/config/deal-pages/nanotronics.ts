@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -144,12 +145,6 @@ export const nanotronicsConfig: DealPageConfig = {
       text: "Book a Call",
       link: "https://calendly.com/haley-splycapital/deal-interest"
     }
-  },
-  
-  video: {
-    title: "See Nanotronics AI Inspection in Action",
-    description: "Watch how Nanotronics' AI-powered inspection technology is transforming manufacturing quality control",
-    videoUrl: "https://player.vimeo.com/video/nanotronics-demo"
   },
   
   footer: {
