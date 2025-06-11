@@ -23,7 +23,7 @@ export const LandingContent = ({
 
   // Function to bold specific words
   const formatTextWithBoldWords = (text: string) => {
-    const wordsTooBold = ['semiconductors', 'aerospace', 'life sciences', 'quantum computing'];
+    const wordsTooBold = ['semiconductors', 'aerospace', 'life sciences', 'quantum computing', 'nSpec™', 'nControl™', 'CubeFab™'];
     let formattedText = text;
     
     wordsTooBold.forEach(word => {
