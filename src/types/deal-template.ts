@@ -62,6 +62,7 @@ export interface DealPageConfig {
     description: string;
     headerLabel?: string;
     keyPoints?: string[];
+    additionalContent?: string;
   };
   
   thesis?: {
