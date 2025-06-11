@@ -62,7 +62,7 @@ export const nanotronicsConfig: DealPageConfig = {
   company: {
     title: "Nanotronics: AI-Powered Optical Inspection for Advanced Manufacturing",
     description: "Nanotronics is redefining industrial inspection and factory control through a proprietary platform that combines artificial intelligence, machine learning, and advanced imaging. Its nSpec™ and nControl™ systems automate quality assurance at the nanoscale—driving higher yields, lower costs, and faster innovation across semiconductors, aerospace, life sciences, and quantum computing.",
-    logoSrc: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+    logoSrc: "/lovable-uploads/138211f1-327b-4096-a569-d960abb0e1b1.png",
     logoAlt: "Nanotronics Logo",
     headerLabel: "Company Overview",
     keyStats: [
