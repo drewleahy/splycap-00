@@ -121,10 +121,11 @@ export const nanotronicsConfig: DealPageConfig = {
     title: "Validated by Leading Institutions Across Industry and Government",
     description: "Nanotronics is supported by a powerful combination of private investors, commercial partners, and government engagement:",
     keyPoints: [
-      "Backed by prominent venture capital firms",
-      "Strategic partnerships with major manufacturing companies",
-      "Strong advisory board with industry veterans",
-      "Government and institutional support for AI innovation"
+      "Backed by Founders Fund, Investment Corporation of Dubai, and Plug and Play Tech Center",
+      "Selected by Google as the exclusive optical inspection partner for its Willow quantum chip",
+      "Customers include Intel, Meta, Amazon, Canon, Illumina, and over 250 others",
+      "CEO Matthew Putman has testified before Congress on AI and quantum leadership",
+      "Applications span semiconductors, quantum, aerospace, life sciences, and national security tech"
     ]
   },
   
