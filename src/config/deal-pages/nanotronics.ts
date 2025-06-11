@@ -14,7 +14,7 @@ export const nanotronicsConfig: DealPageConfig = {
   },
   
   hero: {
-    headline: "Nanotronics: Revolutionizing Manufacturing\nwith AI-Powered Inspection",
+    headline: "Nanotronics: Revolutionizing Manufacturing with AI-Powered Inspection",
     subheadline: "Join us in backing the company that's transforming quality control across industries with cutting-edge artificial intelligence and advanced imaging technology.",
     primaryCta: {
       text: "View Investment Details",
