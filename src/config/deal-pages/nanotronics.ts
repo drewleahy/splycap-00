@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -15,19 +14,19 @@ export const nanotronicsConfig: DealPageConfig = {
   },
   
   hero: {
-    headline: "Exclusive Access: Nanotronics Investment Opportunity",
-    subheadline: "Join SPLY Capital's investment in Nanotronics — the AI-powered industrial inspection platform revolutionizing manufacturing quality control across global supply chains.",
+    headline: "Nanotronics: Revolutionizing Manufacturing\nwith AI-Powered Inspection",
+    subheadline: "Join us in backing the company that's transforming quality control across industries with cutting-edge artificial intelligence and advanced imaging technology.",
     primaryCta: {
-      text: "Schedule a Call",
-      link: "https://calendly.com/haley-splycapital/deal-interest"
+      text: "View Investment Details",
+      link: "#details"
     },
     secondaryCta: {
-      text: "Sign NDA to View Materials",
-      link: "#nda-materials"
+      text: "Watch Demo",
+      link: "https://vimeo.com/999262573"
     },
     tertiaryCta: {
-      text: "Download Deck",
-      link: "#download-deck"
+      text: "Download Pitch Deck",
+      link: "#video"
     }
   },
   
