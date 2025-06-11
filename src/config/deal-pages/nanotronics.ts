@@ -15,7 +15,7 @@ export const nanotronicsConfig: DealPageConfig = {
   
   hero: {
     headline: "Nanotronics: Revolutionizing Manufacturing with AI-Powered Inspection",
-    subheadline: "Join us in backing the company that's transforming quality control across industries with cutting-edge artificial intelligence and advanced imaging technology.",
+    subheadline: "Join SPLY Capital's investment in Nanotronics — the AI-powered industrial inspection platform revolutionizing manufacturing quality control across global supply chains.",
     primaryCta: {
       text: "View Investment Details",
       link: "#details"
