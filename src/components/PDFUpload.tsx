@@ -14,106 +14,135 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<{url: string, name: string} | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<string>("");
+
+  const validateFile = (file: File): string | null => {
+    console.log("Validating file:", file.name, file.type, file.size);
+    
+    if (file.type !== 'application/pdf') {
+      return 'Please select a PDF file';
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      return 'File size must be less than 10MB';
+    }
+
+    if (file.size === 0) {
+      return 'File appears to be empty';
+    }
+
+    return null;
+  };
+
+  const tryUploadMethod = async (file: File, method: string, url: string, options: RequestInit = {}) => {
+    console.log(`Trying upload method: ${method} to ${url}`);
+    setUploadProgress(`Trying ${method}...`);
+    
+    const formData = new FormData();
+    formData.append("file", file);
+    
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+      ...options,
+    });
+
+    console.log(`${method} response:`, response.status, response.statusText);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`${method} failed: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    console.log(`${method} success:`, data);
+    return data;
+  };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check if it's a PDF
-    if (file.type !== 'application/pdf') {
-      setError('Please select a PDF file');
-      return;
-    }
-
-    // Check file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      setError('File size must be less than 10MB');
-      return;
-    }
+    console.log("File selected:", file.name, file.type, file.size);
 
     // Reset states
     setIsUploading(true);
     setError(null);
     setSuccessMessage(null);
+    setUploadProgress("Validating file...");
 
     try {
-      console.log(`Starting PDF upload: ${file.name}, size: ${file.size} bytes`);
-      
+      // Validate file
+      const validationError = validateFile(file);
+      if (validationError) {
+        setError(validationError);
+        return;
+      }
+
       toast({
         title: "Uploading PDF",
         description: `Uploading ${file.name}...`,
       });
 
-      // Create FormData
-      const formData = new FormData();
-      formData.append("file", file);
-      
-      console.log("FormData created, attempting upload...");
-      
-      // Try multiple upload methods in sequence
       let uploadResult = null;
-      
-      // Method 1: Try the service worker proxy first
-      try {
-        console.log("Attempting upload via service worker proxy...");
-        const response = await fetch("/api/upload-file", {
-          method: "POST",
-          body: formData,
-        });
-
-        console.log("Response status:", response.status);
-        console.log("Response headers:", Object.fromEntries(response.headers.entries()));
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Upload successful via service worker:", data);
-          uploadResult = data;
-        } else {
-          const errorText = await response.text();
-          console.error("Service worker upload failed:", errorText);
-          throw new Error(`Service worker upload failed: ${response.status} - ${errorText}`);
-        }
-      } catch (serviceWorkerError) {
-        console.error("Service worker method failed:", serviceWorkerError);
-        
-        // Method 2: Try PHP endpoint
-        try {
-          console.log("Attempting upload via PHP endpoint...");
-          const phpResponse = await fetch("/api/upload-file.php", {
-            method: "POST",
-            body: formData,
-          });
-
-          if (phpResponse.ok) {
-            const phpData = await phpResponse.json();
-            console.log("Upload successful via PHP:", phpData);
-            uploadResult = phpData;
-          } else {
-            const phpErrorText = await phpResponse.text();
-            console.error("PHP upload failed:", phpErrorText);
-            throw new Error(`PHP upload failed: ${phpResponse.status} - ${phpErrorText}`);
+      const uploadMethods = [
+        {
+          name: "Service Worker Proxy",
+          url: "/api/upload-file",
+          options: {}
+        },
+        {
+          name: "PHP Endpoint",
+          url: "/api/upload-file.php",
+          options: {}
+        },
+        {
+          name: "Direct Supabase",
+          url: "https://hjjtsbkxxvygpurfhlub.supabase.co/functions/v1/upload-file",
+          options: {
+            headers: {
+              'Accept': 'application/json',
+            }
           }
-        } catch (phpError) {
-          console.error("PHP method failed:", phpError);
+        }
+      ];
+
+      // Try each upload method in sequence
+      for (let i = 0; i < uploadMethods.length; i++) {
+        const method = uploadMethods[i];
+        try {
+          uploadResult = await tryUploadMethod(file, method.name, method.url, method.options);
+          if (uploadResult && uploadResult.publicUrl) {
+            break; // Success, exit the loop
+          }
+        } catch (methodError) {
+          console.error(`${method.name} failed:`, methodError);
           
-          // Method 3: Try creating a simple blob URL as fallback
-          console.log("Creating blob URL as fallback...");
-          const blobUrl = URL.createObjectURL(file);
-          uploadResult = {
-            publicUrl: blobUrl,
-            message: "File loaded locally (blob URL)"
-          };
-          console.log("Blob URL created:", blobUrl);
+          // If this isn't the last method, continue to the next one
+          if (i < uploadMethods.length - 1) {
+            setUploadProgress(`${method.name} failed, trying next method...`);
+            continue;
+          } else {
+            // This was the last method, create a blob URL as final fallback
+            console.log("All upload methods failed, creating blob URL as fallback");
+            setUploadProgress("Creating local file reference...");
+            const blobUrl = URL.createObjectURL(file);
+            uploadResult = {
+              publicUrl: blobUrl,
+              message: "File loaded locally (blob URL - note: this will only work in this browser session)"
+            };
+          }
         }
       }
       
       if (uploadResult && uploadResult.publicUrl) {
         setUploadedFile({ url: uploadResult.publicUrl, name: file.name });
         setSuccessMessage(`${file.name} uploaded successfully!`);
+        setUploadProgress("");
         
         toast({
           title: "Success",
-          description: "PDF uploaded successfully",
+          description: uploadResult.message || "PDF uploaded successfully",
         });
         
         if (onSuccess) {
@@ -123,9 +152,10 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
         throw new Error("No file URL returned from any upload method");
       }
     } catch (err) {
-      console.error("All upload methods failed:", err);
+      console.error("All upload attempts failed:", err);
       const errorMessage = err instanceof Error ? err.message : "Failed to upload PDF";
-      setError(errorMessage);
+      setError(`Upload failed: ${errorMessage}`);
+      setUploadProgress("");
       
       toast({
         title: "Upload Failed",
@@ -142,6 +172,7 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
     setSuccessMessage(null);
     setError(null);
     setUploadedFile(null);
+    setUploadProgress("");
   }, []);
 
   return (
@@ -151,7 +182,9 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
           <div className="flex flex-col items-center justify-center py-4">
             <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
             <p className="text-sm text-gray-600">Uploading PDF...</p>
-            <p className="text-xs text-gray-500 mt-1">Trying multiple upload methods...</p>
+            {uploadProgress && (
+              <p className="text-xs text-gray-500 mt-1">{uploadProgress}</p>
+            )}
           </div>
         ) : successMessage && uploadedFile ? (
           <div className="flex flex-col items-center justify-center py-4">
@@ -222,6 +255,13 @@ export const PDFUpload = ({ onSuccess, label = "Upload PDF" }: PDFUploadProps) =
             </Button>
           </>
         )}
+      </div>
+      
+      {/* Debug info */}
+      <div className="mt-2 p-2 bg-gray-100 rounded text-xs text-gray-600">
+        <p><strong>Debug Info:</strong></p>
+        <p>Browser: {navigator.userAgent.includes('Chrome') ? 'Chrome' : navigator.userAgent.includes('Firefox') ? 'Firefox' : 'Other'}</p>
+        <p>Upload endpoints available: Service Worker, PHP, Direct Supabase</p>
       </div>
     </div>
   );
