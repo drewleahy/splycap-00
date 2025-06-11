@@ -25,8 +25,8 @@ export const nanotronicsConfig: DealPageConfig = {
       link: "#nda-materials"
     },
     tertiaryCta: {
-      text: "Download Flyer",
-      link: "#download-flyer"
+      text: "Download Deck",
+      link: "#download-deck"
     }
   },
   
