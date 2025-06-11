@@ -87,7 +87,7 @@ export const nanotronicsConfig: DealPageConfig = {
   
   thesis: {
     title: "Compelling Investment Thesis",
-    description: "Nanotronics represents an exceptional investment opportunity at the intersection of AI and industrial automation:",
+    description: "Nanotronics combines proprietary technology, demonstrated commercial traction, and a defensible AI platform—aligning with critical trends in advanced manufacturing, supply chain security, and next-generation computing.",
     points: [
       {
         title: "Market-Leading Technology",
