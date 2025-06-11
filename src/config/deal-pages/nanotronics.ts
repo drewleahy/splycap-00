@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -55,7 +56,7 @@ export const nanotronicsConfig: DealPageConfig = {
   
   market: {
     title: "Positioned at the Forefront of a Manufacturing Revolution",
-    description: "The global industrial inspection market is valued at $20+ billion and growing rapidly. Traditional manual inspection methods are being replaced by AI-powered solutions that deliver superior accuracy, speed, and cost efficiency.\n\nNanotronics has positioned itself as the category leader, with its platform already deployed across mission-critical manufacturing processes. The company's AI-powered inspection technology represents the future of manufacturing quality control, enabling unprecedented precision and scalability that traditional methods simply cannot match.",
+    description: "Nanotronics is pioneering the future of industrial inspection by integrating artificial intelligence, machine learning, and advanced imaging into mission-critical production environments. As industries transition away from fragmented, manual inspection methods, Nanotronics' platform is emerging as the new standard — delivering unprecedented levels of precision, scalability, and efficiency.\n\nWith proven adoption in semiconductors, aerospace, life sciences, and quantum computing, Nanotronics is not just addressing today's manufacturing needs — it's defining the infrastructure for the factories of the future",
     headerLabel: "Market Context"
   },
   
