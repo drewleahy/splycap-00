@@ -61,7 +61,7 @@ export const nanotronicsConfig: DealPageConfig = {
   
   company: {
     title: "Nanotronics: AI-Powered Industrial Inspection Leader",
-    description: "Nanotronics combines advanced AI algorithms with sophisticated imaging technology to create autonomous inspection systems for manufacturing. Their platform detects defects and anomalies that human inspectors often miss, reducing waste and improving quality across production lines.",
+    description: "Nanotronics is pioneering the future of industrial inspection by integrating artificial intelligence, machine learning, and advanced imaging into mission-critical production environments. As industries transition away from fragmented, manual inspection methods, Nanotronics' platform is emerging as the new standard — delivering unprecedented levels of precision, scalability, and efficiency.\n\nWith proven adoption in semiconductors, aerospace, life sciences, and quantum computing, Nanotronics is not just addressing today's manufacturing needs — it's defining the infrastructure for the factories of the future",
     logoSrc: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
     logoAlt: "Nanotronics Logo",
     headerLabel: "Company Overview",
