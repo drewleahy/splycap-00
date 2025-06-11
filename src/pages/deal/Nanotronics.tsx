@@ -16,14 +16,31 @@ const Nanotronics = () => {
     if (uploadedDeckUrl) {
       console.log('Found uploaded deck URL:', uploadedDeckUrl);
       
-      // Update the config with the uploaded deck URL
+      // Create a download function that will be called when the button is clicked
+      const handleDownload = () => {
+        console.log('Triggering download for:', uploadedDeckUrl);
+        
+        // Create a temporary anchor element to trigger download
+        const link = document.createElement('a');
+        link.href = uploadedDeckUrl;
+        link.download = 'nanotronics-investment-deck.pdf';
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+      
+      // Store the download function globally so the button can access it
+      (window as any).downloadNanotronicsDeck = handleDownload;
+      
+      // Update the config with a javascript: URL that calls our download function
       const updatedConfig = {
         ...nanotronicsConfig,
         hero: {
           ...nanotronicsConfig.hero,
           tertiaryCta: {
             text: "Download Deck",
-            link: uploadedDeckUrl
+            link: "javascript:window.downloadNanotronicsDeck()"
           }
         }
       };
