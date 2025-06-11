@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -32,7 +33,7 @@ export const nanotronicsConfig: DealPageConfig = {
   
   opportunity: {
     title: "Access to a Strategic Growth Round in a Category-Leading AI Manufacturing Platform",
-    description: "SPLY Capital has secured a significant allocation in Nanotronics' oversubscribed growth round. The company is scaling rapidly with Fortune 500 customers and expanding global operations.",
+    description: "SPLY Capital has secured a meaningful allocation in Nanotronics' oversubscribed growth round. With its proprietary AI-powered inspection systems already deployed by global leaders—including Google, Intel, and Illumina—the company is scaling rapidly across semiconductor, aerospace, and life science industries.",
     keyMetrics: [
       "$400M+ current valuation",
       "Leading strategic investors participating", 
