@@ -71,15 +71,15 @@ export const LandingContent = ({
         </div>
         
         {keyPoints && keyPoints.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
             {keyPoints.map((point, index) => (
               <Card 
                 key={index} 
                 className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <CardContent className="relative p-4 sm:p-8 text-center">
-                  <p className="text-base sm:text-lg md:text-xl font-bold text-gray-900 leading-tight">
+                <CardContent className="relative p-3 sm:p-4 text-center">
+                  <p className="text-xs sm:text-sm md:text-base font-bold text-gray-900 leading-tight">
                     {point}
                   </p>
                 </CardContent>
