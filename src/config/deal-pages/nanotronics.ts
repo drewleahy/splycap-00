@@ -74,7 +74,7 @@ export const nanotronicsConfig: DealPageConfig = {
   
   traction: {
     title: "Proven Commercial Success with Global Manufacturers",
-    description: "Nanotronics has demonstrated strong commercial validation through partnerships with leading manufacturers:",
+    description: "Nanotronics has demonstrated strong commercial validation through partnerships with leading manufacturers:\n\nNanotronics' systems—nSpec™ for inspection and nControl™ for process optimization—are being scaled globally through strategic partnerships and modular CubeFab™ deployments.",
     headerLabel: "Commercial Traction",
     keyPoints: [
       "Deployed across automotive, electronics, and aerospace industries",
