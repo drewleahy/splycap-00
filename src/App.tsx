@@ -8,6 +8,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import Index from "./pages/Index";
 import LPSplash from "./pages/LPSplash";
 import LytenOpportunity from "./pages/landing/LytenOpportunity";
+import Nanotronics from "./pages/deal/Nanotronics";
 
 // LP Pages
 import Bio from "./pages/lp/Bio";
@@ -49,8 +50,9 @@ const App = () => (
             {/* Old Lyten URL for backwards compatibility */}
             <Route path="/lyten-exclusive-2025" element={<LytenOpportunity />} />
             
-            {/* New Lyten URL structure */}
+            {/* Deal Routes */}
             <Route path="/deals/lyten-exclusive-2025" element={<LytenOpportunity />} />
+            <Route path="/deals/nanotronics-exclusive-2025" element={<Nanotronics />} />
             
             {/* LP Routes */}
             <Route path="/lp/bio" element={<Bio />} />
