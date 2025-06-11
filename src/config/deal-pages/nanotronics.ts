@@ -54,7 +54,7 @@ export const nanotronicsConfig: DealPageConfig = {
   },
   
   market: {
-    title: "A Breakout Moment for AI-Powered Industrial Inspection",
+    title: "Positioned at the Forefront of a Manufacturing Revolution",
     description: "The global industrial inspection market is valued at $20+ billion and growing rapidly. Traditional manual inspection methods are being replaced by AI-powered solutions that deliver superior accuracy, speed, and cost efficiency.",
     headerLabel: "Market Context"
   },
