@@ -18,6 +18,9 @@ export const LandingContent = ({
   keyPoints,
   className = "" 
 }: LandingContentProps) => {
+  // Split the body text into paragraphs based on double line breaks
+  const paragraphs = body.split('\n\n').filter(paragraph => paragraph.trim() !== '');
+
   return (
     <section className={`py-12 sm:py-16 px-4 sm:px-6 bg-white ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
@@ -32,9 +35,16 @@ export const LandingContent = ({
           </h2>
         </div>
         
-        <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-8 sm:mb-12">
-          {body}
-        </p>
+        <div className="mb-8 sm:mb-12">
+          {paragraphs.map((paragraph, index) => (
+            <p 
+              key={index} 
+              className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-6 last:mb-0"
+            >
+              {paragraph}
+            </p>
+          ))}
+        </div>
         
         {keyPoints && keyPoints.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
