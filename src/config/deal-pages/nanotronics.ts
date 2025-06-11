@@ -90,34 +90,29 @@ export const nanotronicsConfig: DealPageConfig = {
     description: "Nanotronics combines proprietary technology, demonstrated commercial traction, and a defensible AI platform—aligning with critical trends in advanced manufacturing, supply chain security, and next-generation computing.",
     points: [
       {
-        title: "Market-Leading Technology",
-        description: "Proprietary AI algorithms delivering superior inspection accuracy and speed",
-        icon: Microscope
-      },
-      {
-        title: "Proven Revenue Growth",
-        description: "Strong financial performance with expanding customer base and contracts",
+        title: "Proven Commercial Demand",
+        description: "Deployed by 250+ customers across 34 countries, including leaders in semiconductors, aerospace, and life sciences",
         icon: TrendingUp
       },
       {
         title: "Defensible IP Portfolio",
-        description: "Extensive patent portfolio protecting core inspection technologies",
+        description: "Over 400 issued and pending patents spanning AI, optics, quantum inspection, and process automation",
         icon: Shield
       },
       {
-        title: "Experienced Leadership",
-        description: "World-class team with deep expertise in AI, manufacturing, and enterprise sales",
+        title: "Category-Leading Performance",
+        description: "Exclusive partner to Google's Willow quantum chip team; nSpec™ achieved >90% inspection accuracy, surpassing legacy AOI methods",
+        icon: Microscope
+      },
+      {
+        title: "Strategic Government Engagement",
+        description: "Nanotronics CEO testified before Congress as an expert in AI and quantum manufacturing policy",
         icon: Award
       },
       {
-        title: "Global Market Expansion",
-        description: "Scaling operations internationally with strategic partnerships",
+        title: "Institutional-Grade Partnerships",
+        description: "Backed by Founders Fund, Investment Corporation of Dubai, and used by Google, Intel, Meta, Canon, Amazon, Illumina, and more",
         icon: Globe
-      },
-      {
-        title: "AI Innovation Edge",
-        description: "Continuous R&D investment maintaining technological leadership",
-        icon: Zap
       }
     ]
   },
