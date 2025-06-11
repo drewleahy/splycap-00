@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -93,7 +92,7 @@ export const LandingHero = ({
         )}
         
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 text-black leading-tight whitespace-pre-line">
+          <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 text-black leading-tight">
             {headline}
           </h1>
           <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto text-gray-700 leading-relaxed px-2 sm:px-0">
