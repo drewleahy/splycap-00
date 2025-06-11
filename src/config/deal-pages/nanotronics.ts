@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -139,7 +138,7 @@ export const nanotronicsConfig: DealPageConfig = {
     },
     secondaryButton: {
       text: "Sign NDA to View Diligence",
-      link: "#nda-materials"
+      link: "https://docsend.com/view/s/dke9vdijy2qu9f42"
     },
     tertiaryButton: {
       text: "Book a Call",
