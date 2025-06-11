@@ -8,6 +8,7 @@ interface LandingContentProps {
   body: string;
   headerLabel?: string;
   keyPoints?: string[];
+  additionalContent?: string;
   className?: string;
 }
 
@@ -16,6 +17,7 @@ export const LandingContent = ({
   body, 
   headerLabel,
   keyPoints,
+  additionalContent,
   className = "" 
 }: LandingContentProps) => {
   // Split the body text into paragraphs based on double line breaks
@@ -69,7 +71,7 @@ export const LandingContent = ({
         </div>
         
         {keyPoints && keyPoints.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
             {keyPoints.map((point, index) => (
               <Card 
                 key={index} 
@@ -84,6 +86,14 @@ export const LandingContent = ({
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-900 via-black to-gray-900" />
               </Card>
             ))}
+          </div>
+        )}
+        
+        {additionalContent && (
+          <div className="mt-8">
+            <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
+              {formatTextWithBoldWords(additionalContent)}
+            </p>
           </div>
         )}
       </div>

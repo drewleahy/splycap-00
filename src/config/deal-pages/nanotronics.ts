@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -74,14 +75,15 @@ export const nanotronicsConfig: DealPageConfig = {
   
   traction: {
     title: "Proven Commercial Success with Global Manufacturers",
-    description: "Nanotronics has demonstrated strong commercial validation through partnerships with leading manufacturers:\n\nNanotronics' systems—nSpec™ for inspection and nControl™ for process optimization—are being scaled globally through strategic partnerships and modular CubeFab™ deployments.",
+    description: "Nanotronics has demonstrated strong commercial validation through partnerships with leading manufacturers:",
     headerLabel: "Commercial Traction",
     keyPoints: [
       "Deployed across automotive, electronics, and aerospace industries",
       "Multi-million dollar contracts with Fortune 500 companies",
       "Expanding international presence in Europe and Asia",
       "Strong recurring revenue model with high customer retention"
-    ]
+    ],
+    additionalContent: "Nanotronics' systems—nSpec™ for inspection and nControl™ for process optimization—are being scaled globally through strategic partnerships and modular CubeFab™ deployments."
   },
   
   thesis: {
