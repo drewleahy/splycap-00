@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -49,7 +48,7 @@ export const nanotronicsConfig: DealPageConfig = {
       },
       {
         header: "Defensible IP and platform expansion",
-        body: "400+ patents protect its core AI, optical, and automation technology—now powering modular CubeFab™ facilities worldwide"
+        body: "Nanotronics holds 61 patent families and 376 total filings—including 270 active and 97 pending patents—spanning AI, optics, and process automation technologies now powering its modular CubeFab™ facilities worldwide"
       }
     ]
   },
