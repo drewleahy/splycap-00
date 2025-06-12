@@ -79,7 +79,7 @@ export const nanotronicsConfig: DealPageConfig = {
     keyPoints: [
       "Deployed across electronics, aerospace, and emerging automotive applications",
       "Engaged with Fortune 500 customers across high-value sectors",
-      "Expanding international presence in Europe and Asia",
+      "Expanding internationally with government and enterprise engagements across Europe, the Middle East, and Latin America",
       "Strong recurring revenue model with high customer retention"
     ],
     additionalContent: "Nanotronics' systems—nSpec™ for inspection and nControl™ for process optimization—are being scaled globally through strategic partnerships and modular CubeFab™ deployments."
