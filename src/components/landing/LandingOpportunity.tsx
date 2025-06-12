@@ -28,11 +28,16 @@ export const LandingOpportunity = ({
 
   // Function to bold specific words
   const formatTextWithBoldWords = (text: string) => {
-    const wordsTooBold = ['semiconductors', 'semiconductor', 'aerospace', 'life sciences', 'life science industries', 'quantum computing', 'quantum', 'nSpec™', 'nControl™', 'CubeFab™', 'Founders Fund', 'Investment Corporation of Dubai', 'Intel', 'Meta', 'Amazon', 'Canon', 'Illumina', 'Google'];
+    const wordsTooBold = [
+      'semiconductors', 'semiconductor', 'aerospace', 'life sciences', 'life science industries', 'quantum computing', 'quantum', 
+      'nSpec™', 'nControl™', 'CubeFab™', 'Founders Fund', 'Investment Corporation of Dubai', 'Intel', 'Meta', 'Amazon', 
+      'Canon', 'Illumina', 'Google', '$3 million raise', '$1.2B valuation cap', '2X warrant coverage', 
+      'projected valuation exceeding $2B'
+    ];
     let formattedText = text;
     
     wordsTooBold.forEach(word => {
-      const regex = new RegExp(`\\b${word}\\b`, 'gi');
+      const regex = new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
       formattedText = formattedText.replace(regex, `**${word}**`);
     });
     
