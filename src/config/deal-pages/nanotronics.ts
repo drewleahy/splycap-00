@@ -77,7 +77,7 @@ export const nanotronicsConfig: DealPageConfig = {
     description: "Nanotronics has demonstrated strong commercial validation through partnerships with leading manufacturers:",
     headerLabel: "Commercial Traction",
     keyPoints: [
-      "Deployed across automotive, electronics, and aerospace industries",
+      "Deployed across electronics, aerospace, and emerging automotive applications",
       "Multi-million dollar contracts with Fortune 500 companies",
       "Expanding international presence in Europe and Asia",
       "Strong recurring revenue model with high customer retention"
