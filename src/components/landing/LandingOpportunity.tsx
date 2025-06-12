@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -38,7 +37,9 @@ export const LandingOpportunity = ({
     let formattedText = text;
     
     wordsTooBold.forEach(word => {
-      const regex = new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
+      // Use a more flexible regex that doesn't rely on word boundaries for special characters
+      const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escapedWord, 'gi');
       formattedText = formattedText.replace(regex, `**${word}**`);
     });
     
