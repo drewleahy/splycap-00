@@ -48,7 +48,7 @@ export const nanotronicsConfig: DealPageConfig = {
       },
       {
         header: "Defensible IP and platform expansion",
-        body: "150+ patents protect its core AI, optical, and automation technology—now powering modular CubeFab™ facilities worldwide"
+        body: "400+ patents protect its core AI, optical, and automation technology—now powering modular CubeFab™ facilities worldwide"
       }
     ]
   },
