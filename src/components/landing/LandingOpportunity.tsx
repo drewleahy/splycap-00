@@ -28,24 +28,40 @@ export const LandingOpportunity = ({
 
   // Function to bold specific words
   const formatTextWithBoldWords = (text: string) => {
+    console.log('Original text:', text);
+    
     const wordsTooBold = [
+      '$3 million raise',
+      '$20 million growth financing round', 
+      '$1.2B valuation cap',
+      '$3 million',
+      '$20 million',
+      '$1.2B',
+      '$2B',
       'semiconductors', 'semiconductor', 'aerospace', 'life sciences', 'life science industries', 'quantum computing', 'quantum', 
       'nSpec™', 'nControl™', 'CubeFab™', 'Founders Fund', 'Investment Corporation of Dubai', 'Intel', 'Meta', 'Amazon', 
-      'Canon', 'Illumina', 'Google', '$3 million raise', '$1.2B valuation cap', '2X warrant coverage', 
-      'projected valuation exceeding $2B', '$3 million', '$20 million growth financing round', '$20 million', 
-      '$1.2B', '$2B'
+      'Canon', 'Illumina', 'Google', '2X warrant coverage', 
+      'projected valuation exceeding $2B'
     ];
+    
     let formattedText = text;
     
     // Sort by length (longest first) to avoid partial matches
     const sortedWordsTooBold = wordsTooBold.sort((a, b) => b.length - a.length);
     
     sortedWordsTooBold.forEach(word => {
-      // Use a more flexible regex that doesn't rely on word boundaries for special characters
-      const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(escapedWord, 'gi');
-      formattedText = formattedText.replace(regex, `**${word}**`);
+      // Check if the word exists in the text first
+      if (formattedText.toLowerCase().includes(word.toLowerCase())) {
+        console.log('Found word to bold:', word);
+        // Use a more flexible regex that doesn't rely on word boundaries for special characters
+        const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedWord})`, 'gi');
+        formattedText = formattedText.replace(regex, '**$1**');
+        console.log('Text after replacing:', formattedText);
+      }
     });
+    
+    console.log('Final formatted text:', formattedText);
     
     // Split by ** to create spans with bold formatting
     const parts = formattedText.split('**');
@@ -53,7 +69,8 @@ export const LandingOpportunity = ({
     return parts.map((part, index) => {
       // Every odd index should be bold
       if (index % 2 === 1) {
-        return <strong key={index} className="font-semibold">{part}</strong>;
+        console.log('Making bold:', part);
+        return <strong key={index} className="font-semibold text-gray-900">{part}</strong>;
       }
       return part;
     });
