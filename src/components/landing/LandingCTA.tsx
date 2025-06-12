@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import jsPDF from 'jspdf';
@@ -170,7 +169,7 @@ export const LandingCTA = ({
               onClick={() => handleButtonClick(tertiaryButtonLink!)}
               variant="outline"
               size="lg"
-              className="border-2 border-gray-300 text-gray-300 bg-transparent hover:bg-gray-300 hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
+              className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
             >
               {tertiaryButtonText}
             </Button>
