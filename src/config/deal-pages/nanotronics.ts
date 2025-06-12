@@ -28,7 +28,7 @@ export const nanotronicsConfig: DealPageConfig = {
   
   opportunity: {
     title: "Access to a Strategic Growth Round in a Category-Leading AI Manufacturing Platform",
-    description: "SPLY Capital is participating in Nanotronics' current growth financing round as part of a $3 million raise, providing access to a rare and compelling investment in a high-growth, AI-driven manufacturing platform. This round includes a $1.2B valuation cap and 2X warrant coverage, offering meaningful upside as the company approaches its next institutional milestone.\n\nNanotronics is targeting its next capital raise in H2 2025, with a projected valuation exceeding $2B. The company's proprietary AI-powered inspection systems are already deployed by global leaders—including Google, Intel, and Illumina—and it continues to scale across semiconductors, aerospace, and life sciences.",
+    description: "SPLY Capital is leading a $3 million raise as part of Nanotronics' broader $20 million growth financing round, providing access to a rare and compelling opportunity in a high-growth, AI-driven manufacturing platform. The round includes a $1.2B valuation cap and 2X warrant coverage, offering meaningful upside as the company approaches its next institutional milestone.\n\nNanotronics is targeting its next capital raise in H2 2025, with a projected valuation exceeding $2B. The company's proprietary AI-powered inspection systems are already deployed by global leaders—including Google, Intel, and Illumina—and it continues to scale across semiconductors, aerospace, and life sciences.",
     keyMetrics: [
       {
         header: "Convertible Note Conversion",
