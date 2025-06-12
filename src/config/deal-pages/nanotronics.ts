@@ -31,6 +31,14 @@ export const nanotronicsConfig: DealPageConfig = {
     description: "SPLY Capital is participating in Nanotronics' current growth financing round as part of a $3 million raise, providing access to a rare and compelling investment in a high-growth, AI-driven manufacturing platform. This round includes a $1.2B valuation cap and 2X warrant coverage, offering meaningful upside as the company approaches its next institutional milestone.\n\nNanotronics is targeting its next capital raise in H2 2025, with a projected valuation exceeding $2B. The company's proprietary AI-powered inspection systems are already deployed by global leaders—including Google, Intel, and Illumina—and it continues to scale across semiconductors, aerospace, and life sciences.",
     keyMetrics: [
       {
+        header: "Convertible Note Conversion",
+        body: "Converts at the lesser of a 20% discount to the next priced round or a $1.25B valuation cap"
+      },
+      {
+        header: "Warrant Coverage",
+        body: "Investors receive warrants to purchase common stock at $0.01/share, with value up to 2X their note investment"
+      },
+      {
         header: "$1.25B post-money valuation",
         body: "Backed by leading global investors including Founders Fund, the Investment Corporation of Dubai, and Plug and Play Tech Center"
       },
@@ -45,14 +53,6 @@ export const nanotronicsConfig: DealPageConfig = {
       {
         header: "Defensible IP and platform expansion",
         body: "Nanotronics holds 61 patent families and 376 total filings—including 270 active and 97 pending patents—spanning AI, optics, and process automation technologies now powering its modular CubeFab™ facilities worldwide"
-      },
-      {
-        header: "Convertible Note Conversion",
-        body: "Converts at the lesser of a 20% discount to the next priced round or a $1.25B valuation cap"
-      },
-      {
-        header: "Warrant Coverage",
-        body: "Investors receive warrants to purchase common stock at $0.01/share, with value up to 2X their note investment"
       }
     ]
   },
