@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -95,7 +96,7 @@ export const LandingHero = ({
           <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 text-black leading-tight">
             {headline}
           </h1>
-          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto text-gray-700 leading-relaxed px-2 sm:px-0">
+          <p className="text-sm sm:text-base md:text-lg mb-6 sm:mb-8 max-w-3xl mx-auto text-gray-700 leading-relaxed px-2 sm:px-0">
             Join SPLY Capital's investment in Nanotronics — the AI-powered platform redefining quality control with advanced optics and computer vision, enabling autonomous manufacturing at global scale.
           </p>
           
