@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -110,6 +109,8 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           secondaryButtonLink={config.cta.secondaryButton?.link}
           tertiaryButtonText={config.cta.tertiaryButton?.text}
           tertiaryButtonLink={config.cta.tertiaryButton?.link}
+          quaternaryButtonText={config.cta.quaternaryButton?.text}
+          quaternaryButtonLink={config.cta.quaternaryButton?.link}
         />
       </div>
       

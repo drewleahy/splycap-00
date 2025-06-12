@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -141,6 +142,10 @@ export const nanotronicsConfig: DealPageConfig = {
       link: "https://docsend.com/view/s/dke9vdijy2qu9f42"
     },
     tertiaryButton: {
+      text: "Sign (International) NDA to View Diligence",
+      link: "https://docsend.com/view/s/adcukdtegq44zf7v"
+    },
+    quaternaryButton: {
       text: "Book a Call",
       link: "https://calendly.com/haley-splycapital/deal-interest"
     }

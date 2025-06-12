@@ -18,6 +18,8 @@ interface LandingCTAProps {
   secondaryButtonLink?: string;
   tertiaryButtonText?: string;
   tertiaryButtonLink?: string;
+  quaternaryButtonText?: string;
+  quaternaryButtonLink?: string;
   className?: string;
 }
 
@@ -30,6 +32,8 @@ export const LandingCTA = ({
   secondaryButtonLink,
   tertiaryButtonText,
   tertiaryButtonLink,
+  quaternaryButtonText,
+  quaternaryButtonLink,
   className = ""
 }: LandingCTAProps) => {
   const downloadFlyer = async () => {
@@ -141,7 +145,7 @@ export const LandingCTA = ({
           {description}
         </p>
         
-        <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center">
+        <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center flex-wrap">
           <Button 
             onClick={() => handleButtonClick(primaryButtonLink)}
             size="lg"
@@ -169,6 +173,17 @@ export const LandingCTA = ({
               className="border-2 border-gray-300 text-gray-300 bg-transparent hover:bg-gray-300 hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
             >
               {tertiaryButtonText}
+            </Button>
+          )}
+
+          {quaternaryButtonText && (
+            <Button 
+              onClick={() => handleButtonClick(quaternaryButtonLink!)}
+              variant="outline"
+              size="lg"
+              className="border-2 border-blue-300 text-blue-300 bg-transparent hover:bg-blue-300 hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
+            >
+              {quaternaryButtonText}
             </Button>
           )}
         </div>

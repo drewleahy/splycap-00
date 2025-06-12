@@ -1,9 +1,23 @@
-
 import { LucideIcon } from 'lucide-react';
 
 export interface OpportunitySection {
   header: string;
   body: string;
+}
+
+export interface CTAButton {
+  text: string;
+  link: string;
+  onClick?: () => void;
+}
+
+export interface CTASection {
+  headline: string;
+  description: string;
+  primaryButton: CTAButton;
+  secondaryButton?: CTAButton;
+  tertiaryButton?: CTAButton;
+  quaternaryButton?: CTAButton;
 }
 
 export interface DealPageConfig {
@@ -84,18 +98,10 @@ export interface DealPageConfig {
   cta: {
     headline: string;
     description: string;
-    primaryButton: {
-      text: string;
-      link: string;
-    };
-    secondaryButton?: {
-      text: string;
-      link: string;
-    };
-    tertiaryButton?: {
-      text: string;
-      link: string;
-    };
+    primaryButton: CTAButton;
+    secondaryButton?: CTAButton;
+    tertiaryButton?: CTAButton;
+    quaternaryButton?: CTAButton;
   };
   
   video?: {
