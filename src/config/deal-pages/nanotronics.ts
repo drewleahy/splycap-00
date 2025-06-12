@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -123,7 +124,7 @@ export const nanotronicsConfig: DealPageConfig = {
     keyPoints: [
       "Backed by Founders Fund, Investment Corporation of Dubai, and Plug and Play Tech Center",
       "Selected by Google as the exclusive optical inspection partner for its Willow quantum chip",
-      "Customers include Intel, Canon, Amazon, Illumina, and other global leaders",
+      "Customers include Intel, Meta, Amazon, Canon, Illumina, and over 250 others",
       "CEO Matthew Putman has testified before Congress on AI and quantum leadership",
       "Applications span semiconductors, quantum, aerospace, life sciences, and national security tech"
     ]
