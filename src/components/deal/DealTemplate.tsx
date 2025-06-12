@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -8,8 +7,8 @@ import { LandingContent } from '@/components/landing/LandingContent';
 import { LandingContentWithLogo } from '@/components/landing/LandingContentWithLogo';
 import { LandingFeatures } from '@/components/landing/LandingFeatures';
 import { LandingCTA } from '@/components/landing/LandingCTA';
+import { LandingVideoSection } from '@/components/landing/LandingVideoSection';
 import { LandingFooter } from '@/components/landing/LandingFooter';
-import { CustomerLogosSection } from './CustomerLogosSection';
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -17,8 +16,10 @@ interface DealTemplateProps {
 
 export const DealTemplate = ({ config }: DealTemplateProps) => {
   useEffect(() => {
+    // Set document title
     document.title = config.seo.title;
     
+    // Update meta description
     let metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', config.seo.description);
@@ -46,66 +47,47 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         backgroundImage={config.hero.backgroundImage}
       />
       
-      {/* Add Customer Logos Section for Nanotronics */}
-      {config.id === 'nanotronics' && (
-        <CustomerLogosSection
-          imageSrc="/lovable-uploads/4b0656ae-4ae0-4e62-9272-33f7855bf48b.png"
-          imageAlt="Nanotronics Key Customers - Including Google, 3M, Illumina, Rolex, Amazon, NASA, Apple, Intel, Canon, and more"
-        />
-      )}
-      
-      {config.opportunity && (
-        <LandingOpportunity
-          title={config.opportunity.title}
-          body={config.opportunity.description}
-          keyPoints={config.opportunity.keyMetrics}
-          headerLabel="The Opportunity"
-        />
-      )}
+      <LandingOpportunity
+        title={config.opportunity.title}
+        body={config.opportunity.description}
+        sections={config.opportunity.keyMetrics}
+        headerLabel="The Opportunity"
+      />
       
       {config.market && (
         <LandingContent
           title={config.market.title}
           body={config.market.description}
           headerLabel={config.market.headerLabel || "Market Context"}
-          className="bg-gray-50"
         />
       )}
       
-      {config.company && (
-        <LandingContentWithLogo
-          title={config.company.title}
-          body={config.company.description}
-          logoSrc={config.company.logoSrc}
-          logoAlt={config.company.logoAlt}
-          headerLabel={config.company.headerLabel || "Company Overview"}
-          keyStats={config.company.keyStats}
-        />
-      )}
+      <LandingContentWithLogo
+        title={config.company.title}
+        body={config.company.description}
+        logoSrc={config.company.logoSrc}
+        logoAlt={config.company.logoAlt}
+        headerLabel={config.company.headerLabel || "Company Overview"}
+        keyStats={config.company.keyStats}
+      />
       
       {config.traction && (
         <LandingContent
           title={config.traction.title}
           body={config.traction.description}
-          headerLabel={config.traction.headerLabel || "Traction"}
+          headerLabel={config.traction.headerLabel || "Commercial Traction"}
           keyPoints={config.traction.keyPoints}
-          className="bg-gray-50"
           additionalContent={config.traction.additionalContent}
+          className="bg-gray-50"
         />
       )}
       
-      {config.thesis && (
-        <LandingFeatures
-          title={config.thesis.title}
-          description={config.thesis.description}
-          features={config.thesis.points.map(point => ({
-            title: point.title,
-            description: point.description,
-            icon: point.icon
-          }))}
-          headerLabel="Investment Thesis"
-        />
-      )}
+      <LandingFeatures
+        title={config.thesis.title}
+        description={config.thesis.description}
+        features={config.thesis.points}
+        headerLabel="Why We're Investing"
+      />
       
       {config.backing && (
         <LandingOpportunity
@@ -131,24 +113,6 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           quaternaryButtonLink={config.cta.quaternaryButton?.link}
         />
       </div>
-      
-      {config.video && (
-        <div id="video" className="py-16 px-4 sm:px-6 bg-gray-50">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">{config.video.title}</h2>
-            <p className="text-lg text-gray-600 mb-8">{config.video.description}</p>
-            <div className="aspect-video">
-              <iframe
-                src={config.video.videoUrl}
-                className="w-full h-full rounded-lg"
-                frameBorder="0"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
-      )}
       
       <LandingFooter
         copyright={config.footer.copyright}
