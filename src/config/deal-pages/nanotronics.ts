@@ -96,7 +96,7 @@ export const nanotronicsConfig: DealPageConfig = {
       },
       {
         title: "Defensible IP Portfolio",
-        description: "Over 400 issued and pending patents spanning AI, optics, quantum inspection, and process automation",
+        description: "Nanotronics holds 61 patent families and 376 total patent filings—covering AI, optics, quantum inspection, and process automation—with 270 active and 97 pending globally.",
         icon: Shield
       },
       {
