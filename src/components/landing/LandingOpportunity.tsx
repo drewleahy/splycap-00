@@ -37,10 +37,9 @@ export const LandingOpportunity = ({
       '$1.2B valuation cap',
       'projected valuation exceeding $2B',
       '2X warrant coverage',
-      // Then individual amounts
+      // Then individual amounts - removed $1.2B to avoid conflict with "$1.2B valuation cap"
       '$20 million',
       '$3 million',
-      '$1.2B',
       '$2B',
       // Companies and terms
       'semiconductors', 'semiconductor', 'aerospace', 'life sciences', 'life science industries', 'quantum computing', 'quantum', 
@@ -50,45 +49,37 @@ export const LandingOpportunity = ({
     
     let formattedText = text;
     
-    // Track what has already been marked for bolding to avoid conflicts
-    const processedRanges: Array<{start: number, end: number}> = [];
-    
     wordsTooBold.forEach(word => {
       const lowerText = formattedText.toLowerCase();
       const lowerWord = word.toLowerCase();
-      let searchIndex = 0;
       
+      // Find all occurrences of the word
+      let searchIndex = 0;
       while (true) {
         const foundIndex = lowerText.indexOf(lowerWord, searchIndex);
         if (foundIndex === -1) break;
         
-        const endIndex = foundIndex + word.length;
+        // Check if this text is already inside bold markers
+        const beforeText = formattedText.substring(0, foundIndex);
+        const afterText = formattedText.substring(foundIndex + word.length);
         
-        // Check if this range overlaps with any already processed range
-        const hasOverlap = processedRanges.some(range => 
-          (foundIndex >= range.start && foundIndex < range.end) ||
-          (endIndex > range.start && endIndex <= range.end) ||
-          (foundIndex <= range.start && endIndex >= range.end)
-        );
+        // Count bold markers before this position
+        const boldMarkersBeforeCount = (beforeText.match(/\*\*/g) || []).length;
         
-        if (!hasOverlap) {
-          // Mark this range as processed
-          const adjustedStart = foundIndex + (formattedText.substring(0, foundIndex).match(/\*\*/g) || []).length * 2;
-          const adjustedEnd = adjustedStart + word.length + 4; // +4 for the ** markers
-          
+        // If we have an odd number of bold markers before, we're inside a bold section
+        const isInsideBold = boldMarkersBeforeCount % 2 === 1;
+        
+        if (!isInsideBold) {
           // Replace the text with bold markers
-          const beforeText = formattedText.substring(0, foundIndex);
-          const matchedText = formattedText.substring(foundIndex, endIndex);
-          const afterText = formattedText.substring(endIndex);
-          
+          const matchedText = formattedText.substring(foundIndex, foundIndex + word.length);
           formattedText = beforeText + '**' + matchedText + '**' + afterText;
-          
-          processedRanges.push({start: adjustedStart, end: adjustedEnd});
-          
           console.log('Bolded:', word, 'at position', foundIndex);
+          
+          // Update the search text for the next iteration
+          searchIndex = foundIndex + word.length + 4; // +4 for the ** markers
+        } else {
+          searchIndex = foundIndex + 1;
         }
-        
-        searchIndex = foundIndex + 1;
       }
     });
     
