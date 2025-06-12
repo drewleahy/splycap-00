@@ -78,7 +78,7 @@ export const nanotronicsConfig: DealPageConfig = {
     headerLabel: "Commercial Traction",
     keyPoints: [
       "Deployed across electronics, aerospace, and emerging automotive applications",
-      "Multi-million dollar contracts with Fortune 500 companies",
+      "Engaged with Fortune 500 customers across high-value sectors",
       "Expanding international presence in Europe and Asia",
       "Strong recurring revenue model with high customer retention"
     ],
