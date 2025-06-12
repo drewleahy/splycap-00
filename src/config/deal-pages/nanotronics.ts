@@ -23,10 +23,6 @@ export const nanotronicsConfig: DealPageConfig = {
     secondaryCta: {
       text: "Sign NDA to View Materials",
       link: "https://docsend.com/view/s/dke9vdijy2qu9f42"
-    },
-    tertiaryCta: {
-      text: "Download Deck",
-      link: "#download-deck"
     }
   },
   
@@ -122,7 +118,7 @@ export const nanotronicsConfig: DealPageConfig = {
     description: "Nanotronics is supported by a powerful combination of private investors, commercial partners, and government engagement:",
     keyPoints: [
       "Backed by Founders Fund, Investment Corporation of Dubai, and Plug and Play Tech Center",
-      "Selected by Google as the exclusive optical inspection partner for its Willow quantum chip",
+      "Selected by Google as the exclusive optical inspection partner for its Willow quantum",
       "CEO Matthew Putman has testified before Congress on AI and quantum leadership",
       "Applications span semiconductors, quantum, aerospace, life sciences, and national security tech"
     ]
