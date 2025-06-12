@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -25,7 +24,7 @@ export const LandingContent = ({
 
   // Function to bold specific words
   const formatTextWithBoldWords = (text: string) => {
-    const wordsTooBold = ['semiconductors', 'aerospace', 'life sciences', 'quantum computing', 'nSpec™', 'nControl™', 'CubeFab™'];
+    const wordsTooBold = ['semiconductors', 'aerospace', 'life sciences', 'quantum computing', 'nSpec™', 'nControl™', 'CubeFab™', 'Founders Fund', 'Investment Corporation of Dubai'];
     let formattedText = text;
     
     wordsTooBold.forEach(word => {
@@ -80,7 +79,7 @@ export const LandingContent = ({
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <CardContent className="relative p-4 sm:p-6 text-center">
                   <p className="text-sm sm:text-base md:text-lg font-bold text-gray-900 leading-tight">
-                    {point}
+                    {formatTextWithBoldWords(point)}
                   </p>
                 </CardContent>
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-900 via-black to-gray-900" />
