@@ -31,7 +31,7 @@ export const nanotronicsConfig: DealPageConfig = {
     description: "SPLY Capital is participating in Nanotronics' current growth financing round, supporting the company's expansion across global manufacturing markets. With its proprietary AI-powered inspection systems already deployed by global leaders—including Google, Intel, and Illumina—the company is scaling rapidly across semiconductor, aerospace, and life science industries.",
     keyMetrics: [
       {
-        header: "$705M post-money valuation",
+        header: "$1.25B post-money valuation",
         body: "Backed by leading global investors including Founders Fund, the Investment Corporation of Dubai, and Plug and Play Tech Center"
       },
       {
