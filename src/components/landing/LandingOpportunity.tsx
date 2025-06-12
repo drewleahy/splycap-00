@@ -37,7 +37,10 @@ export const LandingOpportunity = ({
     ];
     let formattedText = text;
     
-    wordsTooBold.forEach(word => {
+    // Sort by length (longest first) to avoid partial matches
+    const sortedWordsTooBold = wordsTooBold.sort((a, b) => b.length - a.length);
+    
+    sortedWordsTooBold.forEach(word => {
       // Use a more flexible regex that doesn't rely on word boundaries for special characters
       const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const regex = new RegExp(escapedWord, 'gi');
