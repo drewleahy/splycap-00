@@ -11,7 +11,7 @@ export const CustomerLogosSection = ({ className = "" }: CustomerLogosSectionPro
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">
-            Trusted by Industry Leaders
+            Trusted Enterprise Customers
           </h2>
         </div>
         <div className="flex justify-center">
