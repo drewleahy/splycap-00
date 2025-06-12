@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
+
 interface LandingHeroProps {
   headline: string;
   subheadline: string;
@@ -12,6 +14,7 @@ interface LandingHeroProps {
   backgroundImage?: string;
   className?: string;
 }
+
 export const LandingHero = ({
   headline,
   subheadline,
@@ -34,6 +37,7 @@ export const LandingHero = ({
       window.open(ctaLink, '_blank');
     }
   };
+
   const handleSecondaryCtaClick = () => {
     if (secondaryCtaLink) {
       if (secondaryCtaLink.startsWith('#')) {
@@ -54,6 +58,7 @@ export const LandingHero = ({
       }
     }
   };
+
   const handleTertiaryCtaClick = () => {
     if (tertiaryCtaLink) {
       if (tertiaryCtaLink.startsWith('#')) {
@@ -72,11 +77,17 @@ export const LandingHero = ({
         } else {
           console.warn('Video section not found');
         }
+      } else if (tertiaryCtaLink === 'javascript:void(0)') {
+        // Handle the download deck functionality
+        if ((window as any).downloadNanotronicsDeck) {
+          (window as any).downloadNanotronicsDeck();
+        }
       } else {
         window.open(tertiaryCtaLink, '_blank');
       }
     }
   };
+
   return <>
       {/* Confidential Banner */}
       <div className="bg-black text-white text-center py-3 text-xs sm:text-sm font-medium">
@@ -106,7 +117,11 @@ export const LandingHero = ({
                 {secondaryCtaText}
               </Button>}
 
-            {tertiaryCtaText && tertiaryCtaLink}
+            {tertiaryCtaText && tertiaryCtaLink && (
+              <Button onClick={handleTertiaryCtaClick} size="lg" variant="outline" className="border-2 border-gray-600 text-gray-600 bg-transparent hover:bg-gray-600 hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto">
+                {tertiaryCtaText}
+              </Button>
+            )}
           </div>
         </div>
       </section>
