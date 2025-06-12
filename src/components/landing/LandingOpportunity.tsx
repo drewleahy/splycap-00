@@ -33,7 +33,7 @@ export const LandingOpportunity = ({
       'nSpec™', 'nControl™', 'CubeFab™', 'Founders Fund', 'Investment Corporation of Dubai', 'Intel', 'Meta', 'Amazon', 
       'Canon', 'Illumina', 'Google', '$3 million raise', '$1.2B valuation cap', '2X warrant coverage', 
       'projected valuation exceeding $2B', '$3 million', '$20 million growth financing round', '$20 million', 
-      '$1.25B valuation cap', '$1.25B post-money valuation'
+      '$1.2B', '$2B'
     ];
     let formattedText = text;
     
