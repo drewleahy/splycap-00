@@ -111,7 +111,7 @@ export const nanotronicsConfig: DealPageConfig = {
       },
       {
         title: "Institutional-Grade Partnerships",
-        description: "Backed by Founders Fund, Investment Corporation of Dubai, and used by Google, Intel, Meta, Canon, Amazon, Illumina, and more",
+        description: "Backed by Founders Fund, Investment Corporation of Dubai, and used by Google, Intel, Canon, Amazon, Illumina, and more",
         icon: Globe
       }
     ]
@@ -123,7 +123,7 @@ export const nanotronicsConfig: DealPageConfig = {
     keyPoints: [
       "Backed by Founders Fund, Investment Corporation of Dubai, and Plug and Play Tech Center",
       "Selected by Google as the exclusive optical inspection partner for its Willow quantum chip",
-      "Customers include Intel, Canon, Amazon, Illumina, and other global leaders",
+      "Backed by Founders Fund, Investment Corporation of Dubai, and used by Google, Intel, Canon, Amazon, Illumina, and more",
       "CEO Matthew Putman has testified before Congress on AI and quantum leadership",
       "Applications span semiconductors, quantum, aerospace, life sciences, and national security tech"
     ]
