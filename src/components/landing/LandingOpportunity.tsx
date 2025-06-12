@@ -30,34 +30,65 @@ export const LandingOpportunity = ({
   const formatTextWithBoldWords = (text: string) => {
     console.log('Original text:', text);
     
+    // Priority order - most specific phrases first to avoid conflicts
     const wordsTooBold = [
       '$3 million raise',
       '$20 million growth financing round', 
       '$1.2B valuation cap',
-      '$3 million',
+      'projected valuation exceeding $2B',
+      '2X warrant coverage',
+      // Then individual amounts
       '$20 million',
+      '$3 million',
       '$1.2B',
       '$2B',
+      // Companies and terms
       'semiconductors', 'semiconductor', 'aerospace', 'life sciences', 'life science industries', 'quantum computing', 'quantum', 
       'nSpec™', 'nControl™', 'CubeFab™', 'Founders Fund', 'Investment Corporation of Dubai', 'Intel', 'Meta', 'Amazon', 
-      'Canon', 'Illumina', 'Google', '2X warrant coverage', 
-      'projected valuation exceeding $2B'
+      'Canon', 'Illumina', 'Google'
     ];
     
     let formattedText = text;
     
-    // Sort by length (longest first) to avoid partial matches
-    const sortedWordsTooBold = wordsTooBold.sort((a, b) => b.length - a.length);
+    // Track what has already been marked for bolding to avoid conflicts
+    const processedRanges: Array<{start: number, end: number}> = [];
     
-    sortedWordsTooBold.forEach(word => {
-      // Check if the word exists in the text first
-      if (formattedText.toLowerCase().includes(word.toLowerCase())) {
-        console.log('Found word to bold:', word);
-        // Use a more flexible regex that doesn't rely on word boundaries for special characters
-        const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(${escapedWord})`, 'gi');
-        formattedText = formattedText.replace(regex, '**$1**');
-        console.log('Text after replacing:', formattedText);
+    wordsTooBold.forEach(word => {
+      const lowerText = formattedText.toLowerCase();
+      const lowerWord = word.toLowerCase();
+      let searchIndex = 0;
+      
+      while (true) {
+        const foundIndex = lowerText.indexOf(lowerWord, searchIndex);
+        if (foundIndex === -1) break;
+        
+        const endIndex = foundIndex + word.length;
+        
+        // Check if this range overlaps with any already processed range
+        const hasOverlap = processedRanges.some(range => 
+          (foundIndex >= range.start && foundIndex < range.end) ||
+          (endIndex > range.start && endIndex <= range.end) ||
+          (foundIndex <= range.start && endIndex >= range.end)
+        );
+        
+        if (!hasOverlap) {
+          // Mark this range as processed
+          const adjustedStart = foundIndex + (formattedText.substring(0, foundIndex).match(/\*\*/g) || []).length * 2;
+          const adjustedEnd = adjustedStart + word.length + 4; // +4 for the ** markers
+          
+          // Replace the text with bold markers
+          const beforeText = formattedText.substring(0, foundIndex);
+          const matchedText = formattedText.substring(foundIndex, endIndex);
+          const afterText = formattedText.substring(endIndex);
+          
+          formattedText = beforeText + '**' + matchedText + '**' + afterText;
+          
+          processedRanges.push({start: adjustedStart, end: adjustedEnd});
+          
+          console.log('Bolded:', word, 'at position', foundIndex);
+        }
+        
+        searchIndex = foundIndex + 1;
       }
     });
     
