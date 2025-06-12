@@ -45,6 +45,14 @@ export const nanotronicsConfig: DealPageConfig = {
       {
         header: "Defensible IP and platform expansion",
         body: "Nanotronics holds 61 patent families and 376 total filings—including 270 active and 97 pending patents—spanning AI, optics, and process automation technologies now powering its modular CubeFab™ facilities worldwide"
+      },
+      {
+        header: "Convertible Note Conversion",
+        body: "Converts at the lesser of a 20% discount to the next priced round or a $1.25B valuation cap"
+      },
+      {
+        header: "Warrant Coverage",
+        body: "Investors receive warrants to purchase common stock at $0.01/share, with value up to 2X their note investment"
       }
     ]
   },
