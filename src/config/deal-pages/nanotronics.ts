@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -101,7 +102,7 @@ export const nanotronicsConfig: DealPageConfig = {
       },
       {
         title: "Category-Leading Performance",
-        description: "Exclusive partner to Google's Willow quantum chip team; nSpec™ achieved >90% inspection accuracy, surpassing legacy AOI methods",
+        description: "Exclusive optical inspection partner for Google's Willow quantum chip team—selected for precision beyond the capabilities of legacy AOI tools",
         icon: Microscope
       },
       {
