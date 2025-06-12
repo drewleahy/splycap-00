@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,7 +28,7 @@ export const LandingOpportunity = ({
 
   // Function to bold specific words
   const formatTextWithBoldWords = (text: string) => {
-    const wordsTooBold = ['semiconductors', 'aerospace', 'life sciences', 'quantum computing', 'quantum', 'nSpec™', 'nControl™', 'CubeFab™', 'Founders Fund', 'Investment Corporation of Dubai', 'Intel', 'Meta', 'Amazon', 'Canon', 'Illumina', 'Google'];
+    const wordsTooBold = ['semiconductors', 'semiconductor', 'aerospace', 'life sciences', 'life science industries', 'quantum computing', 'quantum', 'nSpec™', 'nControl™', 'CubeFab™', 'Founders Fund', 'Investment Corporation of Dubai', 'Intel', 'Meta', 'Amazon', 'Canon', 'Illumina', 'Google'];
     let formattedText = text;
     
     wordsTooBold.forEach(word => {
