@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -34,10 +33,10 @@ export const LandingOpportunity = ({
     const wordsTooBold = [
       '$3 million raise',
       '$20 million growth financing round', 
-      '$1.2B valuation cap',
+      '$1.25B valuation cap',
       'projected valuation exceeding $2B',
       '2X warrant coverage',
-      // Then individual amounts - removed $1.2B to avoid conflict with "$1.2B valuation cap"
+      // Then individual amounts - removed $1.2B to avoid conflict with "$1.25B valuation cap"
       '$20 million',
       '$3 million',
       '$2B',
