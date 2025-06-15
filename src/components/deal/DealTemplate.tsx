@@ -1,5 +1,4 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
 import { LandingHero } from '@/components/landing/LandingHero';
@@ -11,6 +10,7 @@ import { LandingCTA } from '@/components/landing/LandingCTA';
 import { LandingVideoSection } from '@/components/landing/LandingVideoSection';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { CustomerLogosSection } from './CustomerLogosSection';
+import { NeurableDeckUpload } from "./NeurableDeckUpload";
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -42,15 +42,35 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
   const showCustomerLogos =
     config.id === "nanotronics";
 
+  // Special handling for Neurable download deck PDF override:
+  // We'll check localStorage for a custom deck PDF URL for this deal.
+  const [neurableDeckUrl, setNeurableDeckUrl] = useState<string | null>(null);
+  const isNeurable = config.id === "neurable-exclusive-2025";
+
+  useEffect(() => {
+    if (isNeurable) {
+      setNeurableDeckUrl(localStorage.getItem("neurable-deck-url") || null);
+    }
+  }, [isNeurable]);
+
+  // Determine which PDF link to use for secondary CTA
+  const actualSecondaryCtaLink =
+    isNeurable && neurableDeckUrl
+      ? neurableDeckUrl
+      : config.hero.secondaryCta?.link;
+
   return (
     <LandingLayout>
+      {/* For demo: upload UI at the top for Neurable */}
+      {isNeurable && <NeurableDeckUpload onUpload={setNeurableDeckUrl} />}
+
       <LandingHero
         headline={config.hero.headline}
         subheadline={config.hero.subheadline}
         ctaText={config.hero.primaryCta.text}
         ctaLink={config.hero.primaryCta.link}
         secondaryCtaText={config.hero.secondaryCta?.text}
-        secondaryCtaLink={config.hero.secondaryCta?.link}
+        secondaryCtaLink={actualSecondaryCtaLink}
         tertiaryCtaText={config.hero.tertiaryCta?.text}
         tertiaryCtaLink={config.hero.tertiaryCta?.link}
         backgroundImage={showHeroPhoto ? config.hero.backgroundImage : undefined}
