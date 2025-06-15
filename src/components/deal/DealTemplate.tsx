@@ -10,7 +10,7 @@ import { LandingFeatures } from '@/components/landing/LandingFeatures';
 import { LandingCTA } from '@/components/landing/LandingCTA';
 import { LandingVideoSection } from '@/components/landing/LandingVideoSection';
 import { LandingFooter } from '@/components/landing/LandingFooter';
-import { CustomerLogosSection } from './CustomerLogosSection';
+// Removed: import { CustomerLogosSection } from './CustomerLogosSection';
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -49,7 +49,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         backgroundImage={config.hero.backgroundImage}
       />
       
-      <CustomerLogosSection />
+      {/* Removed CustomerLogosSection, as requested */}
       
       <LandingOpportunity
         title={config.opportunity.title}
