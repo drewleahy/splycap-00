@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -11,7 +12,7 @@ const neurableConfig: DealPageConfig = {
     keywords: ["Neurable", "Investment Deal", "SPLY Capital", "2025", "Exclusive"],
   },
   hero: {
-    headline: "Investment Opportunity: Neurable\n$2M SPV in $8M Series A-3 at $80M Pre-Money Valuation",
+    headline: "Exclusive Access: Neurable Investment Opportunity",
     subheadline: "Neurable is pioneering a new frontier in neurotechnology with a best-in-class non-invasive brain-computer interface (BCI) platform. Its patented signal processing architecture is redefining how consumers and enterprises interact with digital systems—powering applications across wearables, defense, wellness, and productivity.",
     primaryCta: {
       text: "Sign NDA to View Diligence Materials",
