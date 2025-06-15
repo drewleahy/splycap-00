@@ -1,14 +1,13 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 
-// Utility to trigger download for remote HTTP/HTTPS URLs
 async function downloadFile(url: string, filename = "Neurable-Deck.pdf") {
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch file");
     const blob = await res.blob();
 
-    // Create a temporary link and trigger download
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = filename;
@@ -16,13 +15,14 @@ async function downloadFile(url: string, filename = "Neurable-Deck.pdf") {
     link.click();
     link.remove();
 
-    // Clean up the object URL after use
     setTimeout(() => {
       URL.revokeObjectURL(link.href);
     }, 1000);
+
+    return true;
   } catch (err) {
-    alert("Failed to download file. (See console for details.)");
     console.error("Deck download error:", err);
+    throw err;
   }
 }
 
@@ -51,6 +51,8 @@ export const LandingHero = ({
   backgroundImage,
   className = ""
 }: LandingHeroProps) => {
+  const { toast } = useToast();
+
   const handleCtaClick = () => {
     if (ctaLink.startsWith('#')) {
       const element = document.querySelector(ctaLink);
@@ -68,7 +70,10 @@ export const LandingHero = ({
     // Prevent default button behavior if the function is triggered via <a>, just in case
     if (e) e.preventDefault();
 
-    // Download with anchor if blob: or local file URI
+    // Log for debug
+    console.log("[Deck Download] Attempting to download from:", secondaryCtaLink);
+
+    // Direct download for local or blob links
     if (
       secondaryCtaLink.startsWith('blob:') ||
       secondaryCtaLink.startsWith('/') ||
@@ -89,10 +94,11 @@ export const LandingHero = ({
       document.body.appendChild(link);
       link.click();
       link.remove();
+      toast({ title: "Download started!", description: "Your PDF should be downloading from local source." });
       return;
     }
 
-    // Detect Supabase Storage links or any custom PDF deck link
+    // Supabase/public/storage PDF or any custom PDF
     const isSupabasePDF =
       secondaryCtaLink.includes('supabase.co/storage') ||
       (secondaryCtaLink.endsWith('.pdf') &&
@@ -102,7 +108,6 @@ export const LandingHero = ({
       secondaryCtaLink &&
       (
         isSupabasePDF ||
-        // fallback: any http(s) PDF but not the default neurable.com
         (
           secondaryCtaLink.startsWith('http') &&
           !secondaryCtaLink.includes('neurable.com/2025-deck.pdf')
@@ -118,7 +123,14 @@ export const LandingHero = ({
           if (candidate.endsWith('.pdf')) filename = candidate;
         }
       } catch {}
-      await downloadFile(secondaryCtaLink, filename);
+
+      try {
+        toast({ title: "Preparing download...", description: "Downloading PDF deck..." });
+        await downloadFile(secondaryCtaLink, filename);
+        toast({ title: "Download started!", description: "Your PDF deck is downloading." });
+      } catch (err) {
+        toast({ title: "Download failed", description: "Please try again or contact support.", variant: "destructive" });
+      }
       return;
     } else if (secondaryCtaLink.startsWith('#')) {
       const element = document.querySelector(secondaryCtaLink);
@@ -135,7 +147,6 @@ export const LandingHero = ({
       }
       return;
     } else {
-      // fallback - open any other external links as before
       window.open(secondaryCtaLink, '_blank');
       return;
     }
@@ -149,7 +160,6 @@ export const LandingHero = ({
           behavior: 'smooth'
         });
       } else if (tertiaryCtaLink.startsWith('https://vimeo.com/')) {
-        // For Vimeo video links, scroll to the video section instead of opening in new tab
         console.log('Scrolling to video section...');
         const videoElement = document.querySelector('#video');
         if (videoElement) {
@@ -160,7 +170,6 @@ export const LandingHero = ({
           console.warn('Video section not found');
         }
       } else if (tertiaryCtaLink === 'javascript:void(0)') {
-        // Handle the download deck functionality
         if ((window as any).downloadNanotronicsDeck) {
           (window as any).downloadNanotronicsDeck();
         }
@@ -170,7 +179,15 @@ export const LandingHero = ({
     }
   };
 
-  return <>
+  // Debug: What is the secondary CTA link?
+  React.useEffect(() => {
+    if (secondaryCtaLink) {
+      console.log("[LandingHero] secondaryCtaLink received:", secondaryCtaLink);
+    }
+  }, [secondaryCtaLink]);
+
+  return (
+    <>
       {/* Confidential Banner */}
       <div className="bg-black text-white text-center py-3 text-xs sm:text-sm font-medium">
         CONFIDENTIAL
@@ -207,5 +224,6 @@ export const LandingHero = ({
           </div>
         </div>
       </section>
-    </>;
+    </>
+  );
 };
