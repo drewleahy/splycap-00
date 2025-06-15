@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -23,42 +22,11 @@ const neurableConfig: DealPageConfig = {
       link: "https://neurable.com/2025-deck.pdf"
     }
   },
-  // Replace "opportunity" only for fallback - we render a custom component for this deal
+  // Keep "opportunity" for fallback but it's not used on the Neurable deal page
   opportunity: {
     title: "Market Context & Strategic Positioning",
     description: "",
     keyMetrics: []
-  },
-  // Insert new custom opportunityData for this page/component
-  neurableOpportunity: {
-    title: "Market Context & Strategic Positioning",
-    overview: "The global BCI market is projected to grow from $2.2B in 2023 to $6.5B by 2030, driven by advances in consumer wearables, neuro-assistive tools, and cognitive performance optimization. Neurable is uniquely positioned at the convergence of these verticals with a deployable, productized EEG platform that integrates into consumer and government channels.",
-    keyVerticals: [
-      {
-        name: "Consumer Wearables",
-        detail: "Headphones, earbuds, XR devices"
-      },
-      {
-        name: "Neuro-Predictive Monitoring",
-        detail: "Focus, fatigue, stress, productivity"
-      },
-      {
-        name: "Defense & National Security",
-        detail: "Cognitive load tracking, operator performance"
-      },
-      {
-        name: "Mental Health & Wellness",
-        detail: "Early detection of brain-state anomalies"
-      }
-    ],
-    competitiveAdvantage: [
-      { company: "CTRL-Labs (Meta)", focus: "Muscle-based wrist interface", weakness: "Requires EMG hardware" },
-      { company: "Kernel", focus: "Optical neuroimaging", weakness: "High hardware cost, $100M+ burn" },
-      { company: "Emotiv", focus: "EEG headsets", weakness: "Bulky, low signal quality" },
-      { company: "Apple", focus: "Neural earbuds", weakness: "R&D reportedly failed; patents post-date Neurable" },
-      { company: "Blackrock Neurotech", focus: "Invasive implants", weakness: "Not viable for consumer scale" },
-    ],
-    positioning: "Neurable is the only non-invasive, software-first BCI platform with validated high signal quality across both commercial and defense applications."
   },
   market: {
     title: "Market Context",

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -13,6 +14,7 @@ import { CustomerLogosSection } from './CustomerLogosSection';
 import { NeurableDeckUpload } from "./NeurableDeckUpload";
 import { NeurableOpportunitySection } from "./NeurableOpportunitySection";
 import { useAuth } from "@/hooks/use-auth";
+import { NeurableProductTechnologySection } from "./NeurableProductTechnologySection";
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -37,17 +39,15 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
     console.log(`Deal page view: ${config.id}`);
   }, [config]);
 
-  const { user } = useAuth(); // get user info for admin check
+  const { user } = useAuth();
 
   // Only show hero photo if there's a backgroundImage present for this deal config
   const showHeroPhoto = Boolean(config.hero.backgroundImage);
 
   // Only show CustomerLogosSection for certain deals (e.g., Nanotronics)
-  const showCustomerLogos =
-    config.id === "nanotronics";
+  const showCustomerLogos = config.id === "nanotronics";
 
-  // Special handling for Neurable download deck PDF override:
-  // We'll check localStorage for a custom deck PDF URL for this deal.
+  // Special handling for Neurable download deck PDF override
   const [neurableDeckUrl, setNeurableDeckUrl] = useState<string | null>(null);
   const isNeurable = config.id === "neurable-exclusive-2025";
 
@@ -62,6 +62,40 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
     isNeurable && neurableDeckUrl
       ? neurableDeckUrl
       : config.hero.secondaryCta?.link;
+
+  // Neurable custom "The Opportunity" section data
+  const neurableOpportunitySection = isNeurable
+    ? {
+      title: "Market Context & Strategic Positioning",
+      overview: "The global BCI market is projected to grow from $2.2B in 2023 to $6.5B by 2030, driven by advances in consumer wearables, neuro-assistive tools, and cognitive performance optimization. Neurable is uniquely positioned at the convergence of these verticals with a deployable, productized EEG platform that integrates into consumer and government channels.",
+      keyVerticals: [
+        {
+          name: "Consumer Wearables",
+          detail: "Headphones, earbuds, XR devices"
+        },
+        {
+          name: "Neuro-Predictive Monitoring",
+          detail: "Focus, fatigue, stress, productivity"
+        },
+        {
+          name: "Defense & National Security",
+          detail: "Cognitive load tracking, operator performance"
+        },
+        {
+          name: "Mental Health & Wellness",
+          detail: "Early detection of brain-state anomalies"
+        }
+      ],
+      competitiveAdvantage: [
+        { company: "CTRL-Labs (Meta)", focus: "Muscle-based wrist interface", weakness: "Requires EMG hardware" },
+        { company: "Kernel", focus: "Optical neuroimaging", weakness: "High hardware cost, $100M+ burn" },
+        { company: "Emotiv", focus: "EEG headsets", weakness: "Bulky, low signal quality" },
+        { company: "Apple", focus: "Neural earbuds", weakness: "R&D reportedly failed; patents post-date Neurable" },
+        { company: "Blackrock Neurotech", focus: "Invasive implants", weakness: "Not viable for consumer scale" },
+      ],
+      positioning: "Neurable is the only non-invasive, software-first BCI platform with validated high signal quality across both commercial and defense applications."
+    }
+    : null;
 
   return (
     <LandingLayout>
@@ -82,15 +116,18 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
       {showCustomerLogos && <CustomerLogosSection />}
 
-      {/* Custom "The Opportunity" for Neurable */}
-      {isNeurable && "neurableOpportunity" in config && config.neurableOpportunity ? (
-        <NeurableOpportunitySection
-          title={config.neurableOpportunity.title}
-          overview={config.neurableOpportunity.overview}
-          keyVerticals={config.neurableOpportunity.keyVerticals}
-          competitiveAdvantage={config.neurableOpportunity.competitiveAdvantage}
-          positioning={config.neurableOpportunity.positioning}
-        />
+      {/* Custom "The Opportunity" and new Product & Technology for Neurable */}
+      {isNeurable && neurableOpportunitySection ? (
+        <>
+          <NeurableOpportunitySection
+            title={neurableOpportunitySection.title}
+            overview={neurableOpportunitySection.overview}
+            keyVerticals={neurableOpportunitySection.keyVerticals}
+            competitiveAdvantage={neurableOpportunitySection.competitiveAdvantage}
+            positioning={neurableOpportunitySection.positioning}
+          />
+          <NeurableProductTechnologySection />
+        </>
       ) : (
         <LandingOpportunity
           title={config.opportunity.title}
@@ -99,7 +136,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           headerLabel="The Opportunity"
         />
       )}
-      
+
       {config.market && (
         <LandingContent
           title={config.market.title}
@@ -107,7 +144,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           headerLabel={config.market.headerLabel || "Market Context"}
         />
       )}
-      
+
       <LandingContentWithLogo
         title={config.company.title}
         body={config.company.description}
@@ -116,7 +153,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         headerLabel={config.company.headerLabel || "Company Overview"}
         keyStats={config.company.keyStats}
       />
-      
+
       {config.traction && (
         <LandingContent
           title={config.traction.title}
@@ -127,14 +164,14 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           className="bg-gray-50"
         />
       )}
-      
+
       <LandingFeatures
         title={config.thesis.title}
         description={config.thesis.description}
         features={config.thesis.points}
         headerLabel="Why We're Investing"
       />
-      
+
       {config.backing && (
         <LandingOpportunity
           title={config.backing.title}
@@ -144,7 +181,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           className="bg-gray-50"
         />
       )}
-      
+
       <div id="details">
         <LandingCTA
           headline={config.cta.headline}
@@ -159,7 +196,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           quaternaryButtonLink={config.cta.quaternaryButton?.link}
         />
       </div>
-      
+
       <LandingFooter
         copyright={config.footer.copyright}
         links={config.footer.links}
