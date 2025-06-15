@@ -62,36 +62,21 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
       ? neurableDeckUrl
       : config.hero.secondaryCta?.link;
 
-  // Neurable custom "The Opportunity" section data
+  // New bullet list for Neurable Opportunity Section
+  const neurableOpportunityBullets = [
+    "$80M current pre-money valuation",
+    "OEM deals with Sony & Samsung",
+    "Defense partnerships including DARPA",
+    "10–15x M&A return potential with major OEMs",
+    "IPO optionality if B2B SaaS gains scale",
+  ];
+
   const neurableOpportunitySection = isNeurable
     ? {
         title: "Strategic Entry into a Category Leader in Non-Invasive BCI",
         overview:
           "SPLY Capital has secured a $2M allocation in Neurable’s $8M Series A-3 round at an $80M pre-money valuation. The company is in active discussions with acquirers, and the structure is optimized for capital-light scaling and M&A optionality.",
-        keyVerticals: [
-          {
-            name: "$80M current pre-money valuation",
-            detail: ""
-          },
-          {
-            name: "OEM deals with Sony & Samsung",
-            detail: ""
-          },
-          {
-            name: "Defense partnerships including DARPA",
-            detail: ""
-          },
-          {
-            name: "10–15x M&A return potential with major OEMs",
-            detail: ""
-          },
-          {
-            name: "IPO optionality if B2B SaaS gains scale",
-            detail: ""
-          }
-        ],
-        competitiveAdvantage: [],
-        positioning: "",
+        bullets: neurableOpportunityBullets,
       }
     : null;
 
@@ -120,9 +105,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           <NeurableOpportunitySection
             title={neurableOpportunitySection.title}
             overview={neurableOpportunitySection.overview}
-            keyVerticals={neurableOpportunitySection.keyVerticals}
-            competitiveAdvantage={[]} // Intentionally empty
-            positioning={""} // No positioning text
+            bullets={neurableOpportunitySection.bullets}
           />
           <NeurableProductTechnologySection />
         </>
