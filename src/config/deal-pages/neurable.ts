@@ -30,8 +30,17 @@ const neurableConfig: DealPageConfig = {
     keyMetrics: []
   },
   market: {
-    title: "Market Context",
-    description: "Neurable stands at the intersection of neuroscience, consumer electronics, and wellness. With Apple's Neural Engine paving the way, Neurable is set to be the independent BCI platform of choice.",
+    title: "Global BCI Market Reaching $6.5B by 2030",
+    description: `The global BCI market is projected to grow from $2.2B in 2023 to $6.5B by 2030 (CAGR: ~17%). Neurable is positioned at the center of four high-growth verticals:
+
+Consumer Wearables: Headphones, XR, earbuds
+
+Neuroanalytics: Tracking stress, focus, fatigue
+
+Defense: Operator performance optimization
+
+Wellness: Brain-state anomaly detection
+`,
     headerLabel: "Market Context",
   },
   company: {
@@ -126,6 +135,4 @@ const neurableConfig: DealPageConfig = {
     ],
   },
 };
-
 export default neurableConfig;
-
