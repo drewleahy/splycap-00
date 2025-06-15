@@ -57,12 +57,13 @@ Wellness: Brain-state anomaly detection
   },
   traction: {
     title: "Commercial Traction",
-    description: "Neurable's BCI platform is already trusted by consumer electronics leaders, major research universities, and wellness brands.",
+    description: "OEM and Defense Revenue Building Toward Scale",
     headerLabel: "Commercial Traction",
     keyPoints: [
-      "2024: Announced flagship Jabra + Neurable headphone",
-      "Pre-order sold out within 30 days",
-      "Top-10 U.S. research hospital pilots underway",
+      "Sony & Samsung licensing deals signed",
+      "$5M+ in defense R&D grants (incl. DARPA)",
+      "Proof of concept completed with Master & Dynamic",
+      "Targeting $10M revenue in 2025"
     ],
     additionalContent: "",
   },
