@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -51,7 +52,6 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           tertiaryCtaText={config.hero.tertiaryCta?.text}
           tertiaryCtaLink={config.hero.tertiaryCta?.link}
           backgroundImage={config.hero.backgroundImage}
-          dealId={config.id} // NEW: for hero field-level editing
         />
       </WysiwygEditable>
       
