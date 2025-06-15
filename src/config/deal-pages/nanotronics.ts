@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -65,7 +64,6 @@ export const nanotronicsConfig: DealPageConfig = {
   },
   
   company: {
-    // Restored logo and copy for Nanotronics
     title: "Nanotronics: AI-Powered Optical Inspection for Advanced Manufacturing",
     description: "Nanotronics is redefining industrial inspection and factory control through a proprietary platform that combines artificial intelligence, machine learning, and advanced imaging. Its nSpec™ and nControl™ systems automate quality assurance at the nanoscale—driving higher yields, lower costs, and faster innovation across semiconductors, aerospace, life sciences, and quantum computing.",
     logoSrc: "/lovable-uploads/138211f1-327b-4096-a569-d960abb0e1b1.png",
@@ -160,4 +158,3 @@ export const nanotronicsConfig: DealPageConfig = {
     links: []
   }
 };
-
