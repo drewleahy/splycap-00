@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { WysiwygEditable } from '@/components/deal/WysiwygEditable';
 
 interface LandingHeroProps {
   headline: string;
@@ -13,6 +14,7 @@ interface LandingHeroProps {
   tertiaryCtaLink?: string;
   backgroundImage?: string;
   className?: string;
+  dealId: string; // NEW: required to form editable sectionId for headline and subheadline
 }
 
 export const LandingHero = ({
@@ -25,7 +27,8 @@ export const LandingHero = ({
   tertiaryCtaText,
   tertiaryCtaLink,
   backgroundImage,
-  className = ""
+  className = "",
+  dealId
 }: LandingHeroProps) => {
   const handleCtaClick = () => {
     if (ctaLink.startsWith('#')) {
@@ -46,7 +49,6 @@ export const LandingHero = ({
           behavior: 'smooth'
         });
       } else if (secondaryCtaLink.startsWith('https://vimeo.com/')) {
-        // For Vimeo video links, scroll to the video section instead of opening in new tab
         const videoElement = document.querySelector('#video');
         if (videoElement) {
           videoElement.scrollIntoView({
@@ -67,7 +69,6 @@ export const LandingHero = ({
           behavior: 'smooth'
         });
       } else if (tertiaryCtaLink.startsWith('https://vimeo.com/')) {
-        // For Vimeo video links, scroll to the video section instead of opening in new tab
         console.log('Scrolling to video section...');
         const videoElement = document.querySelector('#video');
         if (videoElement) {
@@ -78,7 +79,6 @@ export const LandingHero = ({
           console.warn('Video section not found');
         }
       } else if (tertiaryCtaLink === 'javascript:void(0)') {
-        // Handle the download deck functionality
         if ((window as any).downloadNanotronicsDeck) {
           (window as any).downloadNanotronicsDeck();
         }
@@ -88,42 +88,68 @@ export const LandingHero = ({
     }
   };
 
-  return <>
+  return (
+    <>
       {/* Confidential Banner */}
       <div className="bg-black text-white text-center py-3 text-xs sm:text-sm font-medium">
         CONFIDENTIAL
       </div>
-      
       <section className={`relative pt-12 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-6 bg-white ${className}`}>
-        {backgroundImage && <div className="absolute inset-0 z-0">
+        {backgroundImage && (
+          <div className="absolute inset-0 z-0">
             <img src={backgroundImage} alt="Background" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-          </div>}
-        
+          </div>
+        )}
+
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-black leading-tight">
+          <WysiwygEditable
+            sectionId={`${dealId}-hero-headline`}
+            as="h1"
+            className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-black leading-tight"
+          >
             {headline}
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto text-gray-700 leading-relaxed px-2 sm:px-0">
+          </WysiwygEditable>
+          <WysiwygEditable
+            sectionId={`${dealId}-hero-subheadline`}
+            as="p"
+            className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-3xl mx-auto text-gray-700 leading-relaxed px-2 sm:px-0"
+          >
             {subheadline}
-          </p>
-          
+          </WysiwygEditable>
           <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center items-center px-4 sm:px-0">
-            <Button onClick={handleCtaClick} size="lg" className="bg-black text-white hover:bg-gray-800 px-6 sm:px-8 py-3 text-base sm:text-lg w-full sm:w-auto">
+            <Button
+              onClick={handleCtaClick}
+              size="lg"
+              className="bg-black text-white hover:bg-gray-800 px-6 sm:px-8 py-3 text-base sm:text-lg w-full sm:w-auto"
+            >
               {ctaText}
             </Button>
-            
-            {secondaryCtaText && secondaryCtaLink && <Button onClick={handleSecondaryCtaClick} size="lg" variant="outline" className="border-2 border-gray-600 text-gray-600 bg-transparent hover:bg-gray-600 hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto">
+
+            {secondaryCtaText && secondaryCtaLink && (
+              <Button
+                onClick={handleSecondaryCtaClick}
+                size="lg"
+                variant="outline"
+                className="border-2 border-gray-600 text-gray-600 bg-transparent hover:bg-gray-600 hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto"
+              >
                 {secondaryCtaText}
-              </Button>}
+              </Button>
+            )}
 
             {tertiaryCtaText && tertiaryCtaLink && (
-              <Button onClick={handleTertiaryCtaClick} size="lg" variant="outline" className="border-2 border-gray-600 text-gray-600 bg-transparent hover:bg-gray-600 hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto">
+              <Button
+                onClick={handleTertiaryCtaClick}
+                size="lg"
+                variant="outline"
+                className="border-2 border-gray-600 text-gray-600 bg-transparent hover:bg-gray-600 hover:text-white px-6 sm:px-8 py-3 text-base sm:text-lg font-medium w-full sm:w-auto"
+              >
                 {tertiaryCtaText}
               </Button>
             )}
           </div>
         </div>
       </section>
-    </>;
+    </>
+  );
 };

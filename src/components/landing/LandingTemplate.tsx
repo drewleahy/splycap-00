@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { LandingPageConfig } from '@/types/landing';
 import { LandingLayout } from './LandingLayout';
@@ -46,6 +45,7 @@ export const LandingTemplate = ({ config }: LandingTemplateProps) => {
         tertiaryCtaText={config.hero.tertiaryCtaText}
         tertiaryCtaLink={config.hero.tertiaryCtaLink}
         backgroundImage={config.hero.image}
+        dealId={config.id} // NEW: so hero editing works on landing pages too
       />
       
       {config.opportunitySection && (
