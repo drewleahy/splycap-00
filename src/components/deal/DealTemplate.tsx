@@ -10,7 +10,7 @@ import { LandingFeatures } from '@/components/landing/LandingFeatures';
 import { LandingCTA } from '@/components/landing/LandingCTA';
 import { LandingVideoSection } from '@/components/landing/LandingVideoSection';
 import { LandingFooter } from '@/components/landing/LandingFooter';
-// Removed: import { CustomerLogosSection } from './CustomerLogosSection';
+import { CustomerLogosSection } from './CustomerLogosSection';
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -35,6 +35,13 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
     console.log(`Deal page view: ${config.id}`);
   }, [config]);
 
+  // Only show hero photo if there's a backgroundImage present for this deal config
+  const showHeroPhoto = Boolean(config.hero.backgroundImage);
+
+  // Only show CustomerLogosSection for certain deals (e.g., Nanotronics)
+  const showCustomerLogos =
+    config.id === "nanotronics";
+
   return (
     <LandingLayout>
       <LandingHero
@@ -46,11 +53,11 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         secondaryCtaLink={config.hero.secondaryCta?.link}
         tertiaryCtaText={config.hero.tertiaryCta?.text}
         tertiaryCtaLink={config.hero.tertiaryCta?.link}
-        backgroundImage={config.hero.backgroundImage}
+        backgroundImage={showHeroPhoto ? config.hero.backgroundImage : undefined}
       />
-      
-      {/* Removed CustomerLogosSection, as requested */}
-      
+
+      {showCustomerLogos && <CustomerLogosSection />}
+
       <LandingOpportunity
         title={config.opportunity.title}
         body={config.opportunity.description}
