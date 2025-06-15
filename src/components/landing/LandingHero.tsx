@@ -2,6 +2,31 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
+// Utility to trigger download for remote blob/file URLs
+async function downloadFile(url: string, filename = "Neurable-Deck.pdf") {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch file");
+    const blob = await res.blob();
+
+    // Create a temporary link and trigger download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    // Clean up the object URL after use
+    setTimeout(() => {
+      URL.revokeObjectURL(link.href);
+    }, 1000);
+  } catch (err) {
+    alert("Failed to download file. (See console for details.)");
+    console.error("Deck download error:", err);
+  }
+}
+
 interface LandingHeroProps {
   headline: string;
   subheadline: string;
@@ -38,24 +63,47 @@ export const LandingHero = ({
     }
   };
 
-  const handleSecondaryCtaClick = () => {
-    if (secondaryCtaLink) {
-      if (secondaryCtaLink.startsWith('#')) {
-        const element = document.querySelector(secondaryCtaLink);
-        element?.scrollIntoView({
+  const handleSecondaryCtaClick = async () => {
+    if (!secondaryCtaLink) return;
+    // Only intercept the click if it's a Neurable "deck PDF" upload link, else fallback
+    // We assume it's a custom upload if it starts with http and contains 'neurable' or is a blob/file, or not the default neurable.com link
+    if (
+      secondaryCtaLink &&
+      (
+        !secondaryCtaLink.includes('neurable.com/2025-deck.pdf') && // not the hardcoded public deck
+        (
+          secondaryCtaLink.startsWith('http') ||
+          secondaryCtaLink.startsWith('/') ||
+          secondaryCtaLink.startsWith('blob:')
+        )
+      )
+    ) {
+      // Try to guess the filename from the URL if possible
+      let filename = "Neurable-Deck.pdf";
+      try {
+        const urlParts = secondaryCtaLink.split("?");
+        const lastSlash = urlParts[0].lastIndexOf("/");
+        if (lastSlash !== -1) {
+          const candidate = urlParts[0].substr(lastSlash + 1);
+          if (candidate.endsWith('.pdf')) filename = candidate;
+        }
+      } catch {}
+      await downloadFile(secondaryCtaLink, filename);
+    } else if (secondaryCtaLink.startsWith('#')) {
+      const element = document.querySelector(secondaryCtaLink);
+      element?.scrollIntoView({
+        behavior: 'smooth'
+      });
+    } else if (secondaryCtaLink.startsWith('https://vimeo.com/')) {
+      // For Vimeo video links, scroll to the video section instead of opening in new tab
+      const videoElement = document.querySelector('#video');
+      if (videoElement) {
+        videoElement.scrollIntoView({
           behavior: 'smooth'
         });
-      } else if (secondaryCtaLink.startsWith('https://vimeo.com/')) {
-        // For Vimeo video links, scroll to the video section instead of opening in new tab
-        const videoElement = document.querySelector('#video');
-        if (videoElement) {
-          videoElement.scrollIntoView({
-            behavior: 'smooth'
-          });
-        }
-      } else {
-        window.open(secondaryCtaLink, '_blank');
       }
+    } else {
+      window.open(secondaryCtaLink, '_blank');
     }
   };
 
