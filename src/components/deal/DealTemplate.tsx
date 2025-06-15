@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -35,26 +36,12 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
     console.log(`Deal page view: ${config.id}`);
   }, [config]);
 
-  // Only enable editing for the Nanotronics deal
-  const isNanotronics = config.id === "nanotronics";
+  // Helper function for section IDs
+  const sectionId = (sectionKey: string) => `${config.id}-${sectionKey}`;
 
   return (
     <LandingLayout>
-      {isNanotronics ? (
-        <WysiwygEditable sectionId="nanotronics-hero" as="section" className="">
-          <LandingHero
-            headline={config.hero.headline}
-            subheadline={config.hero.subheadline}
-            ctaText={config.hero.primaryCta.text}
-            ctaLink={config.hero.primaryCta.link}
-            secondaryCtaText={config.hero.secondaryCta?.text}
-            secondaryCtaLink={config.hero.secondaryCta?.link}
-            tertiaryCtaText={config.hero.tertiaryCta?.text}
-            tertiaryCtaLink={config.hero.tertiaryCta?.link}
-            backgroundImage={config.hero.backgroundImage}
-          />
-        </WysiwygEditable>
-      ) : (
+      <WysiwygEditable sectionId={sectionId("hero")} as="section" className="">
         <LandingHero
           headline={config.hero.headline}
           subheadline={config.hero.subheadline}
@@ -66,48 +53,31 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           tertiaryCtaLink={config.hero.tertiaryCta?.link}
           backgroundImage={config.hero.backgroundImage}
         />
-      )}
+      </WysiwygEditable>
       
       <CustomerLogosSection />
       
-      {isNanotronics ? (
-        <WysiwygEditable sectionId="nanotronics-opportunity" as="section" className="">
-          <LandingOpportunity
-            title={config.opportunity.title}
-            body={config.opportunity.description}
-            sections={config.opportunity.keyMetrics}
-            headerLabel="The Opportunity"
-          />
-        </WysiwygEditable>
-      ) : (
+      <WysiwygEditable sectionId={sectionId("opportunity")} as="section" className="">
         <LandingOpportunity
           title={config.opportunity.title}
           body={config.opportunity.description}
           sections={config.opportunity.keyMetrics}
           headerLabel="The Opportunity"
         />
-      )}
+      </WysiwygEditable>
       
       {config.market && (
-        isNanotronics ? (
-          <WysiwygEditable sectionId="nanotronics-market" as="section" className="">
-            <LandingContent
-              title={config.market.title}
-              body={config.market.description}
-              headerLabel={config.market.headerLabel || "Market Context"}
-            />
-          </WysiwygEditable>
-        ) : (
+        <WysiwygEditable sectionId={sectionId("market")} as="section" className="">
           <LandingContent
             title={config.market.title}
             body={config.market.description}
             headerLabel={config.market.headerLabel || "Market Context"}
           />
-        )
+        </WysiwygEditable>
       )}
       
-      {isNanotronics ? (
-        <WysiwygEditable sectionId="nanotronics-company" as="section" className="">
+      {config.company && (
+        <WysiwygEditable sectionId={sectionId("company")} as="section" className="">
           <LandingContentWithLogo
             title={config.company.title}
             body={config.company.description}
@@ -117,30 +87,10 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
             keyStats={config.company.keyStats}
           />
         </WysiwygEditable>
-      ) : (
-        <LandingContentWithLogo
-          title={config.company.title}
-          body={config.company.description}
-          logoSrc={config.company.logoSrc}
-          logoAlt={config.company.logoAlt}
-          headerLabel={config.company.headerLabel || "Company Overview"}
-          keyStats={config.company.keyStats}
-        />
       )}
       
       {config.traction && (
-        isNanotronics ? (
-          <WysiwygEditable sectionId="nanotronics-traction" as="section" className="">
-            <LandingContent
-              title={config.traction.title}
-              body={config.traction.description}
-              headerLabel={config.traction.headerLabel || "Commercial Traction"}
-              keyPoints={config.traction.keyPoints}
-              additionalContent={config.traction.additionalContent}
-              className="bg-gray-50"
-            />
-          </WysiwygEditable>
-        ) : (
+        <WysiwygEditable sectionId={sectionId("traction")} as="section" className="">
           <LandingContent
             title={config.traction.title}
             body={config.traction.description}
@@ -149,11 +99,11 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
             additionalContent={config.traction.additionalContent}
             className="bg-gray-50"
           />
-        )
+        </WysiwygEditable>
       )}
       
-      {isNanotronics ? (
-        <WysiwygEditable sectionId="nanotronics-thesis" as="section" className="">
+      {config.thesis && (
+        <WysiwygEditable sectionId={sectionId("thesis")} as="section" className="">
           <LandingFeatures
             title={config.thesis.title}
             description={config.thesis.description}
@@ -161,27 +111,10 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
             headerLabel="Why We're Investing"
           />
         </WysiwygEditable>
-      ) : (
-        <LandingFeatures
-          title={config.thesis.title}
-          description={config.thesis.description}
-          features={config.thesis.points}
-          headerLabel="Why We're Investing"
-        />
       )}
       
       {config.backing && (
-        isNanotronics ? (
-          <WysiwygEditable sectionId="nanotronics-backing" as="section" className="">
-            <LandingOpportunity
-              title={config.backing.title}
-              body={config.backing.description}
-              keyPoints={config.backing.keyPoints}
-              headerLabel="Strategic Backing"
-              className="bg-gray-50"
-            />
-          </WysiwygEditable>
-        ) : (
+        <WysiwygEditable sectionId={sectionId("backing")} as="section" className="">
           <LandingOpportunity
             title={config.backing.title}
             body={config.backing.description}
@@ -189,7 +122,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
             headerLabel="Strategic Backing"
             className="bg-gray-50"
           />
-        )
+        </WysiwygEditable>
       )}
       
       <div id="details">
