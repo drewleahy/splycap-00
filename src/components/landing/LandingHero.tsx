@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
-// Utility to trigger download for remote blob/file URLs
+// Utility to trigger download for remote HTTP/HTTPS URLs
 async function downloadFile(url: string, filename = "Neurable-Deck.pdf") {
   try {
     const res = await fetch(url);
@@ -65,16 +65,39 @@ export const LandingHero = ({
 
   const handleSecondaryCtaClick = async () => {
     if (!secondaryCtaLink) return;
-    // Only intercept the click if it's a Neurable "deck PDF" upload link, else fallback
-    // We assume it's a custom upload if it starts with http and contains 'neurable' or is a blob/file, or not the default neurable.com link
+
+    // Download with anchor if blob: or local file URI
+    if (
+      secondaryCtaLink.startsWith('blob:') ||
+      secondaryCtaLink.startsWith('/') ||
+      secondaryCtaLink.startsWith('file:')
+    ) {
+      // Try to guess file name
+      let filename = "Neurable-Deck.pdf";
+      try {
+        const urlParts = secondaryCtaLink.split("?");
+        const lastSlash = urlParts[0].lastIndexOf("/");
+        if (lastSlash !== -1) {
+          const candidate = urlParts[0].substr(lastSlash + 1);
+          if (candidate.endsWith('.pdf')) filename = candidate;
+        }
+      } catch {}
+      const link = document.createElement('a');
+      link.href = secondaryCtaLink;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      return;
+    }
+
+    // if it is a custom HTTP/HTTPS (not the default neurable deck), fetch & trigger download
     if (
       secondaryCtaLink &&
       (
-        !secondaryCtaLink.includes('neurable.com/2025-deck.pdf') && // not the hardcoded public deck
+        !secondaryCtaLink.includes('neurable.com/2025-deck.pdf') &&
         (
-          secondaryCtaLink.startsWith('http') ||
-          secondaryCtaLink.startsWith('/') ||
-          secondaryCtaLink.startsWith('blob:')
+          secondaryCtaLink.startsWith('http')
         )
       )
     ) {

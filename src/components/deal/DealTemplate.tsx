@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -11,6 +12,7 @@ import { LandingVideoSection } from '@/components/landing/LandingVideoSection';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { CustomerLogosSection } from './CustomerLogosSection';
 import { NeurableDeckUpload } from "./NeurableDeckUpload";
+import { useAuth } from "@/hooks/use-auth";
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -34,6 +36,8 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
     console.log(`Deal page view: ${config.id}`);
   }, [config]);
+
+  const { user } = useAuth(); // get user info for admin check
 
   // Only show hero photo if there's a backgroundImage present for this deal config
   const showHeroPhoto = Boolean(config.hero.backgroundImage);
@@ -61,8 +65,8 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
   return (
     <LandingLayout>
-      {/* For demo: upload UI at the top for Neurable */}
-      {isNeurable && <NeurableDeckUpload onUpload={setNeurableDeckUrl} />}
+      {/* Only show upload UI for admins/authenticated users */}
+      {isNeurable && user && <NeurableDeckUpload onUpload={setNeurableDeckUrl} />}
 
       <LandingHero
         headline={config.hero.headline}
