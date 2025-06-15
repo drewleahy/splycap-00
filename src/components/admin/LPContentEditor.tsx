@@ -244,7 +244,7 @@ export const LPContentEditor = () => {
                         <p>First 50 chars: {currentContent.substring(0, 50)}</p>
                         <p>Deal: {selectedDeal}</p>
                         <p>Section: {activeSection}</p>
-                        <p>SectionId: {getSectionId(activeSection)}</p>
+                        <p>SectionId: {getSectionId(selectedDeal, activeSection)}</p>
                       </div>
                     )}
                   </div>
