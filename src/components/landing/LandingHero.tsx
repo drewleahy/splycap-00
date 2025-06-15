@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -63,8 +62,11 @@ export const LandingHero = ({
     }
   };
 
-  const handleSecondaryCtaClick = async () => {
+  const handleSecondaryCtaClick = async (e?: React.MouseEvent) => {
     if (!secondaryCtaLink) return;
+
+    // Prevent default button behavior if the function is triggered via <a>, just in case
+    if (e) e.preventDefault();
 
     // Download with anchor if blob: or local file URI
     if (
@@ -72,7 +74,6 @@ export const LandingHero = ({
       secondaryCtaLink.startsWith('/') ||
       secondaryCtaLink.startsWith('file:')
     ) {
-      // Try to guess file name
       let filename = "Neurable-Deck.pdf";
       try {
         const urlParts = secondaryCtaLink.split("?");
@@ -91,17 +92,23 @@ export const LandingHero = ({
       return;
     }
 
-    // if it is a custom HTTP/HTTPS (not the default neurable deck), fetch & trigger download
+    // Detect Supabase Storage links or any custom PDF deck link
+    const isSupabasePDF =
+      secondaryCtaLink.includes('supabase.co/storage') ||
+      (secondaryCtaLink.endsWith('.pdf') &&
+        !secondaryCtaLink.includes('neurable.com/2025-deck.pdf'));
+
     if (
       secondaryCtaLink &&
       (
-        !secondaryCtaLink.includes('neurable.com/2025-deck.pdf') &&
+        isSupabasePDF ||
+        // fallback: any http(s) PDF but not the default neurable.com
         (
-          secondaryCtaLink.startsWith('http')
+          secondaryCtaLink.startsWith('http') &&
+          !secondaryCtaLink.includes('neurable.com/2025-deck.pdf')
         )
       )
     ) {
-      // Try to guess the filename from the URL if possible
       let filename = "Neurable-Deck.pdf";
       try {
         const urlParts = secondaryCtaLink.split("?");
@@ -112,21 +119,25 @@ export const LandingHero = ({
         }
       } catch {}
       await downloadFile(secondaryCtaLink, filename);
+      return;
     } else if (secondaryCtaLink.startsWith('#')) {
       const element = document.querySelector(secondaryCtaLink);
       element?.scrollIntoView({
         behavior: 'smooth'
       });
+      return;
     } else if (secondaryCtaLink.startsWith('https://vimeo.com/')) {
-      // For Vimeo video links, scroll to the video section instead of opening in new tab
       const videoElement = document.querySelector('#video');
       if (videoElement) {
         videoElement.scrollIntoView({
           behavior: 'smooth'
         });
       }
+      return;
     } else {
+      // fallback - open any other external links as before
       window.open(secondaryCtaLink, '_blank');
+      return;
     }
   };
 
