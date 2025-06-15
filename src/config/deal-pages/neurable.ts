@@ -12,7 +12,7 @@ const neurableConfig: DealPageConfig = {
     keywords: ["Neurable", "Investment Deal", "SPLY Capital", "2025", "Exclusive"],
   },
   hero: {
-    headline: "Neurable: Enabling the Next Generation of Brain-Computer Interfaces",
+    headline: "Investment Opportunity: Neurable | $2M Participation in $8M Series A-3 at $80M Valuation",
     subheadline: "The leading neurotechnology platform making brain-computer interaction real for everyday consumers.",
     // Removed backgroundImage to ensure white background and no hero photo
     primaryCta: {
