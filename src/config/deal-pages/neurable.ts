@@ -14,7 +14,7 @@ const neurableConfig: DealPageConfig = {
   hero: {
     headline: "Neurable: Enabling the Next Generation of Brain-Computer Interfaces",
     subheadline: "The leading neurotechnology platform making brain-computer interaction real for everyday consumers.",
-    backgroundImage: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1200&q=80",
+    // Removed backgroundImage to ensure white background and no hero photo
     primaryCta: {
       text: "Request Data Room Access",
       link: "#details"
@@ -145,3 +145,4 @@ const neurableConfig: DealPageConfig = {
 };
 
 export default neurableConfig;
+
