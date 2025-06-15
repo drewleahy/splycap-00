@@ -21,11 +21,8 @@ const neurableConfig: DealPageConfig = {
     secondaryCta: {
       text: "Download Deck",
       link: "https://neurable.com/2025-deck.pdf"
-    },
-    tertiaryCta: {
-      text: "Meet the Founders",
-      link: "https://neurable.com/team"
-    },
+    }
+    // Removed tertiaryCta to hide "Meet the Founders" button.
   },
   opportunity: {
     title: "Massive Opportunity in Neural Wearables",
