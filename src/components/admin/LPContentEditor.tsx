@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,18 +11,8 @@ import { fetchLPContent, saveLPContent } from "@/utils/contentUtils";
 import { AdminFileSelector } from "@/components/AdminFileSelector";
 import { Badge } from "@/components/ui/badge";
 
-// List of available deal/page IDs (should be kept up-to-date)
-const DEAL_IDS = [
-  { id: "neurable-exclusive-2025", name: "Neurable" },
-  { id: "nanotronics", name: "Nanotronics" },
-  { id: "lyten-opportunity", name: "Lyten" },
-];
-
 export const LPContentEditor = () => {
   const { toast } = useToast();
-  // Track which deal/page we're editing
-  const [selectedDeal, setSelectedDeal] = useState(DEAL_IDS[0].id);
-
   const [activeSection, setActiveSection] = useState("deck");
   const queryClient = useQueryClient();
   const [editorRef, setEditorRef] = useState<React.RefObject<HTMLDivElement> | null>(null);
@@ -39,20 +30,21 @@ export const LPContentEditor = () => {
     setLastDebugInfo({ action, content, timestamp: Date.now() });
   };
 
-  // Fetch all content SECTIONS for all deals
   const { data: content, isLoading, refetch } = useQuery({
     queryKey: ["lp-content-admin"],
     queryFn: async () => {
-      console.log("LPContentEditor: Fetching all LP sections for all deals...");
+      console.log("LPContentEditor: Fetching all LP sections...");
       const { data, error } = await supabase
         .from("content_sections")
         .select("*")
         .like("section_id", "lp-%")
         .order('updated_at', { ascending: false });
+      
       if (error) {
         console.error("LPContentEditor: Error fetching content sections:", error);
         throw error;
       }
+      
       console.log("LPContentEditor: Fetched content sections:", data?.length || 0);
       return data || [];
     },
@@ -72,12 +64,14 @@ export const LPContentEditor = () => {
       });
 
       await queryClient.invalidateQueries();
+      
       await queryClient.invalidateQueries({ queryKey: ["lp-content"] });
       await queryClient.invalidateQueries({ queryKey: ["lp-content", sectionId] });
       await queryClient.invalidateQueries({ queryKey: ["lp-content-admin"] });
+      
       await refetch();
       setContentUpdated(false);
-
+      
       console.log("LPContentEditor: Content saved and cache invalidated successfully");
     } catch (error) {
       console.error("LPContentEditor: Error saving content:", error);
@@ -89,25 +83,20 @@ export const LPContentEditor = () => {
     }
   };
 
-  // Compute fully-qualified sectionId including deal id
-  const getSectionId = (dealId: string, section: string) => `lp-${dealId}-${section}`;
-
-  // When the deal or section changes, set the right content into the editor
   useEffect(() => {
     if (activeSection) {
       const latestContent = getLatestContent(activeSection);
+      console.log(`Switching to section ${activeSection}, setting content:`, latestContent.substring(0, 100) + "...");
       setCurrentContent(latestContent);
       setContentUpdated(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeSection, selectedDeal, content]);
+  }, [activeSection, content]);
 
   useEffect(() => {
     if (activeSection && currentContent) {
       addDebugInfo("content-update", currentContent);
       setContentUpdated(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentContent]);
 
   if (isLoading) {
@@ -131,18 +120,18 @@ export const LPContentEditor = () => {
     { id: "ira", title: "IRA Information" },
   ];
 
-  // Find latest content for a specific section + deal id
-  const getLatestContent = (section: string) => {
+  const getLatestContent = (sectionId: string) => {
     if (!content) return "";
-    const fullSectionId = getSectionId(selectedDeal, section); // Always unique per deal!
+    
     const sectionContent = content
-      .filter((c) => c.section_id === fullSectionId)
-      .sort(
-        (a, b) =>
-          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-      );
-    const latestContent =
-      sectionContent.length > 0 ? sectionContent[0].description || "" : "";
+      .filter(c => c.section_id === `lp-${sectionId}`)
+      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+    
+    const latestContent = sectionContent.length > 0 ? sectionContent[0].description || "" : "";
+    console.log(`LPContentEditor: Latest content for ${sectionId}:`, latestContent ? "Found" : "None");
+    if (latestContent) {
+      console.log(`Content sample for ${sectionId}:`, latestContent.substring(0, 100) + "...");
+    }
     return latestContent;
   };
 
@@ -161,23 +150,6 @@ export const LPContentEditor = () => {
         <CardTitle>LP Data Room Content</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
-        {/* Deal/Page selector */}
-        <div className="mb-4 flex flex-wrap gap-3 items-center">
-          <span className="font-semibold text-gray-800 mr-2">
-            Deal/Page:
-          </span>
-          <select
-            value={selectedDeal}
-            onChange={(e) => setSelectedDeal(e.target.value)}
-            className="border border-gray-300 rounded px-2 py-1 bg-white"
-          >
-            {DEAL_IDS.map((deal) => (
-              <option key={deal.id} value={deal.id}>
-                {deal.name}
-              </option>
-            ))}
-          </select>
-        </div>
         <Tabs value={activeSection} onValueChange={setActiveSection}>
           <div className="mb-6">
             <TabsList className="inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground w-full flex-wrap gap-1">
@@ -196,7 +168,7 @@ export const LPContentEditor = () => {
           <div className="mt-4">
             {sections.map((section) => {
               const latestContent = getLatestContent(section.id);
-
+              
               return (
                 <TabsContent 
                   key={section.id} 
@@ -230,7 +202,7 @@ export const LPContentEditor = () => {
                     <div className="rounded-lg">
                       <Editor
                         initialContent={latestContent}
-                        onSave={(content) => handleSave(getSectionId(selectedDeal, section.id), content)}
+                        onSave={(content) => handleSave(section.id, content)}
                         captureRef={(ref) => captureEditorRef(ref)}
                         content={currentContent}
                         setContent={setCurrentContent}
@@ -242,9 +214,6 @@ export const LPContentEditor = () => {
                         <p>Debug: Last action: {lastDebugInfo.action} at {new Date(lastDebugInfo.timestamp).toLocaleTimeString()}</p>
                         <p>Content state: {currentContent.length > 0 ? 'Has content' : 'Empty'}</p>
                         <p>First 50 chars: {currentContent.substring(0, 50)}</p>
-                        <p>Deal: {selectedDeal}</p>
-                        <p>Section: {activeSection}</p>
-                        <p>SectionId: {getSectionId(selectedDeal, activeSection)}</p>
                       </div>
                     )}
                   </div>

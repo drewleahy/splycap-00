@@ -27,7 +27,7 @@ export const WysiwygEditable = ({
 
   const fetchContent = async () => {
     setLoading(true);
-    const data = await fetchLPContent(sectionId); // sectionId is already fully namespaced!
+    const data = await fetchLPContent(sectionId);
     setContent(data || "");
     setInitialContent(data || "");
     setLoading(false);
@@ -119,4 +119,3 @@ export const WysiwygEditable = ({
     </Element>
   );
 };
-

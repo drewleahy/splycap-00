@@ -1,14 +1,15 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 export const fetchLPContent = async (sectionId: string) => {
   console.log(`Fetching LP content for section: ${sectionId}`);
   
   try {
-    // sectionId is already fully-qualified!
+    // Get the most recent entry for this section
     const { data, error } = await supabase
       .from("content_sections")
       .select("description")
-      .eq("section_id", sectionId)
+      .eq("section_id", `lp-${sectionId}`)
       .order('updated_at', { ascending: false })
       .limit(1);
     
@@ -54,7 +55,7 @@ export const saveLPContent = async (sectionId: string, content: string) => {
     const { data, error } = await supabase
       .from("content_sections")
       .insert({
-        section_id: sectionId, // Use as provided (already unique)
+        section_id: `lp-${sectionId}`,
         description: processedContent,
         title: sectionId.charAt(0).toUpperCase() + sectionId.slice(1),
         updated_at: new Date().toISOString(),
