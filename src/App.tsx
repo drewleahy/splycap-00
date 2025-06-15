@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,6 +9,7 @@ import LPSplash from "./pages/LPSplash";
 import LytenOpportunity from "./pages/landing/LytenOpportunity";
 import Nanotronics from "./pages/deal/Nanotronics";
 import NanotronicsUpload from "./pages/deal/NanotronicsUpload";
+import NeurableDealPage from "./pages/deal/Neurable";
 
 // LP Pages
 import Bio from "./pages/lp/Bio";
@@ -55,6 +55,7 @@ const App = () => (
             <Route path="/deals/lyten-exclusive-2025" element={<LytenOpportunity />} />
             <Route path="/deals/nanotronics-exclusive-2025" element={<Nanotronics />} />
             <Route path="/deals/nanotronics-upload" element={<NanotronicsUpload />} />
+            <Route path="/deals/neurable-exclusive-2025" element={<NeurableDealPage />} />
             
             {/* LP Routes */}
             <Route path="/lp/bio" element={<Bio />} />
