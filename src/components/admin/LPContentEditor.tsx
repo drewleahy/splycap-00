@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -90,17 +89,13 @@ export const LPContentEditor = () => {
     }
   };
 
-  // Compute fully-qualified sectionId including the deal id
-  const getSectionId = (section: string) => `lp-${selectedDeal}-${section}`;
+  // Compute fully-qualified sectionId including deal id
+  const getSectionId = (dealId: string, section: string) => `lp-${dealId}-${section}`;
 
   // When the deal or section changes, set the right content into the editor
   useEffect(() => {
     if (activeSection) {
       const latestContent = getLatestContent(activeSection);
-      console.log(
-        `Switching to section ${activeSection} for deal ${selectedDeal}, setting content:`,
-        latestContent.substring(0, 100) + "..."
-      );
       setCurrentContent(latestContent);
       setContentUpdated(false);
     }
@@ -139,7 +134,7 @@ export const LPContentEditor = () => {
   // Find latest content for a specific section + deal id
   const getLatestContent = (section: string) => {
     if (!content) return "";
-    const fullSectionId = getSectionId(section);
+    const fullSectionId = getSectionId(selectedDeal, section); // Always unique per deal!
     const sectionContent = content
       .filter((c) => c.section_id === fullSectionId)
       .sort(
@@ -148,16 +143,6 @@ export const LPContentEditor = () => {
       );
     const latestContent =
       sectionContent.length > 0 ? sectionContent[0].description || "" : "";
-    console.log(
-      `LPContentEditor: Latest content for ${fullSectionId}:`,
-      latestContent ? "Found" : "None"
-    );
-    if (latestContent) {
-      console.log(
-        `Content sample for ${fullSectionId}:`,
-        latestContent.substring(0, 100) + "..."
-      );
-    }
     return latestContent;
   };
 
@@ -245,7 +230,7 @@ export const LPContentEditor = () => {
                     <div className="rounded-lg">
                       <Editor
                         initialContent={latestContent}
-                        onSave={(content) => handleSave(getSectionId(section.id), content)}
+                        onSave={(content) => handleSave(getSectionId(selectedDeal, section.id), content)}
                         captureRef={(ref) => captureEditorRef(ref)}
                         content={currentContent}
                         setContent={setCurrentContent}
