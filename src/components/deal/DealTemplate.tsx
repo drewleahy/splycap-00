@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -66,35 +65,34 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
   // Neurable custom "The Opportunity" section data
   const neurableOpportunitySection = isNeurable
     ? {
-      title: "Market Context & Strategic Positioning",
-      overview: "The global BCI market is projected to grow from $2.2B in 2023 to $6.5B by 2030, driven by advances in consumer wearables, neuro-assistive tools, and cognitive performance optimization. Neurable is uniquely positioned at the convergence of these verticals with a deployable, productized EEG platform that integrates into consumer and government channels.",
-      keyVerticals: [
-        {
-          name: "Consumer Wearables",
-          detail: "Headphones, earbuds, XR devices"
-        },
-        {
-          name: "Neuro-Predictive Monitoring",
-          detail: "Focus, fatigue, stress, productivity"
-        },
-        {
-          name: "Defense & National Security",
-          detail: "Cognitive load tracking, operator performance"
-        },
-        {
-          name: "Mental Health & Wellness",
-          detail: "Early detection of brain-state anomalies"
-        }
-      ],
-      competitiveAdvantage: [
-        { company: "CTRL-Labs (Meta)", focus: "Muscle-based wrist interface", weakness: "Requires EMG hardware" },
-        { company: "Kernel", focus: "Optical neuroimaging", weakness: "High hardware cost, $100M+ burn" },
-        { company: "Emotiv", focus: "EEG headsets", weakness: "Bulky, low signal quality" },
-        { company: "Apple", focus: "Neural earbuds", weakness: "R&D reportedly failed; patents post-date Neurable" },
-        { company: "Blackrock Neurotech", focus: "Invasive implants", weakness: "Not viable for consumer scale" },
-      ],
-      positioning: "Neurable is the only non-invasive, software-first BCI platform with validated high signal quality across both commercial and defense applications."
-    }
+        title: "Strategic Entry into a Category Leader in Non-Invasive BCI",
+        overview:
+          "SPLY Capital has secured a $2M allocation in Neurable’s $8M Series A-3 round at an $80M pre-money valuation. The company is in active discussions with acquirers, and the structure is optimized for capital-light scaling and M&A optionality.",
+        keyVerticals: [
+          {
+            name: "$80M current pre-money valuation",
+            detail: ""
+          },
+          {
+            name: "OEM deals with Sony & Samsung",
+            detail: ""
+          },
+          {
+            name: "Defense partnerships including DARPA",
+            detail: ""
+          },
+          {
+            name: "10–15x M&A return potential with major OEMs",
+            detail: ""
+          },
+          {
+            name: "IPO optionality if B2B SaaS gains scale",
+            detail: ""
+          }
+        ],
+        competitiveAdvantage: [],
+        positioning: "",
+      }
     : null;
 
   return (
@@ -123,8 +121,8 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
             title={neurableOpportunitySection.title}
             overview={neurableOpportunitySection.overview}
             keyVerticals={neurableOpportunitySection.keyVerticals}
-            competitiveAdvantage={neurableOpportunitySection.competitiveAdvantage}
-            positioning={neurableOpportunitySection.positioning}
+            competitiveAdvantage={[]} // Intentionally empty
+            positioning={""} // No positioning text
           />
           <NeurableProductTechnologySection />
         </>
