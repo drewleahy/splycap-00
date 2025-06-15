@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -12,6 +11,7 @@ import { LandingVideoSection } from '@/components/landing/LandingVideoSection';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { CustomerLogosSection } from './CustomerLogosSection';
 import { NeurableDeckUpload } from "./NeurableDeckUpload";
+import { NeurableOpportunitySection } from "./NeurableOpportunitySection";
 import { useAuth } from "@/hooks/use-auth";
 
 interface DealTemplateProps {
@@ -82,12 +82,23 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
       {showCustomerLogos && <CustomerLogosSection />}
 
-      <LandingOpportunity
-        title={config.opportunity.title}
-        body={config.opportunity.description}
-        sections={config.opportunity.keyMetrics}
-        headerLabel="The Opportunity"
-      />
+      {/* Custom "The Opportunity" for Neurable */}
+      {isNeurable && "neurableOpportunity" in config && config.neurableOpportunity ? (
+        <NeurableOpportunitySection
+          title={config.neurableOpportunity.title}
+          overview={config.neurableOpportunity.overview}
+          keyVerticals={config.neurableOpportunity.keyVerticals}
+          competitiveAdvantage={config.neurableOpportunity.competitiveAdvantage}
+          positioning={config.neurableOpportunity.positioning}
+        />
+      ) : (
+        <LandingOpportunity
+          title={config.opportunity.title}
+          body={config.opportunity.description}
+          sections={config.opportunity.keyMetrics}
+          headerLabel="The Opportunity"
+        />
+      )}
       
       {config.market && (
         <LandingContent

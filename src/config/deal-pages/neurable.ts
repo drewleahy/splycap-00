@@ -14,7 +14,6 @@ const neurableConfig: DealPageConfig = {
   hero: {
     headline: "Investment Opportunity: Neurable\n$2M SPV in $8M Series A-3 at $80M Pre-Money Valuation",
     subheadline: "Neurable is pioneering a new frontier in neurotechnology with a best-in-class non-invasive brain-computer interface (BCI) platform. Its patented signal processing architecture is redefining how consumers and enterprises interact with digital systems—powering applications across wearables, defense, wellness, and productivity.",
-    // Removed backgroundImage to ensure white background and no hero photo
     primaryCta: {
       text: "Sign NDA to View Diligence Materials",
       link: "#details"
@@ -23,25 +22,43 @@ const neurableConfig: DealPageConfig = {
       text: "Download Deck",
       link: "https://neurable.com/2025-deck.pdf"
     }
-    // Removed tertiaryCta to hide "Meet the Founders" button.
   },
+  // Replace "opportunity" only for fallback - we render a custom component for this deal
   opportunity: {
-    title: "Massive Opportunity in Neural Wearables",
-    description: "The neural interface market is forecasted to reach $70B+ by 2030 as wearables become mainstream. Neurable is defining the consumer frontier for non-invasive brain-computer interfaces (BCI).",
-    keyMetrics: [
+    title: "Market Context & Strategic Positioning",
+    description: "",
+    keyMetrics: []
+  },
+  // Insert new custom opportunityData for this page/component
+  neurableOpportunity: {
+    title: "Market Context & Strategic Positioning",
+    overview: "The global BCI market is projected to grow from $2.2B in 2023 to $6.5B by 2030, driven by advances in consumer wearables, neuro-assistive tools, and cognitive performance optimization. Neurable is uniquely positioned at the convergence of these verticals with a deployable, productized EEG platform that integrates into consumer and government channels.",
+    keyVerticals: [
       {
-        header: "TAM",
-        body: "$70B+ addressable market by 2030 in neural wearables and wellness"
+        name: "Consumer Wearables",
+        detail: "Headphones, earbuds, XR devices"
       },
       {
-        header: "Commercial Launch",
-        body: "2025 launch with best-in-class pre-orders and partnerships in place"
+        name: "Neuro-Predictive Monitoring",
+        detail: "Focus, fatigue, stress, productivity"
       },
       {
-        header: "First-mover Advantage",
-        body: "Proprietary algorithms, published science & 50+ filed patents"
+        name: "Defense & National Security",
+        detail: "Cognitive load tracking, operator performance"
       },
+      {
+        name: "Mental Health & Wellness",
+        detail: "Early detection of brain-state anomalies"
+      }
     ],
+    competitiveAdvantage: [
+      { company: "CTRL-Labs (Meta)", focus: "Muscle-based wrist interface", weakness: "Requires EMG hardware" },
+      { company: "Kernel", focus: "Optical neuroimaging", weakness: "High hardware cost, $100M+ burn" },
+      { company: "Emotiv", focus: "EEG headsets", weakness: "Bulky, low signal quality" },
+      { company: "Apple", focus: "Neural earbuds", weakness: "R&D reportedly failed; patents post-date Neurable" },
+      { company: "Blackrock Neurotech", focus: "Invasive implants", weakness: "Not viable for consumer scale" },
+    ],
+    positioning: "Neurable is the only non-invasive, software-first BCI platform with validated high signal quality across both commercial and defense applications."
   },
   market: {
     title: "Market Context",
@@ -138,7 +155,7 @@ const neurableConfig: DealPageConfig = {
       { text: "Contact", url: "mailto:info@neurable.com" },
       { text: "Privacy", url: "https://neurable.com/privacy" }
     ],
-  }
+  },
 };
 
 export default neurableConfig;
