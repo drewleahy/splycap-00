@@ -12,6 +12,7 @@ import { LandingFooter } from '@/components/landing/LandingFooter';
 import { CustomerLogosSection } from './CustomerLogosSection';
 import { NeurableDeckUpload } from "./NeurableDeckUpload";
 import { NeurableOpportunitySection } from "./NeurableOpportunitySection";
+import { NeurableMarketSection } from "./NeurableMarketSection";
 import { useAuth } from "@/hooks/use-auth";
 import { NeurableProductTechnologySection } from "./NeurableProductTechnologySection";
 
@@ -118,12 +119,17 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         />
       )}
 
-      {config.market && (
-        <LandingContent
-          title={config.market.title}
-          body={config.market.description}
-          headerLabel={config.market.headerLabel || "Market Context"}
-        />
+      {/* USE NEURABLE MARKET SECTION */}
+      {isNeurable ? (
+        <NeurableMarketSection />
+      ) : (
+        config.market && (
+          <LandingContent
+            title={config.market.title}
+            body={config.market.description}
+            headerLabel={config.market.headerLabel || "Market Context"}
+          />
+        )
       )}
 
       <LandingContentWithLogo
