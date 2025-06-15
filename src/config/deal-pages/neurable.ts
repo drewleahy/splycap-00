@@ -13,7 +13,7 @@ const neurableConfig: DealPageConfig = {
   },
   hero: {
     headline: "Exclusive Access: Neurable Investment Opportunity",
-    subheadline: "Neurable is pioneering a new frontier in neurotechnology with a best-in-class non-invasive brain-computer interface (BCI) platform. Its patented signal processing architecture is redefining how consumers and enterprises interact with digital systems—powering applications across wearables, defense, wellness, and productivity.",
+    subheadline: "Join SPLY Capital in a $2M allocation to Neurable — a category-defining brain-computer interface (BCI) platform enabling neural interaction across consumer electronics, defense, and wellness.",
     primaryCta: {
       text: "Sign NDA to View Diligence Materials",
       link: "#details"
@@ -128,3 +128,4 @@ const neurableConfig: DealPageConfig = {
 };
 
 export default neurableConfig;
+
