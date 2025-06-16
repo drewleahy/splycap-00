@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import jsPDF from 'jspdf';
@@ -86,6 +85,31 @@ export const LandingCTA = ({
     }
   };
 
+  const downloadNeurableDeck = () => {
+    console.log('Attempting to download Neurable deck...');
+    
+    // Check for uploaded Neurable deck URL in localStorage
+    const neurableDeckUrl = localStorage.getItem('neurable-deck-url');
+    
+    if (neurableDeckUrl) {
+      console.log('Downloading Neurable deck from:', neurableDeckUrl);
+      
+      // Create a temporary anchor element to trigger download
+      const link = document.createElement('a');
+      link.href = neurableDeckUrl;
+      link.download = 'Neurable-Investment-Deck.pdf';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      console.log('Neurable deck download initiated');
+    } else {
+      console.log('No Neurable deck found in storage');
+      alert('No Neurable deck available for download. Please contact us directly for the deck.');
+    }
+  };
+
   const handleButtonClick = (link: string, onClick?: () => void) => {
     console.log('Button clicked with link:', link);
     
@@ -98,6 +122,12 @@ export const LandingCTA = ({
     // Check for special download flyer action FIRST
     if (link.startsWith('#download-flyer')) {
       downloadFlyer();
+      return;
+    }
+    
+    // Check for Neurable deck download action
+    if (link.startsWith('#download-neurable-deck')) {
+      downloadNeurableDeck();
       return;
     }
     

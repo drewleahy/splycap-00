@@ -19,7 +19,7 @@ const neurableConfig: DealPageConfig = {
     },
     secondaryCta: {
       text: "Download Deck",
-      link: "https://neurable.com/2025-deck.pdf"
+      link: "#download-neurable-deck"
     }
   },
   // Keep "opportunity" for fallback but it's not used on the Neurable deal page
