@@ -49,10 +49,10 @@ export const NeurableWhyInvestingStyled = () => {
               key={index} 
               className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-900/5 via-transparent to-gray-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <CardContent className="relative p-5 sm:p-6 lg:p-7 text-left">
                 <div className="mb-4 flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-slate-700 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
                     <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-2 text-gray-900">
                       {point.title}
@@ -65,7 +65,7 @@ export const NeurableWhyInvestingStyled = () => {
                   </div>
                 </div>
               </CardContent>
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-slate-700 via-gray-800 to-slate-700" />
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 via-blue-500 to-green-500" />
             </Card>
           ))}
         </div>
