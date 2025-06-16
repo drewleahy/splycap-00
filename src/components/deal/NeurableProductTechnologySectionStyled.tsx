@@ -1,10 +1,11 @@
+
 import React from "react";
 import { Card, CardContent } from '@/components/ui/card';
 import { Cpu, Headphones, Smartphone, Brain } from "lucide-react";
 
 const features = [
   {
-    title: "Software Toolkit Integration",
+    title: "Proprietary Signal Engine",
     description: "Best-in-Class Signal Quality for Brainwave Data Capture",
     icon: Brain,
   },
