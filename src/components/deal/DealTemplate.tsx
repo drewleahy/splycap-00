@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -21,6 +20,7 @@ import { NeurableMarketSectionStyled } from "./NeurableMarketSectionStyled";
 import { useAuth } from "@/hooks/use-auth";
 import { NeurableProductTechnologySection } from "./NeurableProductTechnologySection";
 import { NeurableProductTechnologySectionStyled } from "./NeurableProductTechnologySectionStyled";
+import { NeurableDubaiSection } from "./NeurableDubaiSection";
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -158,6 +158,9 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
           keyStats={config.company.keyStats}
         />
       )}
+
+      {/* Add Dubai section only for Neurable */}
+      {isNeurable && <NeurableDubaiSection />}
 
       {config.traction && (
         <LandingContent
