@@ -17,7 +17,7 @@ export const NeurableOpportunitySectionStyled: React.FC<NeurableOpportunityProps
   bullets,
 }) => (
   <section className="py-12 sm:py-16 px-4 sm:px-6 bg-gray-50">
-    <div className="max-w-3xl mx-auto text-left">
+    <div className="max-w-4xl mx-auto text-left">
       <div className="mb-6 sm:mb-8">
         <h3 className="text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 text-slate-600 uppercase tracking-wide">
           The Opportunity
