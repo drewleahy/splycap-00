@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -77,13 +76,6 @@ export const LandingHero = ({
     // Log for debug
     console.log("[Deck Download] Attempting to download from:", secondaryCtaLink);
 
-    // Special handling for Neurable page - always open in new tab
-    if (isNeurablePage && secondaryCtaText?.toLowerCase().includes('download deck')) {
-      console.log('Opening Neurable deck in new tab:', secondaryCtaLink);
-      window.open(secondaryCtaLink, '_blank', 'noopener,noreferrer');
-      return;
-    }
-
     // Check for DocSend URLs FIRST - open in new tab immediately
     if (secondaryCtaLink.includes('docsend.com')) {
       console.log('Opening DocSend URL in new tab:', secondaryCtaLink);
@@ -91,7 +83,7 @@ export const LandingHero = ({
       return;
     }
 
-    // Direct download for local or blob links
+    // Direct download for blob URLs or local files
     if (
       secondaryCtaLink.startsWith('blob:') ||
       secondaryCtaLink.startsWith('/') ||
@@ -112,7 +104,7 @@ export const LandingHero = ({
       document.body.appendChild(link);
       link.click();
       link.remove();
-      toast({ title: "Download started!", description: "Your PDF should be downloading from local source." });
+      toast({ title: "Download started!", description: "Your PDF should be downloading." });
       return;
     }
 
