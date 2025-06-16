@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import jsPDF from 'jspdf';
@@ -94,7 +95,7 @@ export const LandingCTA = ({
       return;
     }
     
-    // Check for special download flyer action
+    // Check for special download flyer action FIRST
     if (link.startsWith('#download-flyer')) {
       downloadFlyer();
       return;
@@ -106,6 +107,13 @@ export const LandingCTA = ({
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
+      return;
+    }
+    
+    // Check for DocSend URLs - open in new tab immediately
+    if (link.includes('docsend.com')) {
+      console.log('Opening DocSend URL in new tab:', link);
+      window.open(link, '_blank', 'noopener,noreferrer');
       return;
     }
     
@@ -127,8 +135,16 @@ export const LandingCTA = ({
       return;
     }
     
-    // Default: open in new tab
-    window.open(link, '_blank');
+    // Default: open in new tab for all other external links
+    if (link.startsWith('http')) {
+      console.log('Opening external URL in new tab:', link);
+      window.open(link, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    
+    // If none of the above, try to navigate
+    console.log('Attempting to navigate to:', link);
+    window.location.href = link;
   };
 
   return (
