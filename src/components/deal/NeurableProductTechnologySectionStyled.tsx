@@ -6,7 +6,7 @@ import { Cpu, Headphones, Smartphone, Brain } from "lucide-react";
 const features = [
   {
     title: "Proprietary Signal Engine",
-    description: "Best-in-class SNR for EEG capture",
+    description: "Best-in-Class Signal Quality for Brainwave Data Capture",
     icon: Brain,
   },
   {
