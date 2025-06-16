@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -60,8 +61,9 @@ Wellness: Brain-state anomaly detection
     headerLabel: "Commercial Traction",
     keyPoints: [
       "Sony & Samsung licensing deals signed",
-      "$5M+ in defense R&D grants (incl. DARPA)",
+      "$5M+ in defense R&D grants (including DARPA)",
       "Proof of concept completed with Master & Dynamic",
+      "OEM-integrated product lines launching in 2025",
       "Targeting $10M revenue in 2025"
     ],
     additionalContent: "",
