@@ -26,7 +26,7 @@ const verticals = [
   },
   {
     label: "Wellness",
-    description: "Brain-state anomaly detection",
+    description: "Early detection of brain-state anomalies",
     Icon: HeartPulse,
     bg: "bg-slate-200",
     iconColor: "text-gray-800"
