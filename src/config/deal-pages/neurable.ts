@@ -44,7 +44,7 @@ Wellness: Brain-state anomaly detection
   },
   company: {
     title: "About Neurable",
-    description: "Founded at the University of Michigan and backed by leading neuroscientists, Neurable’s platform unlocks effortless focus, cognitive insights, and mental wellness through EEG headbands and everyday headphones.",
+    description: "Founded at the University of Michigan and backed by leading neuroscientists, Neurable's platform unlocks effortless focus, cognitive insights, and mental wellness through EEG headbands and everyday headphones.",
     logoSrc: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=200&q=80",
     logoAlt: "Neurable logo",
     headerLabel: "Company Overview",
@@ -92,17 +92,8 @@ Wellness: Brain-state anomaly detection
       },
     ],
   },
-  backing: {
-    title: "Strategic Backing",
-    description: "Supported by top VC firms and strategic angels in neuroscience and audio hardware.",
-    keyPoints: [
-      "Major Silicon Valley VCs",
-      "Consumer brand partnerships in negotiation",
-      "Advisors include pioneers in BCI and wearable tech"
-    ],
-  },
   cta: {
-    headline: "Interested in Neurable’s Revolution?",
+    headline: "Interested in Neurable's Revolution?",
     description: "Request access to our data room to view the full Neurable investment deck, diligence materials, and virtual demo.",
     primaryButton: {
       text: "Request Data Room",
@@ -123,7 +114,7 @@ Wellness: Brain-state anomaly detection
   },
   video: {
     title: "Neurable Product Demo",
-    description: "See Neurable’s next generation neural wearable in action.",
+    description: "See Neurable's next generation neural wearable in action.",
     videoUrl: "https://player.vimeo.com/video/968123456?h=0",
   },
   footer: {

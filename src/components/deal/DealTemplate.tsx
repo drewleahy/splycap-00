@@ -76,7 +76,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
     ? {
         title: "Strategic Entry into a Category Leader in Non-Invasive BCI",
         overview:
-          "SPLY Capital has secured a $2M allocation in Neurable’s $8M Series A-3 round at an $80M pre-money valuation. The company is in active discussions with acquirers, and the structure is optimized for capital-light scaling and M&A optionality.",
+          "SPLY Capital has secured a $2M allocation in Neurable's $8M Series A-3 round at an $80M pre-money valuation. The company is in active discussions with acquirers, and the structure is optimized for capital-light scaling and M&A optionality.",
         bullets: neurableOpportunityBullets,
       }
     : null;
@@ -159,6 +159,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         headerLabel="Why We're Investing"
       />
 
+      {/* Only render Strategic Backing section if it exists in config */}
       {config.backing && (
         <LandingOpportunity
           title={config.backing.title}
