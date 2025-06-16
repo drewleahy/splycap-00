@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -82,7 +83,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
   const neurableOpportunitySection = isNeurable
     ? {
-        title: "Strategic Entry into a Category Leader in Non-Invasive BCI",
+        title: "Strategic Entry into a Category Leader in Non-Invasive Brain-Computer Interfaces (BCI)",
         overview:
           "SPLY Capital has secured a $2M allocation in Neurable's $8M Series A-3 round at an $80M pre-money valuation. The company is in active discussions with acquirers, and the structure is optimized for capital-light scaling and M&A optionality.",
         bullets: neurableOpportunityBullets,
