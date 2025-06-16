@@ -5,7 +5,7 @@ import { CheckCircle } from 'lucide-react';
 export const NeurableCommercialTractionStyled = () => {
   const tractionPoints = [
     "Closed strategic licensing and co-development contracts with Sony and Samsung.",
-    "Over $5 million secured in research and development grants from U.S. defense agencies — including active collaborations with the Defense Advanced Research Projects Agency (DARPA) and other military innovation units.",
+    "$5M+ in U.S. defense R&D grants secured, including work with DARPA and other innovation units.",
     "Master & Dynamic is a commercial partner, actively selling thousands of Neurable-enabled units.",
     "Commercial product lines developed in partnership with leading manufacturers will launch in 2025",
     "Targeting $25 million in revenue from commercial product launches in 2025."
