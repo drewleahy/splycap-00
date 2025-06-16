@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -105,8 +106,8 @@ Wellness: Brain-state anomaly detection
       link: "mailto:info@splycapital.com?subject=Requesting%20Neurable%20Data%20Room"
     },
     secondaryButton: {
-      text: "Download Investment Deck",
-      link: "https://neurable.com/2025-deck.pdf"
+      text: "Book a Call",
+      link: "https://calendly.com/haley-splycapital/deal-interest"
     },
     quaternaryButton: {
       text: "Visit Neurable.com",
