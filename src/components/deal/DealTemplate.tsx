@@ -21,6 +21,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { NeurableProductTechnologySection } from "./NeurableProductTechnologySection";
 import { NeurableProductTechnologySectionStyled } from "./NeurableProductTechnologySectionStyled";
 import { NeurableDubaiSection } from "./NeurableDubaiSection";
+import { NeurableCommercialTractionStyled } from "./NeurableCommercialTractionStyled";
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -162,15 +163,20 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
       {/* Add Dubai section only for Neurable */}
       {isNeurable && <NeurableDubaiSection />}
 
+      {/* Use styled component for Neurable Commercial Traction, original for others */}
       {config.traction && (
-        <LandingContent
-          title={config.traction.title}
-          body={config.traction.description}
-          headerLabel={config.traction.headerLabel || "Commercial Traction"}
-          keyPoints={config.traction.keyPoints}
-          additionalContent={config.traction.additionalContent}
-          className="bg-gray-50"
-        />
+        isNeurable ? (
+          <NeurableCommercialTractionStyled />
+        ) : (
+          <LandingContent
+            title={config.traction.title}
+            body={config.traction.description}
+            headerLabel={config.traction.headerLabel || "Commercial Traction"}
+            keyPoints={config.traction.keyPoints}
+            additionalContent={config.traction.additionalContent}
+            className="bg-gray-50"
+          />
+        )
       )}
 
       {/* Use styled features component for Neurable */}
