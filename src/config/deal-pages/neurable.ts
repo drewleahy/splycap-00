@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -18,7 +19,7 @@ const neurableConfig: DealPageConfig = {
       link: "#details"
     },
     secondaryCta: {
-      text: "Book a Call",
+      text: "Schedule a Call",
       link: "https://calendly.com/haley-splycapital/deal-interest"
     }
   },
@@ -109,7 +110,7 @@ Wellness: Brain-state anomaly detection
       link: "mailto:info@splycapital.com?subject=Requesting%20Neurable%20International%20Data%20Room"
     },
     tertiaryButton: {
-      text: "Book a Call",
+      text: "Schedule a Call",
       link: "https://calendly.com/haley-splycapital/deal-interest"
     },
     quaternaryButton: {

@@ -23,9 +23,16 @@ export const useCtaHandlers = () => {
     if (e) e.preventDefault();
 
     // Log for debug
-    console.log("[Deck Download] Attempting to download from:", secondaryCtaLink);
+    console.log("[Secondary CTA] Handling click for:", secondaryCtaLink);
 
-    // Check for DocSend URLs FIRST - open in new tab immediately
+    // Check for Calendly URLs FIRST - open in new tab immediately
+    if (secondaryCtaLink.includes('calendly.com')) {
+      console.log('Opening Calendly URL in new tab:', secondaryCtaLink);
+      window.open(secondaryCtaLink, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    // Check for DocSend URLs - open in new tab immediately
     if (secondaryCtaLink.includes('docsend.com')) {
       console.log('Opening DocSend URL in new tab:', secondaryCtaLink);
       window.open(secondaryCtaLink, '_blank', 'noopener,noreferrer');
@@ -98,7 +105,8 @@ export const useCtaHandlers = () => {
         isSupabasePDF ||
         (
           secondaryCtaLink.startsWith('http') &&
-          !secondaryCtaLink.includes('neurable.com/2025-deck.pdf')
+          !secondaryCtaLink.includes('neurable.com/2025-deck.pdf') &&
+          !secondaryCtaLink.includes('calendly.com')
         )
       )
     ) {
@@ -127,6 +135,7 @@ export const useCtaHandlers = () => {
       }
       return;
     } else {
+      // Default fallback - open in new tab
       window.open(secondaryCtaLink, '_blank');
       return;
     }
