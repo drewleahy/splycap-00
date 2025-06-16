@@ -83,9 +83,45 @@ export const LandingHero = ({
       return;
     }
 
-    // Direct download for blob URLs or local files
+    // Enhanced blob URL handling - download immediately without fetch
+    if (secondaryCtaLink.startsWith('blob:')) {
+      console.log('Handling blob URL download directly');
+      try {
+        let filename = "Neurable-Deck.pdf";
+        
+        // Create download link immediately
+        const link = document.createElement('a');
+        link.href = secondaryCtaLink;
+        link.download = filename;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        
+        // Force download
+        link.click();
+        
+        // Clean up
+        setTimeout(() => {
+          document.body.removeChild(link);
+        }, 100);
+        
+        toast({ 
+          title: "Download started!", 
+          description: "Your Neurable deck PDF is downloading." 
+        });
+        return;
+      } catch (err) {
+        console.error('Blob download error:', err);
+        toast({ 
+          title: "Download failed", 
+          description: "There was an issue downloading the PDF. Please try uploading again.", 
+          variant: "destructive" 
+        });
+        return;
+      }
+    }
+
+    // Direct download for local files
     if (
-      secondaryCtaLink.startsWith('blob:') ||
       secondaryCtaLink.startsWith('/') ||
       secondaryCtaLink.startsWith('file:')
     ) {
