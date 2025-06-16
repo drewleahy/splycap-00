@@ -54,6 +54,9 @@ export const LandingHero = ({
 }: LandingHeroProps) => {
   const { toast } = useToast();
 
+  // Check if we're on the Neurable page
+  const isNeurablePage = window.location.pathname.includes('/deals/neurable-exclusive-2025');
+
   const handleCtaClick = () => {
     if (ctaLink.startsWith('#')) {
       const element = document.querySelector(ctaLink);
@@ -73,6 +76,13 @@ export const LandingHero = ({
 
     // Log for debug
     console.log("[Deck Download] Attempting to download from:", secondaryCtaLink);
+
+    // Special handling for Neurable page - always open in new tab
+    if (isNeurablePage && secondaryCtaText?.toLowerCase().includes('download deck')) {
+      console.log('Opening Neurable deck in new tab:', secondaryCtaLink);
+      window.open(secondaryCtaLink, '_blank', 'noopener,noreferrer');
+      return;
+    }
 
     // Check for DocSend URLs FIRST - open in new tab immediately
     if (secondaryCtaLink.includes('docsend.com')) {
