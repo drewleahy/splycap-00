@@ -37,7 +37,7 @@ export const NeurableProductTechnologySectionStyled: React.FC = () => (
           Product & Technology
         </h3>
         <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-6 sm:mb-8 text-gray-900">
-          Validated Platform Ready for OEM Integration
+          Proven Platform Built for Seamless Manufacturer Integration
         </h2>
         <p className="text-sm sm:text-base md:text-lg text-gray-700 mb-8 leading-relaxed">
           Neurable's proprietary brain-computer interface technology has been validated through partnerships with major consumer electronics manufacturers and defense agencies, demonstrating commercial readiness across multiple verticals.
