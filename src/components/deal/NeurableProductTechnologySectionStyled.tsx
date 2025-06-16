@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent } from '@/components/ui/card';
 import { Cpu, Headphones, Smartphone, Brain } from "lucide-react";
@@ -20,7 +19,7 @@ const features = [
     icon: Headphones,
   },
   {
-    title: "SDK Integration",
+    title: "Software Toolkit Integration",
     description: "Cross-platform cognitive APIs",
     icon: Smartphone,
   },
