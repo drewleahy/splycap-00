@@ -19,8 +19,12 @@ export const LandingFooter = ({ copyright, links, className = "" }: LandingFoote
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <Link to="/" className="text-black text-xl sm:text-2xl font-bold">
-              SPLY CAPITAL
+            <Link to="/" className="block">
+              <img 
+                src="/lovable-uploads/86042c2d-fd71-488f-8f31-22569d955254.png" 
+                alt="SPLYCAP" 
+                className="h-8"
+              />
             </Link>
           </div>
           
