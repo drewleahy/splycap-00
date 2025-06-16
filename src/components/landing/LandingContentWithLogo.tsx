@@ -44,41 +44,50 @@ export const LandingContentWithLogo = ({
     : logoSrc;
   const logoLabel = isNeurable ? "Neurable logo" : logoAlt;
 
+  // Apply Neurable-specific styling if this is the Neurable page
+  const sectionBg = isNeurable ? "bg-white" : "bg-gray-50";
+  const headerColor = isNeurable ? "text-emerald-700" : "text-gray-600";
+  const titleColor = isNeurable ? "text-gray-900" : "text-gray-900";
+  const bodyColor = isNeurable ? "text-gray-700" : "text-gray-700";
+  const bulletBorder = isNeurable ? "border-emerald-500" : "border-sky-400";
+  const bulletColor = isNeurable ? "bg-emerald-600" : "bg-sky-500";
+  const statColor = isNeurable ? "text-gray-800" : "text-gray-900";
+
   return (
-    <section className={`py-12 sm:py-16 px-4 sm:px-6 bg-gray-50 ${className}`}>
+    <section className={`py-16 sm:py-20 px-4 sm:px-6 ${sectionBg} ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-8 sm:mb-12">
           {headerLabel && (
-            <h3 className="text-xs sm:text-sm md:text-base font-semibold mb-2 sm:mb-4 text-gray-600 uppercase tracking-wide">
+            <h3 className={`text-xs sm:text-sm md:text-base font-semibold mb-4 sm:mb-6 ${headerColor} uppercase tracking-wider`}>
               {headerLabel}
             </h3>
           )}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center mb-6 sm:mb-8 gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center mb-8 sm:mb-12 gap-4 sm:gap-6">
             <img
               src={logoUrl}
               alt={logoLabel}
-              className="h-10 sm:h-12 md:h-16 mb-1 sm:mb-0 sm:mr-4 rounded-sm bg-white object-contain"
-              style={{maxWidth: 160}}
+              className="h-12 sm:h-16 md:h-20 mb-1 sm:mb-0 rounded-sm bg-white object-contain shadow-sm"
+              style={{maxWidth: 200}}
               loading="lazy"
             />
-            <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
+            <h2 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold ${titleColor} leading-tight`}>
               {headline}
             </h2>
           </div>
         </div>
-        <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-8 sm:mb-10">
+        <p className={`text-base sm:text-lg md:text-xl ${bodyColor} leading-relaxed mb-12 sm:mb-16`}>
           {sectionBody}
         </p>
         {stats && stats.length > 0 && (
-          <div className="border-l-2 border-sky-400 pl-5 mb-6 sm:mb-10">
-            <ul className="space-y-2">
+          <div className={`border-l-4 ${bulletBorder} pl-6 sm:pl-8 mb-8 sm:mb-12`}>
+            <ul className="space-y-4">
               {stats.map((stat, i) => (
                 <li
                   key={i}
-                  className="flex items-start text-gray-900 text-base sm:text-lg"
+                  className="flex items-start text-base sm:text-lg"
                 >
-                  <span className="mt-1 mr-2 w-2.5 h-2.5 bg-sky-500 rounded-full flex-shrink-0"></span>
-                  <span className="leading-snug">{stat}</span>
+                  <span className={`mt-1.5 mr-4 w-3 h-3 ${bulletColor} rounded-full flex-shrink-0`}></span>
+                  <span className={`leading-relaxed font-medium ${statColor}`}>{stat}</span>
                 </li>
               ))}
             </ul>

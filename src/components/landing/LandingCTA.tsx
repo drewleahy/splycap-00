@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import jsPDF from 'jspdf';
@@ -35,6 +36,9 @@ export const LandingCTA = ({
   quaternaryButtonLink,
   className = ""
 }: LandingCTAProps) => {
+  // Check if this is the Neurable page
+  const isNeurable = window.location.pathname.includes('neurable');
+
   const downloadFlyer = async () => {
     console.log('Creating PDF flyer...');
     
@@ -131,24 +135,38 @@ export const LandingCTA = ({
     window.open(link, '_blank');
   };
 
+  // Apply Neurable-specific styling
+  const sectionBg = isNeurable ? "bg-gray-900" : "bg-black";
+  const titleColor = isNeurable ? "text-white" : "text-white";
+  const descColor = isNeurable ? "text-gray-200" : "text-gray-200";
+  const primaryBtnStyle = isNeurable 
+    ? "bg-emerald-600 text-white hover:bg-emerald-700" 
+    : "bg-white text-black hover:bg-gray-100 hover:text-black";
+  const secondaryBtnStyle = isNeurable 
+    ? "border-2 border-white text-white bg-transparent hover:bg-white hover:text-gray-900" 
+    : "border-2 border-white text-white bg-transparent hover:bg-white hover:text-black";
+  const quaternaryBtnStyle = isNeurable 
+    ? "border-2 border-emerald-400 text-emerald-400 bg-transparent hover:bg-emerald-400 hover:text-gray-900" 
+    : "border-2 border-blue-300 text-blue-300 bg-transparent hover:bg-blue-300 hover:text-black";
+
   return (
-    <section className={`py-16 sm:py-20 px-4 sm:px-6 bg-black ${className}`}>
+    <section className={`py-20 sm:py-24 px-4 sm:px-6 ${sectionBg} ${className}`}>
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-white">
+        <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 ${titleColor}`}>
           {headline}
         </h2>
-        <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3 sm:mb-4 text-gray-200">
+        <h3 className={`text-lg sm:text-xl md:text-2xl font-semibold mb-4 sm:mb-6 ${descColor}`}>
           Review Materials and Connect
         </h3>
-        <p className="text-base sm:text-xl mb-6 sm:mb-8 text-gray-200 max-w-2xl mx-auto leading-relaxed">
+        <p className={`text-base sm:text-xl mb-8 sm:mb-12 ${descColor} max-w-2xl mx-auto leading-relaxed`}>
           {description}
         </p>
         
-        <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center flex-wrap">
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-6 justify-center flex-wrap">
           <Button 
             onClick={() => handleButtonClick(primaryButtonLink)}
             size="lg"
-            className="bg-white text-black hover:bg-gray-100 hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
+            className={`${primaryBtnStyle} px-8 sm:px-10 py-4 text-base sm:text-lg font-semibold w-full sm:w-auto`}
           >
             {primaryButtonText}
           </Button>
@@ -158,7 +176,7 @@ export const LandingCTA = ({
               onClick={() => handleButtonClick(secondaryButtonLink!)}
               variant="outline"
               size="lg"
-              className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
+              className={`${secondaryBtnStyle} px-8 sm:px-10 py-4 text-base sm:text-lg font-semibold w-full sm:w-auto`}
             >
               {secondaryButtonText}
             </Button>
@@ -169,7 +187,7 @@ export const LandingCTA = ({
               onClick={() => handleButtonClick(tertiaryButtonLink!)}
               variant="outline"
               size="lg"
-              className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
+              className={`${secondaryBtnStyle} px-8 sm:px-10 py-4 text-base sm:text-lg font-semibold w-full sm:w-auto`}
             >
               {tertiaryButtonText}
             </Button>
@@ -180,7 +198,7 @@ export const LandingCTA = ({
               onClick={() => handleButtonClick(quaternaryButtonLink!)}
               variant="outline"
               size="lg"
-              className="border-2 border-blue-300 text-blue-300 bg-transparent hover:bg-blue-300 hover:text-black px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold w-full sm:w-auto"
+              className={`${quaternaryBtnStyle} px-8 sm:px-10 py-4 text-base sm:text-lg font-semibold w-full sm:w-auto`}
             >
               {quaternaryButtonText}
             </Button>
