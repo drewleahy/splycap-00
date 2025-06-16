@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface LandingContentWithLogoStyledProps {
@@ -28,7 +27,7 @@ export const LandingContentWithLogoStyled = ({
   const neurableBody =
     "Neurable has developed a software-first, hardware-light architecture supported by one of the strongest IP portfolios in non-invasive BCI.";
   const neurableKeyStats = [
-    "33 patents filed, 11 granted — covering EEG signal processing, artifact removal, and neural prediction",
+    "33 patents filed, 11 granted — covering brainwave signal processing, noise and interference removal, and neural activity prediction",
     "Patents pre-date Apple's in-ear EEG filings",
     "Peer-reviewed validation in journals including Nature",
     "Plug-and-play EEG with no calibration or bulky hardware required"
