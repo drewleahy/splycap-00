@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -23,7 +22,6 @@ const neurableConfig: DealPageConfig = {
       link: "https://calendly.com/haley-splycapital/deal-interest"
     }
   },
-  // Keep "opportunity" for fallback but it's not used on the Neurable deal page
   opportunity: {
     title: "Strategic Entry into a Category Leader in Non-Invasive Brain-Computer Interfaces",
     description: "",
