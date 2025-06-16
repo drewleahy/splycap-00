@@ -33,21 +33,46 @@ export function handleDirectDownload(url: string, filename: string) {
 }
 
 export function handleBlobDownload(blobUrl: string, filename = "Neurable-Deck.pdf") {
-  console.log('Handling blob URL download directly');
+  console.log('Handling blob URL download directly with improved method');
   
-  const link = document.createElement('a');
-  link.href = blobUrl;
-  link.download = filename;
-  link.style.display = 'none';
-  document.body.appendChild(link);
-  
-  // Force download
-  link.click();
-  
-  // Clean up
-  setTimeout(() => {
-    document.body.removeChild(link);
-  }, 100);
+  try {
+    // Create a temporary link element
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    
+    // Ensure the link is not visible
+    link.style.display = 'none';
+    link.style.position = 'absolute';
+    link.style.left = '-9999px';
+    
+    // Add to DOM
+    document.body.appendChild(link);
+    
+    // Trigger download with multiple methods for better compatibility
+    const clickEvent = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true
+    });
+    
+    link.dispatchEvent(clickEvent);
+    
+    // Fallback: direct click
+    link.click();
+    
+    // Clean up immediately
+    setTimeout(() => {
+      if (document.body.contains(link)) {
+        document.body.removeChild(link);
+      }
+    }, 100);
+    
+    return true;
+  } catch (error) {
+    console.error('Blob download error:', error);
+    throw error;
+  }
 }
 
 export function extractFilenameFromUrl(url: string, defaultFilename = "Neurable-Deck.pdf"): string {

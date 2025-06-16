@@ -32,23 +32,46 @@ export const useCtaHandlers = () => {
       return;
     }
 
-    // Enhanced blob URL handling - download immediately without fetch
+    // Enhanced blob URL handling with better error recovery
     if (secondaryCtaLink.startsWith('blob:')) {
       try {
-        handleBlobDownload(secondaryCtaLink);
-        toast({ 
-          title: "Download started!", 
-          description: "Your Neurable deck PDF is downloading." 
-        });
+        console.log('Starting blob download process...');
+        
+        // First, verify the blob URL is still valid
+        const response = await fetch(secondaryCtaLink, { method: 'HEAD' });
+        if (!response.ok) {
+          throw new Error('Blob URL is no longer valid');
+        }
+        
+        const success = handleBlobDownload(secondaryCtaLink);
+        if (success) {
+          toast({ 
+            title: "Download started!", 
+            description: "Your Neurable deck PDF is downloading." 
+          });
+        }
         return;
       } catch (err) {
         console.error('Blob download error:', err);
-        toast({ 
-          title: "Download failed", 
-          description: "There was an issue downloading the PDF. Please try uploading again.", 
-          variant: "destructive" 
-        });
-        return;
+        
+        // Try to fallback to opening in same tab if blob download fails
+        try {
+          console.log('Attempting fallback: opening blob URL in same tab');
+          window.location.href = secondaryCtaLink;
+          toast({ 
+            title: "Opening PDF...", 
+            description: "The PDF should open in your browser." 
+          });
+          return;
+        } catch (fallbackErr) {
+          console.error('Fallback also failed:', fallbackErr);
+          toast({ 
+            title: "Download failed", 
+            description: "The uploaded PDF may have expired. Please try uploading again.", 
+            variant: "destructive" 
+          });
+          return;
+        }
       }
     }
 
