@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -140,11 +141,11 @@ export const nanotronicsConfig: DealPageConfig = {
       link: "https://www.forbes.com/sites/jaimecatmull/2025/04/10/the-future-of-ai-investing-how-semiconductors-are-shaping-the-game/"
     },
     secondaryButton: {
-      text: "Sign NDA to View Diligence",
+      text: "Sign NDA to View Diligence Materials",
       link: "https://docsend.com/view/s/dke9vdijy2qu9f42"
     },
     tertiaryButton: {
-      text: "Sign (International) NDA to View Diligence",
+      text: "Sign (International) NDA to View Diligence Materials",
       link: "https://docsend.com/view/s/adcukdtegq44zf7v"
     },
     quaternaryButton: {
