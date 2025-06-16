@@ -18,8 +18,8 @@ const neurableConfig: DealPageConfig = {
       link: "#details"
     },
     secondaryCta: {
-      text: "Download Deck",
-      link: "#download-neurable-deck"
+      text: "Book a Call",
+      link: "https://calendly.com/haley-splycapital/deal-interest"
     }
   },
   // Keep "opportunity" for fallback but it's not used on the Neurable deal page
