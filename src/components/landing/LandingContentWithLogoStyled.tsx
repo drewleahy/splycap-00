@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface LandingContentWithLogoStyledProps {
@@ -31,7 +30,7 @@ export const LandingContentWithLogoStyled = ({
     "33 patents filed, 11 granted — covering brainwave signal processing, noise and interference removal, and neural activity prediction",
     "Intellectual property filings pre-date Apple's submissions related to in-ear brain signal detection technology",
     "Peer-reviewed validation in journals including Nature",
-    "Plug-and-play EEG with no calibration or bulky hardware required"
+    "Instant brain signal detection with no need for calibration or large external devices"
   ];
 
   return (
