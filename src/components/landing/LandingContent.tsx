@@ -20,9 +20,6 @@ export const LandingContent = ({
   additionalContent,
   className = "" 
 }: LandingContentProps) => {
-  // Check if this is being used on the Neurable page
-  const isNeurable = window.location.pathname.includes('neurable');
-  
   // Split the body text into paragraphs based on double line breaks
   const paragraphs = body.split('\n\n').filter(paragraph => paragraph.trim() !== '');
 
@@ -48,31 +45,25 @@ export const LandingContent = ({
     });
   };
 
-  // Apply Neurable-specific styling
-  const sectionBg = isNeurable ? "bg-gray-50" : "bg-white";
-  const headerColor = isNeurable ? "text-emerald-700" : "text-gray-600";
-  const titleColor = isNeurable ? "text-gray-900" : "text-gray-900";
-  const bodyColor = isNeurable ? "text-gray-700" : "text-gray-700";
-
   return (
-    <section className={`py-16 sm:py-20 px-4 sm:px-6 ${sectionBg} ${className}`}>
+    <section className={`py-12 sm:py-16 px-4 sm:px-6 bg-white ${className}`}>
       <div className="max-w-4xl mx-auto text-left">
-        <div className="mb-8 sm:mb-12">
+        <div className="mb-6 sm:mb-8">
           {headerLabel && (
-            <h3 className={`text-xs sm:text-sm md:text-base font-semibold mb-4 sm:mb-6 ${headerColor} uppercase tracking-wider`}>
+            <h3 className="text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 text-gray-600 uppercase tracking-wide">
               {headerLabel}
             </h3>
           )}
-          <h2 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-8 sm:mb-12 ${titleColor} leading-tight`}>
+          <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-6 sm:mb-8 text-gray-900">
             {title}
           </h2>
         </div>
         
-        <div className="mb-12 sm:mb-16">
+        <div className="mb-8 sm:mb-12">
           {paragraphs.map((paragraph, index) => (
             <p 
               key={index} 
-              className={`text-base sm:text-lg md:text-xl ${bodyColor} leading-relaxed mb-8 last:mb-0`}
+              className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-6 last:mb-0"
             >
               {formatTextWithBoldWords(paragraph)}
             </p>
@@ -80,30 +71,27 @@ export const LandingContent = ({
         </div>
         
         {keyPoints && keyPoints.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
             {keyPoints.map((point, index) => (
               <Card 
                 key={index} 
-                className={isNeurable 
-                  ? "group relative overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1"
-                  : "group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                }
+                className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
-                {!isNeurable && <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />}
-                <CardContent className="relative p-6 sm:p-8 text-center">
-                  <p className={`text-base sm:text-lg font-bold ${isNeurable ? 'text-gray-900' : 'text-gray-900'} leading-tight`}>
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <CardContent className="relative p-4 sm:p-6 text-center">
+                  <p className="text-sm sm:text-base md:text-lg font-bold text-gray-900 leading-tight">
                     {formatTextWithBoldWords(point)}
                   </p>
                 </CardContent>
-                <div className={`absolute bottom-0 left-0 right-0 h-1 ${isNeurable ? 'bg-emerald-600' : 'bg-gradient-to-r from-gray-900 via-black to-gray-900'}`} />
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-900 via-black to-gray-900" />
               </Card>
             ))}
           </div>
         )}
         
         {additionalContent && (
-          <div className="mt-12">
-            <p className={`text-base sm:text-lg md:text-xl ${bodyColor} leading-relaxed`}>
+          <div className="mt-8">
+            <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
               {formatTextWithBoldWords(additionalContent)}
             </p>
           </div>
