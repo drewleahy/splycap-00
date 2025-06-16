@@ -1,3 +1,4 @@
+
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -101,7 +102,7 @@ Wellness: Brain-state anomaly detection
     headline: "Next Steps",
     description: "We've secured this exclusive allocation for the SPLYCAP network at a $80M pre-money valuation, and the round is closing quickly.",
     primaryButton: {
-      text: "Request Data Room",
+      text: "Sign NDA to View Diligence Materials",
       link: "mailto:info@splycapital.com?subject=Requesting%20Neurable%20Data%20Room"
     },
     secondaryButton: {
