@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -120,12 +119,8 @@ Wellness: Brain-state anomaly detection
     videoUrl: "https://player.vimeo.com/video/968123456?h=0",
   },
   footer: {
-    copyright: "© 2025 Neurable. All rights reserved.",
-    links: [
-      { text: "Website", url: "https://neurable.com" },
-      { text: "Contact", url: "mailto:info@neurable.com" },
-      { text: "Privacy", url: "https://neurable.com/privacy" }
-    ],
+    copyright: "© 2025 SPLY CAPITAL. All rights reserved.",
+    links: []
   },
 };
 export default neurableConfig;
