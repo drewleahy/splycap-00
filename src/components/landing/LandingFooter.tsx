@@ -23,7 +23,8 @@ export const LandingFooter = ({ copyright, links, className = "" }: LandingFoote
               <img 
                 src="/lovable-uploads/86042c2d-fd71-488f-8f31-22569d955254.png" 
                 alt="SPLYCAP" 
-                className="h-8"
+                className="h-16 sm:h-20 md:h-24 w-auto object-contain bg-transparent"
+                style={{ backgroundColor: 'transparent' }}
               />
             </Link>
           </div>
