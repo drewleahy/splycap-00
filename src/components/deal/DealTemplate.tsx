@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -12,7 +13,6 @@ import { LandingCTA } from '@/components/landing/LandingCTA';
 import { LandingVideoSection } from '@/components/landing/LandingVideoSection';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { CustomerLogosSection } from './CustomerLogosSection';
-import { SimpleNeurableDeckUpload } from "./SimpleNeurableDeckUpload";
 import { NeurableOpportunitySection } from "./NeurableOpportunitySection";
 import { NeurableOpportunitySectionStyled } from "./NeurableOpportunitySectionStyled";
 import { NeurableMarketSection } from "./NeurableMarketSection";
@@ -52,23 +52,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
   // Only show CustomerLogosSection for certain deals (e.g., Nanotronics)
   const showCustomerLogos = config.id === "nanotronics";
 
-  // Special handling for Neurable download deck PDF override - ONLY for Neurable
-  const [neurableDeckUrl, setNeurableDeckUrl] = useState<string | null>(null);
   const isNeurable = config.id === "neurable-exclusive-2025";
-
-  useEffect(() => {
-    // Only load deck URL for Neurable page
-    if (isNeurable) {
-      const storedUrl = localStorage.getItem("neurable-deck-url");
-      setNeurableDeckUrl(storedUrl);
-      console.log("Loading Neurable deck URL:", storedUrl);
-    }
-  }, [isNeurable]);
-
-  // Determine which PDF link to use for secondary CTA - ONLY for Neurable
-  const actualSecondaryCtaLink = isNeurable && neurableDeckUrl
-    ? neurableDeckUrl
-    : config.hero.secondaryCta?.link;
 
   // New bullet list for Neurable Opportunity Section
   const neurableOpportunityBullets = [
@@ -90,16 +74,13 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
   return (
     <LandingLayout>
-      {/* Show simple upload UI for Neurable ONLY */}
-      {isNeurable && <SimpleNeurableDeckUpload />}
-
       <LandingHero
         headline={config.hero.headline}
         subheadline={config.hero.subheadline}
         ctaText={config.hero.primaryCta.text}
         ctaLink={config.hero.primaryCta.link}
         secondaryCtaText={config.hero.secondaryCta?.text}
-        secondaryCtaLink={actualSecondaryCtaLink}
+        secondaryCtaLink={config.hero.secondaryCta?.link}
         tertiaryCtaText={config.hero.tertiaryCta?.text}
         tertiaryCtaLink={config.hero.tertiaryCta?.link}
         backgroundImage={showHeroPhoto ? config.hero.backgroundImage : undefined}
