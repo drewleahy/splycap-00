@@ -106,6 +106,10 @@ Wellness: Brain-state anomaly detection
       link: "mailto:info@splycapital.com?subject=Requesting%20Neurable%20Data%20Room"
     },
     secondaryButton: {
+      text: "Sign (International) NDA to View Diligence Materials",
+      link: "mailto:info@splycapital.com?subject=Requesting%20Neurable%20International%20Data%20Room"
+    },
+    tertiaryButton: {
       text: "Book a Call",
       link: "https://calendly.com/haley-splycapital/deal-interest"
     },
