@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -5,16 +6,21 @@ import { LandingHero } from '@/components/landing/LandingHero';
 import { LandingOpportunity } from '@/components/landing/LandingOpportunity';
 import { LandingContent } from '@/components/landing/LandingContent';
 import { LandingContentWithLogo } from '@/components/landing/LandingContentWithLogo';
+import { LandingContentWithLogoStyled } from '@/components/landing/LandingContentWithLogoStyled';
 import { LandingFeatures } from '@/components/landing/LandingFeatures';
+import { LandingFeaturesStyled } from '@/components/landing/LandingFeaturesStyled';
 import { LandingCTA } from '@/components/landing/LandingCTA';
 import { LandingVideoSection } from '@/components/landing/LandingVideoSection';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { CustomerLogosSection } from './CustomerLogosSection';
 import { NeurableDeckUpload } from "./NeurableDeckUpload";
 import { NeurableOpportunitySection } from "./NeurableOpportunitySection";
+import { NeurableOpportunitySectionStyled } from "./NeurableOpportunitySectionStyled";
 import { NeurableMarketSection } from "./NeurableMarketSection";
+import { NeurableMarketSectionStyled } from "./NeurableMarketSectionStyled";
 import { useAuth } from "@/hooks/use-auth";
 import { NeurableProductTechnologySection } from "./NeurableProductTechnologySection";
+import { NeurableProductTechnologySectionStyled } from "./NeurableProductTechnologySectionStyled";
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -103,12 +109,12 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
       {/* Custom "The Opportunity" and new Product & Technology for Neurable */}
       {isNeurable && neurableOpportunitySection ? (
         <>
-          <NeurableOpportunitySection
+          <NeurableOpportunitySectionStyled
             title={neurableOpportunitySection.title}
             overview={neurableOpportunitySection.overview}
             bullets={neurableOpportunitySection.bullets}
           />
-          <NeurableProductTechnologySection />
+          <NeurableProductTechnologySectionStyled />
         </>
       ) : (
         <LandingOpportunity
@@ -119,9 +125,9 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         />
       )}
 
-      {/* USE NEURABLE MARKET SECTION */}
+      {/* USE STYLED NEURABLE MARKET SECTION */}
       {isNeurable ? (
-        <NeurableMarketSection />
+        <NeurableMarketSectionStyled />
       ) : (
         config.market && (
           <LandingContent
@@ -132,14 +138,26 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         )
       )}
 
-      <LandingContentWithLogo
-        title={config.company.title}
-        body={config.company.description}
-        logoSrc={config.company.logoSrc}
-        logoAlt={config.company.logoAlt}
-        headerLabel={config.company.headerLabel || "Company Overview"}
-        keyStats={config.company.keyStats}
-      />
+      {/* Use styled component for Neurable, original for others */}
+      {isNeurable ? (
+        <LandingContentWithLogoStyled
+          title={config.company.title}
+          body={config.company.description}
+          logoSrc={config.company.logoSrc}
+          logoAlt={config.company.logoAlt}
+          headerLabel={config.company.headerLabel || "Company Overview"}
+          keyStats={config.company.keyStats}
+        />
+      ) : (
+        <LandingContentWithLogo
+          title={config.company.title}
+          body={config.company.description}
+          logoSrc={config.company.logoSrc}
+          logoAlt={config.company.logoAlt}
+          headerLabel={config.company.headerLabel || "Company Overview"}
+          keyStats={config.company.keyStats}
+        />
+      )}
 
       {config.traction && (
         <LandingContent
@@ -152,12 +170,22 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
         />
       )}
 
-      <LandingFeatures
-        title={config.thesis.title}
-        description={config.thesis.description}
-        features={config.thesis.points}
-        headerLabel="Why We're Investing"
-      />
+      {/* Use styled features component for Neurable */}
+      {isNeurable ? (
+        <LandingFeaturesStyled
+          title={config.thesis.title}
+          description={config.thesis.description}
+          features={config.thesis.points}
+          headerLabel="Why We're Investing"
+        />
+      ) : (
+        <LandingFeatures
+          title={config.thesis.title}
+          description={config.thesis.description}
+          features={config.thesis.points}
+          headerLabel="Why We're Investing"
+        />
+      )}
 
       {/* Only render Strategic Backing section if it exists in config */}
       {config.backing && (
