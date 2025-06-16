@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface LandingContentWithLogoStyledProps {
@@ -23,7 +24,7 @@ export const LandingContentWithLogoStyled = ({
   className = ""
 }: LandingContentWithLogoStyledProps) => {
   // Neurable company overview content
-  const neurableHeadline = "Validated by Tier-1 OEMs and U.S. Defense Agencies";
+  const neurableHeadline = "Validated by Leading Manufacturers and United States Defense Agencies";
   const neurableBody =
     "Neurable has developed a software-first, hardware-light architecture supported by one of the strongest IP portfolios in non-invasive BCI.";
   const neurableKeyStats = [
