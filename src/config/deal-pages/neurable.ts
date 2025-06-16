@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -68,28 +67,28 @@ Wellness: Brain-state anomaly detection
     additionalContent: "",
   },
   thesis: {
-    title: "Why We’re Investing",
-    description: "Neurable’s strong IP, commercial traction, and category-defining team position it as the winner in BCI-enabled audio wearables.",
+    title: "Why We're Investing",
+    description: "IP Moat + Exit Signals",
     points: [
       {
-        title: "Category-Defining IP",
-        description: "Proprietary BCI tech with early FDA pathway and consumer focus.",
+        title: "Defensible IP Portfolio",
+        description: "Early patents covering EEG signal capture and artifact removal",
       },
       {
-        title: "Market Tailwinds",
-        description: "Growing demand for brain wellness and wearables with advanced sensors.",
+        title: "Capital-Light Growth",
+        description: "OEM licensing + defense funding model means capital-light growth",
       },
       {
-        title: "Execution & Partnerships",
-        description: "OEM deals with leading headphone brands; fast go-to-market.",
+        title: "Acquirer-Ready Architecture",
+        description: "Apple, Meta, Samsung already in the conversation",
       },
       {
-        title: "Elite Team",
-        description: "Leading experts from neuroscience, engineering, and consumer electronics.",
+        title: "Series B Step-Up",
+        description: "Projected 3–4x step-up in Series B",
       },
       {
-        title: "Moat",
-        description: "High defensibility via patents, data, and platform lock-in.",
+        title: "Strategic Board",
+        description: "Board includes Mithril Capital and Pace Ventures",
       },
     ],
   },
