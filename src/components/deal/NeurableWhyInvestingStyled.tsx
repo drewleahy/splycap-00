@@ -24,10 +24,6 @@ export const NeurableWhyInvestingStyled = () => {
     {
       title: "Strong Exit Precedents",
       description: "CTRL-Labs (Meta), Axonics (Boston Scientific), Blackrock Neuro (Tether)"
-    },
-    {
-      title: "Projected 3–4x step-up in Series B valuation",
-      description: ""
     }
   ];
 
