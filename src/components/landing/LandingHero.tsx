@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -72,6 +73,13 @@ export const LandingHero = ({
 
     // Log for debug
     console.log("[Deck Download] Attempting to download from:", secondaryCtaLink);
+
+    // Check for DocSend URLs FIRST - open in new tab immediately
+    if (secondaryCtaLink.includes('docsend.com')) {
+      console.log('Opening DocSend URL in new tab:', secondaryCtaLink);
+      window.open(secondaryCtaLink, '_blank', 'noopener,noreferrer');
+      return;
+    }
 
     // Direct download for local or blob links
     if (
