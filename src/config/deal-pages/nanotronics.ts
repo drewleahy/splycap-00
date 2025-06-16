@@ -1,5 +1,3 @@
-
-
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -74,7 +72,7 @@ export const nanotronicsConfig: DealPageConfig = {
     keyStats: [
       "400+ patents issued and pending",
       "Deployed across 250+ global customers in 34 countries",
-      "Selected by Google for quantum chip development with nSpec™ systems"
+      "Validated by Leading Manufacturers and United States Defense Agencies"
     ]
   },
   
@@ -160,4 +158,3 @@ export const nanotronicsConfig: DealPageConfig = {
     links: []
   }
 };
-
