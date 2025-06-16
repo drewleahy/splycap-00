@@ -56,21 +56,31 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
   // Only show CustomerLogosSection for certain deals (e.g., Nanotronics)
   const showCustomerLogos = config.id === "nanotronics";
 
-  // Special handling for Neurable download deck PDF override
+  // Special handling for Neurable download deck PDF override - ONLY for Neurable
   const [neurableDeckUrl, setNeurableDeckUrl] = useState<string | null>(null);
   const isNeurable = config.id === "neurable-exclusive-2025";
 
   useEffect(() => {
+    // Only load deck URL for Neurable page
     if (isNeurable) {
-      setNeurableDeckUrl(localStorage.getItem("neurable-deck-url") || null);
+      const storedUrl = localStorage.getItem("neurable-deck-url");
+      setNeurableDeckUrl(storedUrl);
+      console.log("Loading Neurable deck URL:", storedUrl);
     }
   }, [isNeurable]);
 
-  // Determine which PDF link to use for secondary CTA
-  const actualSecondaryCtaLink =
-    isNeurable && neurableDeckUrl
-      ? neurableDeckUrl
-      : config.hero.secondaryCta?.link;
+  // Handle deck upload for Neurable only
+  const handleNeurableDeckUpload = (url: string, name: string) => {
+    if (isNeurable) {
+      setNeurableDeckUrl(url);
+      console.log("Neurable deck uploaded:", url);
+    }
+  };
+
+  // Determine which PDF link to use for secondary CTA - ONLY for Neurable
+  const actualSecondaryCtaLink = isNeurable && neurableDeckUrl
+    ? neurableDeckUrl
+    : config.hero.secondaryCta?.link;
 
   // New bullet list for Neurable Opportunity Section
   const neurableOpportunityBullets = [
@@ -92,8 +102,12 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
   return (
     <LandingLayout>
-      {/* Only show upload UI for admins/authenticated users */}
-      {isNeurable && user && <NeurableDeckUpload onUpload={setNeurableDeckUrl} />}
+      {/* Show upload UI for Neurable ONLY - make it visible for testing */}
+      {isNeurable && (
+        <div className="bg-yellow-50 border border-yellow-200 p-4 m-4 rounded-lg">
+          <NeurableDeckUpload onUpload={handleNeurableDeckUpload} />
+        </div>
+      )}
 
       <LandingHero
         headline={config.hero.headline}
