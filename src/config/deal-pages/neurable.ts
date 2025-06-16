@@ -74,23 +74,27 @@ Wellness: Brain-state anomaly detection
     points: [
       {
         title: "Defensible IP Portfolio",
-        description: "Early patents covering EEG signal capture and artifact removal",
+        description: "Early patents protecting EEG signal capture and real-time cognitive state tracking",
       },
       {
-        title: "Capital-Light Growth",
-        description: "OEM licensing + defense funding model means capital-light growth",
+        title: "Capital-Light Growth Model",
+        description: "OEM licensing + defense funding model means low burn and scalable revenue",
       },
       {
         title: "Acquirer-Ready Architecture",
-        description: "Apple, Meta, Samsung already in the conversation",
+        description: "Active conversations with Apple, Meta, Samsung",
       },
       {
-        title: "Series B Step-Up",
-        description: "Projected 3–4x step-up in Series B",
+        title: "Strategic Board & Support",
+        description: "Includes Mithril Capital and Pace Ventures",
       },
       {
-        title: "Strategic Board",
-        description: "Board includes Mithril Capital and Pace Ventures",
+        title: "Strong Exit Precedents",
+        description: "CTRL-Labs (Meta), Axonics (Boston Scientific), Blackrock Neuro (Tether)",
+      },
+      {
+        title: "Projected 3–4x step-up in Series B valuation",
+        description: "",
       },
     ],
   },
