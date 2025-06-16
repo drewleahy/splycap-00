@@ -47,23 +47,23 @@ export const LandingFeaturesStyled = ({
           )}
         </div>
         
-        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
           {features.map((feature, index) => (
             <Card 
               key={index} 
               className="group relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-slate-900/10 via-transparent to-gray-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <CardContent className="relative p-3 sm:p-4 text-center">
+              <CardContent className="relative p-4 sm:p-5 lg:p-8 text-center">
                 {feature.icon && (
-                  <div className="mb-2 flex justify-center">
-                    <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-slate-700" />
+                  <div className="mb-3 lg:mb-4 flex justify-center">
+                    <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-slate-700" />
                   </div>
                 )}
-                <h3 className="text-xs sm:text-sm font-semibold mb-2 text-gray-900">
+                <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-3 lg:mb-4 text-gray-900">
                   {feature.title}
                 </h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
+                <p className="text-xs sm:text-sm lg:text-base text-gray-600 leading-relaxed">
                   {feature.description}
                 </p>
               </CardContent>
