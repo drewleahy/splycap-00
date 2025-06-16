@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle } from 'lucide-react';
 
 export const NeurableCommercialTractionStyled = () => {
   const tractionPoints = [
-    "Sony & Samsung licensing deals signed",
+    "Closed strategic licensing and co-development contracts with Sony and Samsung.",
     "$5M+ in defense R&D grants (including DARPA)",
     "Proof of concept completed with Master & Dynamic",
     "OEM-integrated product lines launching in 2025",
