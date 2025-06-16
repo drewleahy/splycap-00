@@ -22,6 +22,7 @@ import { NeurableProductTechnologySection } from "./NeurableProductTechnologySec
 import { NeurableProductTechnologySectionStyled } from "./NeurableProductTechnologySectionStyled";
 import { NeurableDubaiSection } from "./NeurableDubaiSection";
 import { NeurableCommercialTractionStyled } from "./NeurableCommercialTractionStyled";
+import { NeurableWhyInvestingStyled } from "./NeurableWhyInvestingStyled";
 
 interface DealTemplateProps {
   config: DealPageConfig;
@@ -181,12 +182,7 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
       {/* Use styled features component for Neurable */}
       {isNeurable ? (
-        <LandingFeaturesStyled
-          title={config.thesis.title}
-          description={config.thesis.description}
-          features={config.thesis.points}
-          headerLabel="Why We're Investing"
-        />
+        <NeurableWhyInvestingStyled />
       ) : (
         <LandingFeatures
           title={config.thesis.title}
