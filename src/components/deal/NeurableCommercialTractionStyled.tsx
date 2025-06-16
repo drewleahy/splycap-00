@@ -8,7 +8,7 @@ export const NeurableCommercialTractionStyled = () => {
     "$5M+ in U.S. defense R&D grants secured, including work with DARPA and other innovation units.",
     "Master & Dynamic is a commercial partner, actively selling thousands of Neurable-enabled units.",
     "Commercial product lines developed in partnership with leading manufacturers will launch in 2025",
-    "Targeting $25 million in revenue from commercial product launches in 2025."
+    "Targeting $10 million in revenue from commercial product launches in 2025."
   ];
 
   return (
