@@ -34,7 +34,7 @@ export const NeurableOpportunitySectionStyled: React.FC<NeurableOpportunityProps
         <ul className="space-y-4">
           {bullets.map((bullet, i) => (
             <li key={i} className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-slate-700 mt-0.5 shrink-0" />
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 shrink-0" />
               <span className="ml-3 text-base text-gray-800 font-medium">{bullet}</span>
             </li>
           ))}
