@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -25,7 +24,7 @@ const neurableConfig: DealPageConfig = {
   },
   // Keep "opportunity" for fallback but it's not used on the Neurable deal page
   opportunity: {
-    title: "Market Context & Strategic Positioning",
+    title: "Strategic Entry into a Category Leader in Non-Invasive Brain-Computer Interfaces",
     description: "",
     keyMetrics: []
   },
