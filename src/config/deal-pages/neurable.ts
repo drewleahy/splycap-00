@@ -1,4 +1,3 @@
-
 import { DealPageConfig } from "@/types/deal-template";
 
 const neurableConfig: DealPageConfig = {
@@ -99,8 +98,8 @@ Wellness: Brain-state anomaly detection
     ],
   },
   cta: {
-    headline: "Interested in Neurable's Revolution?",
-    description: "Request access to our data room to view the full Neurable investment deck, diligence materials, and virtual demo.",
+    headline: "Next Steps",
+    description: "We've secured this exclusive allocation for the SPLYCAP network at a $80M pre-money valuation, and the round is closing quickly.",
     primaryButton: {
       text: "Request Data Room",
       link: "mailto:info@splycapital.com?subject=Requesting%20Neurable%20Data%20Room"
