@@ -102,8 +102,8 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
   return (
     <LandingLayout>
-      {/* Show upload UI for Neurable ONLY - make it visible for testing */}
-      {isNeurable && (
+      {/* Show upload UI for Neurable ONLY for authenticated users */}
+      {isNeurable && user && (
         <div className="bg-yellow-50 border border-yellow-200 p-4 m-4 rounded-lg">
           <NeurableDeckUpload onUpload={handleNeurableDeckUpload} />
         </div>
