@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DealPageConfig } from '@/types/deal-template';
 import { LandingLayout } from '@/components/landing/LandingLayout';
@@ -13,12 +12,11 @@ import { LandingCTA } from '@/components/landing/LandingCTA';
 import { LandingVideoSection } from '@/components/landing/LandingVideoSection';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { CustomerLogosSection } from './CustomerLogosSection';
-import { NeurableDeckUpload } from "./NeurableDeckUpload";
+import { SimpleNeurableDeckUpload } from "./SimpleNeurableDeckUpload";
 import { NeurableOpportunitySection } from "./NeurableOpportunitySection";
 import { NeurableOpportunitySectionStyled } from "./NeurableOpportunitySectionStyled";
 import { NeurableMarketSection } from "./NeurableMarketSection";
 import { NeurableMarketSectionStyled } from "./NeurableMarketSectionStyled";
-import { useAuth } from "@/hooks/use-auth";
 import { NeurableProductTechnologySection } from "./NeurableProductTechnologySection";
 import { NeurableProductTechnologySectionStyled } from "./NeurableProductTechnologySectionStyled";
 import { NeurableDubaiSection } from "./NeurableDubaiSection";
@@ -48,8 +46,6 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
     console.log(`Deal page view: ${config.id}`);
   }, [config]);
 
-  const { user } = useAuth();
-
   // Only show hero photo if there's a backgroundImage present for this deal config
   const showHeroPhoto = Boolean(config.hero.backgroundImage);
 
@@ -68,14 +64,6 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
       console.log("Loading Neurable deck URL:", storedUrl);
     }
   }, [isNeurable]);
-
-  // Handle deck upload for Neurable only
-  const handleNeurableDeckUpload = (url: string, name: string) => {
-    if (isNeurable) {
-      setNeurableDeckUrl(url);
-      console.log("Neurable deck uploaded:", url);
-    }
-  };
 
   // Determine which PDF link to use for secondary CTA - ONLY for Neurable
   const actualSecondaryCtaLink = isNeurable && neurableDeckUrl
@@ -102,12 +90,8 @@ export const DealTemplate = ({ config }: DealTemplateProps) => {
 
   return (
     <LandingLayout>
-      {/* Show upload UI for Neurable ONLY for authenticated users */}
-      {isNeurable && user && (
-        <div className="bg-yellow-50 border border-yellow-200 p-4 m-4 rounded-lg">
-          <NeurableDeckUpload onUpload={handleNeurableDeckUpload} />
-        </div>
-      )}
+      {/* Show simple upload UI for Neurable ONLY */}
+      {isNeurable && <SimpleNeurableDeckUpload />}
 
       <LandingHero
         headline={config.hero.headline}
