@@ -103,10 +103,6 @@ Wellness: Brain-state anomaly detection
       text: "Download Investment Deck",
       link: "https://neurable.com/2025-deck.pdf"
     },
-    tertiaryButton: {
-      text: "Meet the Neurable Team",
-      link: "https://neurable.com/team"
-    },
     quaternaryButton: {
       text: "Visit Neurable.com",
       link: "https://neurable.com/"
