@@ -20,7 +20,7 @@ export const NeurableCommercialTractionStyled = () => {
             Commercial Traction
           </h3>
           <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-6 sm:mb-8 text-gray-900">
-            OEM and Defense Revenue Building Toward Scale
+            Defense and Industrial Revenues Building Toward Scale
           </h2>
         </div>
         
