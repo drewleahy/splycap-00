@@ -7,7 +7,7 @@ export const NeurableCommercialTractionStyled = () => {
     "Closed strategic licensing and co-development contracts with Sony and Samsung.",
     "$5M+ in defense R&D grants (including DARPA)",
     "Master & Dynamic is a commercial partner, actively selling thousands of Neurable-enabled units.",
-    "OEM-integrated product lines launching in 2025",
+    "Commercial product lines developed in partnership with leading manufacturers will launch in 2025",
     "Targeting $10M revenue in 2025"
   ];
 
