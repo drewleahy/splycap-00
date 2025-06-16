@@ -59,7 +59,7 @@ export const LandingContentWithLogoStyled = ({
         <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-8 sm:mb-10">
           {neurableBody}
         </p>
-        <div className="border-l-2 border-slate-600 pl-5 mb-6 sm:mb-10">
+        <div className="border-l-4 border-gradient-to-b from-green-500 to-blue-500 pl-5 mb-6 sm:mb-10" style={{borderImage: 'linear-gradient(to bottom, #10b981, #3b82f6) 1'}}>
           <ul className="space-y-2">
             {neurableKeyStats.map((stat, i) => (
               <li
