@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface LandingContentWithLogoStyledProps {
@@ -26,10 +27,21 @@ export const LandingContentWithLogoStyled = ({
   const neurableHeadline = "Validated by Leading Manufacturers and United States Defense Agencies";
   const neurableBody =
     "Neurable has developed a software-first, hardware-light architecture supported by one of the strongest IP portfolios in non-invasive BCI.";
+  
+  // Updated to include JSX elements for the Nature link
   const neurableKeyStats = [
     "33 patents filed, 11 granted — covering brainwave signal processing, noise and interference removal, and neural activity prediction",
     "Intellectual property filings pre-date Apple's submissions related to in-ear brain signal detection technology",
-    "Peer-reviewed validation in journals including Nature",
+    <span key="nature-link">
+      <a 
+        href="https://www.nature.com/articles/s41467-024-45922-8.pdf" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="underline hover:text-blue-600 transition-colors"
+      >
+        Peer-reviewed validation in journals including Nature
+      </a>
+    </span>,
     "Instant brain signal detection with no need for calibration or large external devices"
   ];
 
