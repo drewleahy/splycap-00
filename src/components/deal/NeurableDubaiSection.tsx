@@ -7,11 +7,11 @@ export const NeurableDubaiSection = () => {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Image on the left */}
-          <div className="order-2 lg:order-1">
+          <div className="order-2 lg:order-1 flex justify-center lg:justify-start">
             <img
               src="/lovable-uploads/7ecc1d94-d705-4d10-b9b3-438d19ae727b.png"
               alt="SPLY Capital venture partner with Ramses Alcaide, CEO of Neurable, at Dubai partnership event"
-              className="w-full h-auto rounded-lg shadow-lg"
+              className="w-full max-w-md h-auto rounded-lg shadow-lg"
               loading="lazy"
             />
           </div>
