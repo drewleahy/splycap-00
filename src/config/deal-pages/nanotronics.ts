@@ -1,4 +1,5 @@
 
+
 import { DealPageConfig } from '@/types/deal-template';
 import { Microscope, TrendingUp, Shield, Award, Globe, Zap } from 'lucide-react';
 
@@ -78,7 +79,7 @@ export const nanotronicsConfig: DealPageConfig = {
   },
   
   traction: {
-    title: "Proven Commercial Success with Global Manufacturers",
+    title: "Defense and Industrial Revenues Building Toward Scale",
     description: "Nanotronics has demonstrated strong commercial validation through partnerships with leading manufacturers:",
     headerLabel: "Commercial Traction",
     keyPoints: [
@@ -159,3 +160,4 @@ export const nanotronicsConfig: DealPageConfig = {
     links: []
   }
 };
+
